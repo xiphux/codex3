@@ -1,4 +1,4 @@
-require 'json'
+require 'oj'
 require 'sinatra'
 require 'data_mapper'
 

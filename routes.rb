@@ -17,12 +17,22 @@ get '/api/characters/:id' do
 end
 
 get '/api/fics' do
-	Fic.all.to_json
+	fics = Fic.all
+	if params['series']
+		fics = fics.all(:fic_series => FicSeries.all(:series_id => params['series']))
+	end
+	if params['matchup']
+		fics = fics.all(:fic_matchups => FicMatchup.all(:matchup_id => params['matchup']))
+	end
+	if params['genre']
+		fics = fics.all(:fic_genres => FicGenre.all(:genre_id => params['genre']))
+	end
+	fics.to_json(methods: [ :authors, :fic_genres, :fic_series, :fic_matchups ])
 end
 
 get '/api/fics/:id' do
 	fic ||= Fic.get(params[:id]) || halt(404)
-	fic.to_json(methods: [ :authors, :genres, :series ])
+	fic.to_json(methods: [ :authors, :genres, :series ], relationships: { :matchups => { :relationships => { :characters => { :methods => [ :series ]}}}})
 end
 
 get '/api/fics/:id/chapters' do
@@ -55,7 +65,7 @@ get '/api/matchups/:id' do
 end
 
 get '/api/series' do
-	Series.all.to_json
+	Series.all(:fic_series => FicSeries.all).to_json
 end
 
 get '/api/series/:id' do

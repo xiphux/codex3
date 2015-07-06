@@ -1,0 +1,24 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<codex-fic-header details="false" fic="fic"></codex-fic-header>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<codex-chapter-header ng-show="chapters.length>1 || chapter.name" chapter="chapter">
+			</codex-chapter-header>
+			<codex-reader-full-nav ng-show="chapters.length>1" current-chapter="chapter" chapters="chapters" scroll-to-top="false"></codex-reader-full-nav>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<codex-chapter-text chapter="chapter"></codex-chapter-text>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<codex-reader-mini-nav ng-show="chapters.length > 1" current-chapter="chapter" max-chapter="maxchapter" scroll-to-top="true"></codex-reader-mini-nav>
+		</div>
+	</div>
+</div>

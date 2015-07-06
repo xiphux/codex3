@@ -1,0 +1,6 @@
+<div class="panel panel-default" ng-class="{'panel-default':!sfpCtrl.filterActive, 'panel-primary':sfpCtrl.filterActive}">
+	<div class="panel-heading" ng-click="sfpCtrl.toggleSeriesExpand()">Series</div>
+	<div class="list-group" ng-show="sfpCtrl.expanded">
+		<codex-series-filter-panel-item series="s" ng-repeat="s in sfpCtrl.series | orderBy:'title'"></codex-series-filter-panel-item>
+	</div>
+</div>

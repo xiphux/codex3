@@ -1,0 +1,4 @@
+<div>
+	<codex-fic-list-splash ng-show="!flCtrl.searchActive"></codex-fic-list-splash>
+	<codex-fic-list-item fic="fic" ng-repeat="fic in flCtrl.fics | orderBy:'title'"></codex-fic-list-item>
+</div>

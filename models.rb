@@ -28,6 +28,10 @@ class Chapter
 	property :file,   String, :length => 255
 	property :data,   Text, :length => 2**32-1
 	
+	property :wrapped, Boolean
+	property :no_paragraph_spacing, Boolean
+	property :double_line_breaks, Boolean
+	
 	belongs_to :fic
 end
 
@@ -70,6 +74,9 @@ class Fic
 	has n, :fic_series
 	has n, :series, :through => :fic_series
 	
+	has n, :fic_matchups
+	has n, :matchups, :through => :fic_matchups
+	
 	has n, :chapters
 end
 
@@ -80,6 +87,15 @@ class FicGenre
 	
 	belongs_to :fic, :key => true
 	belongs_to :genre, :key => true
+end
+
+class FicMatchup
+	include DataMapper::Resource
+	
+	storage_names[:default] = 'fics_matchups'
+	
+	belongs_to :fic, :key => true
+	belongs_to :matchup, :key => true
 end
 
 class FicSeries
@@ -108,6 +124,9 @@ class Matchup
 	
 	has n, :character_matchups
 	has n, :characters, :through => :character_matchups
+	
+	has n, :fic_matchups
+	has n, :fics, :through => :fic_matchups
 end
 
 class Series
