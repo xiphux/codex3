@@ -11,9 +11,9 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 
 .factory('ficBrowseService', ['$rootScope', '$resource', function($rootScope, $resource) {
 	
-	var genreFilters = [];
-	var matchupFilters = [];
-	var seriesFilters = [];
+	var genreFilters = {};
+	var matchupFilters = {};
+	var seriesFilters = {};
 	
 	var genreCounts = {};
 	var matchupCounts = {};
@@ -70,9 +70,9 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 		
 		queryFics: function() {
 			var params = {};
-			var genreIds = _.pluck(genreFilters, 'id');
-			var matchupIds = _.pluck(matchupFilters, 'id');
-			var seriesIds = _.pluck(seriesFilters, 'id');
+			var genreIds = _.keys(genreFilters);
+			var matchupIds = _.keys(matchupFilters);
+			var seriesIds = _.keys(seriesFilters);
 			if (genreIds.length > 0) {
 				if (genreIds.length > 1) {
 					params['genre[]'] = genreIds;
@@ -115,19 +115,19 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 		},
 		
 		addGenreFilter: function(genre) {
-			if (!genre) {
+			if (!genre || this.hasGenreFilter(genre)) {
 				return;
 			}
-			genreFilters.push(genre);
+			genreFilters[genre.id] = genre;
 			$rootScope.$broadcast('ficBrowseGenresUpdated');
 			this.queryFics();
 		},
 		
 		removeGenreFilter: function(genre) {
-			if (!genre) {
+			if (!(genre && this.hasGenreFilter(genre))) {
 				return;
 			}
-			genreFilters = _.reject(genreFilters, 'id', genre.id);
+			delete genreFilters[genre.id];
 			$rootScope.$broadcast('ficBrowseGenresUpdated');
 			this.queryFics();
 		},
@@ -136,11 +136,11 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 			if (!genre) {
 				return false;
 			}
-			return !!_.find(genreFilters, 'id', genre.id);
+			return _.has(genreFilters, genre.id);
 		},
 		
 		hasAnyGenreFilter: function() {
-			return (genreFilters.length > 0);
+			return !_.isEmpty(genreFilters);
 		},
 		
 		ficsWithGenre: function(genre) {
@@ -152,19 +152,19 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 		},
 		
 		addMatchupFilter: function(matchup) {
-			if (!matchup) {
+			if (!matchup || this.hasMatchupFilter(matchup)) {
 				return;
 			}
-			matchupFilters.push(matchup);
+			matchupFilters[matchup.id] = matchup;
 			$rootScope.$broadcast('ficBrowseMatchupsUpdated');
 			this.queryFics();
 		},
 		
 		removeMatchupFilter: function(matchup) {
-			if (!matchup) {
+			if (!(matchup && this.hasMatchupFilter(matchup))) {
 				return;
 			}
-			matchupFilters = _.reject(matchupFilters, 'id', matchup.id);
+			delete matchupFilters[matchup.id];
 			$rootScope.$broadcast('ficBrowseMatchupsUpdated');
 			this.queryFics();
 		},
@@ -173,11 +173,11 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 			if (!matchup) {
 				return false;
 			}
-			return !!_.find(matchupFilters, 'id', matchup.id);
+			return _.has(matchupFilters, matchup.id);
 		},
 		
 		hasAnyMatchupFilter: function() {
-			return (matchupFilters.length > 0);
+			return !_.isEmpty(matchupFilters);
 		},
 		
 		ficsWithMatchup: function(matchup) {
@@ -189,19 +189,19 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 		},
 		
 		addSeriesFilter: function(series) {
-			if (!series) {
+			if (!series || this.hasSeriesFilter(series)) {
 				return;
 			}
-			seriesFilters.push(series);
+			seriesFilters[series.id] = series;
 			$rootScope.$broadcast('ficBrowseSeriesUpdated');
 			this.queryFics();
 		},
 		
 		removeSeriesFilter: function(series) {
-			if (!series) {
+			if (!(series && this.hasSeriesFilter(series))) {
 				return;
 			}
-			seriesFilters = _.reject(seriesFilters, 'id', series.id);
+			delete seriesFilters[series.id];
 			$rootScope.$broadcast('ficBrowseSeriesUpdated');
 			this.queryFics();
 		},
@@ -210,11 +210,11 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 			if (!series) {
 				return false;
 			}
-			return !!_.find(seriesFilters, 'id', series.id);
+			return _.has(seriesFilters, series.id);
 		},
 		
 		hasAnySeriesFilter: function() {
-			return (seriesFilters.length > 0);
+			return !_.isEmpty(seriesFilters);
 		},
 		
 		ficsWithSeries: function(series) {
@@ -226,9 +226,9 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 		},
 		
 		clear: function() {
-			seriesFilters = [];
-			genreFilters = [];
-			matchupFilters = [];
+			seriesFilters = {};
+			genreFilters = {};
+			matchupFilters = {};
 			$rootScope.$broadcast('ficBrowseFicsUpdating');
 			this.fics = null;
 			this.recount();
