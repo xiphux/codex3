@@ -14,6 +14,18 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 	});
 }])
 
+.service('$locationEx', ['$location', '$route', '$rootScope', function($location, $route, $rootScope) {
+	$location.skipReload = function () {
+        var lastRoute = $route.current;
+        var un = $rootScope.$on('$locationChangeSuccess', function () {
+            $route.current = lastRoute;
+            un();
+        });
+        return $location;
+    };
+    return $location;
+}])
+
 .controller('tocController', ['$scope', '$routeParams', '$resource', '$location', '$rootScope', function($scope, $routeParams, $resource, $location, $rootScope) {
 	
 	$scope.fic = $resource('api/fics/:ficId').get({ ficId: $routeParams.ficId },
@@ -37,7 +49,7 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 	);
 }])
 
-.controller('readerController', ['$scope', '$routeParams', '$location', '$rootScope', '$resource', 'chapterFilter', function($scope, $routeParams, $location, $rootScope, $resource, chapterFilter) {
+.controller('readerController', ['$scope', '$routeParams', '$locationEx', '$rootScope', '$resource', 'chapterFilter', function($scope, $routeParams, $locationEx, $rootScope, $resource, chapterFilter) {
 	
 	$scope.maxchapter = 0;
 	
@@ -63,7 +75,7 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 				}
 			},
 			function(httpResponse) {
-				$location.path('/');
+				$locationEx.path('/');
 			}
 		);
 	};
@@ -90,6 +102,7 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 			return false;
 		}
 		loadChapter(num);
+		$locationEx.skipReload().path('/read/' + $routeParams.ficId + '/chapters/' + num);
 		return true;
 	};
 	
