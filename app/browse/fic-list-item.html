@@ -1,6 +1,8 @@
-<div>
-	<h3 ng-click="fliCtrl.toggle()">{{fic.title}} <small>by {{fic.authors | authorList}}</small></h3>
-	<div ng-show="fliCtrl.expanded">
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 ng-click="fliCtrl.toggle()">{{fic.title}} <small>by {{fic.authors | authorList}}</small></h3>
+	</div>
+	<div class="panel-body" ng-show="fliCtrl.expanded">
 		<div ng-show="fliCtrl.ficDetail.series && fliCtrl.ficDetail.series.length > 0">
 			Series: {{fliCtrl.ficDetail.series | seriesList}}
 		</div>
@@ -10,6 +12,8 @@
 		<div ng-show="fliCtrl.ficDetail.matchups && fliCtrl.ficDetail.matchups.length > 0">
 			Matchups: {{fliCtrl.ficDetail.matchups | matchupList}}
 		</div>
+	</div>
+	<div class="panel-footer" ng-show="fliCtrl.expanded">
 		<a href="#/read/{{fic.id}}" class="btn btn-default" role="button">Read</a>
 	</div>
 </div>
