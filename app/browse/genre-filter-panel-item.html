@@ -1,4 +1,4 @@
-<a href class="list-group-item" ng-class="{active:gfpiCtrl.active}" ng-click="gfpiCtrl.toggleGenreFilter()">
-	{{genre.name}}
-	<span class="badge" ng-show="gfpiCtrl.showBadge">{{gfpiCtrl.matchCount}}</span>
+<a href class="mdl-navigation__link" ng-click="gfpiCtrl.toggleGenreFilter()">
+	<i class="material-icons">{{ gfpiCtrl.active ? 'check_box' : 'check_box_outline_blank' }}</i>
+	<span ng-class="{'mdl-badge':gfpiCtrl.showBadge}" ng-attr-data-badge="{{gfpiCtrl.matchCount}}">{{genre.name}}</span>
 </a>

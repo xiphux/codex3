@@ -1,0 +1,14 @@
+<footer class="mdl-mini-footer">
+	<div class="mdl-mini-footer--left-section" ng-show="rfnCtrl.prevChapter">
+		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-button--mini-fab" ng-click="rfnCtrl.gotoPrevChapter()">
+		  <i class="material-icons">arrow_back</i>
+		</button>
+		{{ rfnCtrl.prevChapter | chapter }}
+	</div>
+	<div class="mdl-mini-footer--right-section" ng-show="rfnCtrl.nextChapter">
+		{{ rfnCtrl.nextChapter | chapter }}
+		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-button--mini-fab" ng-click="rfnCtrl.gotoNextChapter()">
+		  <i class="material-icons">arrow_forward</i>
+		</button>
+	</div>
+</footer>

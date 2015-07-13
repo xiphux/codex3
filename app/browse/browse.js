@@ -243,9 +243,13 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 	return service;
 }])
 
-.controller('browseController', function() {
-	
-})
+.controller('browseController', ['$scope', '$timeout', function($scope, $timeout) {
+	$scope.$on('$viewContentLoaded', function() {
+		$timeout(function() {
+			componentHandler.upgradeAllRegistered();
+		});
+	});
+}])
 
 .controller('ficListController', ['$scope', '$rootScope', 'ficBrowseService', function($scope, $rootScope, ficBrowseService) {
 	
@@ -281,7 +285,13 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 	};
 })
 
-.controller('ficListItemController', ['$scope', '$resource', function($scope, $resource) {
+.controller('ficListItemController', ['$scope', '$resource', '$timeout', function($scope, $resource, $timeout) {
+	
+	$scope.$on('$viewContentLoaded', function() {
+		$timeout(function() {
+			componentHandler.upgradeAllRegistered();
+		});
+	});
 	
 	this.expanded = false;
 	

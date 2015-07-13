@@ -4,8 +4,9 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/read/:ficId', {
-		templateUrl: 'read/toc.html',
-		controller: 'tocController'
+		redirectTo: function(routeParams, path, search) {
+			return '/read/' + routeParams.ficId + '/chapters/1';
+		}
 	})
 	.when('/read/:ficId/chapters/:chapterNum', {
 		templateUrl: 'read/read.html',
@@ -26,30 +27,7 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
     return $location;
 }])
 
-.controller('tocController', ['$scope', '$routeParams', '$resource', '$location', '$rootScope', function($scope, $routeParams, $resource, $location, $rootScope) {
-	
-	$scope.fic = $resource('api/fics/:ficId').get({ ficId: $routeParams.ficId },
-		function(value) {
-			$rootScope.subtitle = value.title;
-		},
-		function(httpResponse) {
-			$location.path('/');
-		}
-	);
-	
-	$scope.chapters = $resource('api/fics/:ficId/chapters').query({ ficId: $routeParams.ficId },
-		function(value) {
-			if (value.length == 1) {
-				$location.path('/read/' + $routeParams.ficId + '/chapters/' + value[0].number).replace();
-			}
-		},
-		function(httpResponse) {
-			$location.path('/');
-		}
-	);
-}])
-
-.controller('readerController', ['$scope', '$routeParams', '$locationEx', '$rootScope', '$resource', 'chapterFilter', function($scope, $routeParams, $locationEx, $rootScope, $resource, chapterFilter) {
+.controller('readerController', ['$scope', '$routeParams', '$locationEx', '$rootScope', '$resource', '$timeout', 'chapterFilter', function($scope, $routeParams, $locationEx, $rootScope, $resource, $timeout, chapterFilter) {
 	
 	$scope.maxchapter = 0;
 	
@@ -130,19 +108,13 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 		$scope.setChapter(chapter.number);
 	});
 	
+	$scope.$on('$viewContentLoaded', function() {
+		$timeout(function() {
+			componentHandler.upgradeAllRegistered();
+		});
+	});
+	
 }])
-
-.directive('codexFicHeader', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'read/fic-header.html',
-		replace: true,
-		scope: {
-			fic: '=',
-			details: '='
-		}
-	};
-})
 
 .filter('chapter', function() {
 	return function(chapter) {
@@ -166,19 +138,8 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 
 .directive('codexChapterListItem', function() {
 	return {
-		restrict: 'A',
-		templateUrl: 'read/chapter-list-item.html',
-		replace: false,
-		scope: {
-			chapter: '='
-		}
-	};
-})
-
-.directive('codexChapterHeader', function() {
-	return {
 		restrict: 'E',
-		templateUrl: 'read/chapter-header.html',
+		templateUrl: 'read/chapter-list-item.html',
 		replace: true,
 		scope: {
 			chapter: '='
@@ -186,115 +147,65 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 	};
 })
 
-.controller('readerFullNavController', ['$scope', '$window', function($scope, $window) {
+.controller('readerFooterNavController', ['$scope', '$window', function($scope, $window) {
 	
-	this.nextChapter = function() {
-		if ($scope.currentChapter && ($scope.currentChapter.number < this.maxChapter)) {
-			$scope.$emit('readerNextChapter');
-			if ($scope.scrollToTop) {
-				$window.scrollTo(0,0);
-			}
-		}
-	};
-	
-	this.prevChapter = function() {
-		if ($scope.currentChapter && ($scope.currentChapter.number > 1)) {
-			$scope.$emit('readerPrevChapter');
-			if ($scope.scrollToTop) {
-				$window.scrollTo(0,0);
-			}
-		}
-	};
-	
-	this.maxChapter = _.get(_.max($scope.chapters, 'number'),'number', 0);
-	
+	this.nextChapter = null;
+	this.prevChapter = null;
 	var that = this;
+	
+	var updateChapters = function() {
+		if (($scope.currentChapter == null) || ($scope.chapters == null)) {
+			that.nextChapter = null;
+			that.prevChapter = null;
+			return;
+		}
+		
+		for (var i = 0; i < $scope.chapters.length; i++) {
+			var chapter = $scope.chapters[i];
+			if (chapter.id == $scope.currentChapter.id) {
+				that.prevChapter = i > 0 ? $scope.chapters[i-1] : null;
+				that.nextChapter = i < ($scope.chapters.length - 1) ? $scope.chapters[i+1] : null;
+				break;
+			}
+		}
+	};
+	
+	updateChapters();
+	$scope.$watch('currentChapter', updateChapters);
 	$scope.$watch('chapters', function() {
-		if ($scope.chapters !== null) {
-			$scope.chapters.$promise.then(function() {
-				that.maxChapter = _.get(_.max($scope.chapters, 'number'),'number', 0)
-			})
+		if ($scope.chapters != null) {
+			$scope.chapters.$promise.then(updateChapters);
+		} else {
+			updateChapters();
 		}
 	});
 	
+	this.gotoNextChapter = function() {
+		if ($scope.currentChapter && this.nextChapter) {
+			$scope.$emit('readerNextChapter');
+			$window.scrollTo(0,0);
+		}
+	};
+	
+	this.gotoPrevChapter = function() {
+		if ($scope.currentChapter && this.prevChapter) {
+			$scope.$emit('readerPrevChapter');
+			$window.scrollTo(0,0);
+		}
+	};
+	
 }])
 
-.directive('codexReaderFullNav', function() {
+.directive('codexReaderFooterNav', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'read/reader-full-nav.html',
+		templateUrl: 'read/reader-footer-nav.html',
 		replace: true,
-		controller: 'readerFullNavController',
+		controller: 'readerFooterNavController',
 		controllerAs: 'rfnCtrl',
 		scope: {
 			currentChapter: '=',
-			chapters: '=',
-			scrollToTop: '='
-		}
-	};
-})
-
-.controller('readerFullNavChapterController', ['$scope', '$window', function($scope, $window) {
-	
-	this.setChapter = function() {
-		if ($scope.chapter && (!$scope.currentChapter || ($scope.chapter.number != $scope.currentChapter.number))) {
-			$scope.$emit('readerSetChapter', $scope.chapter);
-			if ($scope.scrollToTop) {
-				$window.scrollTo(0,0);
-			}
-		}
-	};
-	
-}])
-
-.directive('codexReaderFullNavChapter', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'read/reader-full-nav-chapter.html',
-		replace: true,
-		controller: 'readerFullNavChapterController',
-		controllerAs: 'rfncCtrl',
-		scope: {
-			chapter: '=',
-			currentChapter: '=',
-			scrollToTop: '='
-		}
-	};
-})
-
-.controller('readerMiniNavController', ['$scope', '$window', function($scope, $window) {
-	
-	this.nextChapter = function() {
-		if ($scope.currentChapter && ($scope.currentChapter.number < $scope.maxChapter)) {
-			$scope.$emit('readerNextChapter');
-			if ($scope.scrollToTop) {
-				$window.scrollTo(0,0);
-			}
-		}
-	};
-	
-	this.prevChapter = function() {
-		if ($scope.currentChapter && ($scope.currentChapter.number > 1)) {
-			$scope.$emit('readerPrevChapter');
-			if ($scope.scrollToTop) {
-				$window.scrollTo(0,0);
-			}
-		}
-	};
-	
-}])
-
-.directive('codexReaderMiniNav', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'read/reader-mini-nav.html',
-		replace: true,
-		controller: 'readerMiniNavController',
-		controllerAs: 'rmnCtrl',
-		scope: {
-			currentChapter: '=',
-			maxChapter: '=',
-			scrollToTop: '='
+			chapters: '='
 		}
 	};
 })

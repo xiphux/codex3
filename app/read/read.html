@@ -1,24 +1,42 @@
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<codex-fic-header details="false" fic="fic"></codex-fic-header>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+	<header class="mdl-layout__header">
+		<div class="mdl-layout__header-row">
+			<span class="mdl-layout-title">
+				<a href="#/">Codex</a>
+				<i class="material-icons">chevron_right</i>
+				{{fic.title}}
+				<span ng-show="chapters.length > 1 || chapter.name">
+					<i class="material-icons">chevron_right</i>
+					{{ chapter | chapter }}
+				</span>
+			</span>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<codex-chapter-header ng-show="chapters.length>1 || chapter.name" chapter="chapter">
-			</codex-chapter-header>
-			<codex-reader-full-nav ng-show="chapters.length>1" current-chapter="chapter" chapters="chapters" scroll-to-top="false"></codex-reader-full-nav>
+	</header>
+	<div class="mdl-layout__drawer">
+		<span class="mdl-layout-title">{{fic.title}}</span>
+		<span class="mdl-layout-title">by {{fic.authors | authorList}}</span>
+		<div ng-show="fic.series && fic.series.length > 0">
+			Series: {{fic.series | seriesList}}
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<codex-chapter-text chapter="chapter"></codex-chapter-text>
+		<div ng-show="fic.genres && fic.genres.length > 0">
+			Genres: {{fic.genres | genreList}}
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<codex-reader-mini-nav ng-show="chapters.length > 1" current-chapter="chapter" max-chapter="maxchapter" scroll-to-top="true"></codex-reader-mini-nav>
+		<div ng-show="fic.matchups && fic.matchups.length > 0">
+			Matchups: {{fic.matchups | matchupList}}
 		</div>
+		<div class="mdl-layout-spacer"></div>
+		<codex-chapter-list chapters="chapters"></codex-chapter-list>
 	</div>
+	<main class="mdl-layout__content">
+		<div class="page-content">
+			<div class="mdl-grid">
+				<div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+				<div class="mdl-cell mdl-cell--10-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+					<codex-chapter-text chapter="chapter"></codex-chapter-text>
+				</div>
+				<div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+			</div>
+			<codex-reader-footer-nav ng-show="chapters.length > 1" current-chapter="chapter" chapters="chapters"></codex-reader-footer-nav>
+		</div>
+	</main>
 </div>

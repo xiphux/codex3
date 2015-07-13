@@ -1,6 +1,6 @@
-<div class="panel panel-default" ng-class="{'panel-default':!gfpCtrl.filterActive, 'panel-primary':gfpCtrl.filterActive}">
-	<div class="panel-heading" ng-click="gfpCtrl.toggleGenreExpand()">Genre</div>
-	<div class="list-group" ng-show="gfpCtrl.expanded">
+<nav class="mdl-navigation">
+	<a class="mdl-navigation__link" href ng-click="gfpCtrl.toggleGenreExpand()"><h6>Genre</h6></a>
+	<div ng-show="gfpCtrl.expanded">
 		<codex-genre-filter-panel-item genre="genre" ng-repeat="genre in gfpCtrl.genres | orderBy:'name'"></codex-genre-filter-panel-item>
 	</div>
-</div>
+</nav>

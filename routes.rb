@@ -37,7 +37,7 @@ end
 
 get '/api/fics/:id/chapters' do
 	fic ||= Fic.get(params[:id]) || halt(404)
-	fic.chapters.all.to_json(:exclude => [ :data ])
+	fic.chapters.all(:order => [:number.asc]).to_json(:exclude => [ :data ])
 end
 
 get '/api/fics/:id/chapters/:number' do
