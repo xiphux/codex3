@@ -138,7 +138,8 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 		templateUrl: 'read/chapter-list.html',
 		replace: true,
 		scope: {
-			chapters: '='
+			chapters: '=',
+			currentChapter: '='
 		}
 	};
 })
@@ -157,12 +158,13 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 		controller: 'chapterListItemController',
 		controllerAs: 'cliCtrl',
 		scope: {
-			chapter: '='
+			chapter: '=',
+			currentChapter: '='
 		}
 	};
 })
 
-.controller('readerFooterNavController', ['$scope', '$window', function($scope, $window) {
+.controller('readerFooterNavController', ['$scope', function($scope) {
 	
 	this.nextChapter = null;
 	this.prevChapter = null;
@@ -198,14 +200,12 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 	this.gotoNextChapter = function() {
 		if ($scope.currentChapter && this.nextChapter) {
 			$scope.$emit('readerNextChapter');
-			$window.scrollTo(0,0);
 		}
 	};
 	
 	this.gotoPrevChapter = function() {
 		if ($scope.currentChapter && this.prevChapter) {
 			$scope.$emit('readerPrevChapter');
-			$window.scrollTo(0,0);
 		}
 	};
 	
