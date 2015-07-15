@@ -1,5 +1,7 @@
 <nav class="mdl-navigation">
-	<a class="mdl-navigation__link" href ng-click="sfpCtrl.toggleSeriesExpand()"><h6>Series</h6></a>
+	<a class="mdl-navigation__link" href ng-click="sfpCtrl.toggleSeriesExpand()">
+		<h6><i class="material-icons">{{ sfpCtrl.expanded ? 'expand_less' : 'expand_more' }}</i> Series</h6>
+	</a>
 	<div ng-show="sfpCtrl.expanded">
 		<codex-series-filter-panel-item series="s" ng-repeat="s in sfpCtrl.series | orderBy:'title'"></codex-series-filter-panel-item>
 	</div>

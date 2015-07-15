@@ -1,5 +1,7 @@
 <nav class="mdl-navigation">
-	<a class="mdl-navigation__link" ng-click="mfpCtrl.toggleMatchupExpand()"><h6>Matchup</h6></a>
+	<a class="mdl-navigation__link" ng-click="mfpCtrl.toggleMatchupExpand()">
+		<h6><i class="material-icons">{{ mfpCtrl.expanded ? 'expand_less' : 'expand_more' }}</i> Matchup</h6>
+	</a>
 	<div ng-show="mfpCtrl.expanded">
 		<codex-matchup-filter-panel-item matchup="matchup" ng-repeat="matchup in mfpCtrl.matchups"></codex-matchup-filter-panel-item>
 	</div>
