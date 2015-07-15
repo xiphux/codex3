@@ -18,7 +18,7 @@ angular.module('codex.filters', [])
 		for (var i = 0; i < authors.length; i++) {
 			if (i > 0) {
 				if (i == (authors.length - 1)) {
-					retstr += " and ";
+					retstr += ", and ";
 				} else {
 					retstr += ", ";
 				}
