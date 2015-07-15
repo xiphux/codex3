@@ -251,15 +251,25 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 	});
 }])
 
-.controller('ficListController', ['$scope', '$rootScope', 'ficBrowseService', function($scope, $rootScope, ficBrowseService) {
+.controller('ficListController', ['$scope', '$rootScope', '$timeout', 'ficBrowseService', function($scope, $rootScope, $timeout, ficBrowseService) {
 	
 	$rootScope.subtitle = '';
 	
 	this.fics = ficBrowseService.fics;
 	this.searchActive = ficBrowseService.hasSearch();
+	this.searchPending = false;
 	var that = this;
 	
+	// TODO: apparently directive template/controllers don't get $viewContentLoaded events - is this correct to call on init?
+	componentHandler.upgradeAllRegistered();
+	
+	$scope.$on('ficBrowseFicsUpdating', function() {
+		that.searchPending = true;
+		that.searchActive = ficBrowseService.hasSearch();
+	});
+	
 	$scope.$on('ficBrowseFicsUpdated', function() {
+		that.searchPending = false;
 		that.fics = ficBrowseService.fics;
 		that.searchActive = ficBrowseService.hasSearch();
 	});
@@ -286,12 +296,6 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 })
 
 .controller('ficListItemController', ['$scope', '$resource', '$timeout', function($scope, $resource, $timeout) {
-	
-	$scope.$on('$viewContentLoaded', function() {
-		$timeout(function() {
-			componentHandler.upgradeAllRegistered();
-		});
-	});
 	
 	this.expanded = false;
 	

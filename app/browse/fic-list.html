@@ -1,4 +1,5 @@
 <div class="mdl-grid">
+	<div ng-show="flCtrl.searchPending" ng-class="{'is-active':flCtrl.searchPending}" class="mdl-cell mdl-cell--12-col mdl-spinner mdl-js-spinner" style="width:96px;height:96px"></div>
 	<codex-fic-list-splash ng-show="!flCtrl.searchActive"></codex-fic-list-splash>
 	<codex-fic-list-item fic="fic" ng-repeat="fic in flCtrl.fics | orderBy:'title'"></codex-fic-list-item>
 </div>
