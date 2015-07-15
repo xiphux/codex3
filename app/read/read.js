@@ -143,11 +143,19 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 	};
 })
 
+.controller('chapterListItemController', ['$scope', function($scope) {
+	this.setChapter = function() {
+		$scope.$emit('readerSetChapter', $scope.chapter);
+	}
+}])
+
 .directive('codexChapterListItem', function() {
 	return {
 		restrict: 'E',
 		templateUrl: 'read/chapter-list-item.html',
 		replace: true,
+		controller: 'chapterListItemController',
+		controllerAs: 'cliCtrl',
 		scope: {
 			chapter: '='
 		}
