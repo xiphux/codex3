@@ -29,8 +29,6 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 
 .controller('readerController', ['$scope', '$routeParams', '$locationEx', '$rootScope', '$resource', '$timeout', 'chapterFilter', function($scope, $routeParams, $locationEx, $rootScope, $resource, $timeout, chapterFilter) {
 	
-	$scope.maxchapter = 0;
-	
 	var chapterResource = $resource('api/fics/:ficId/chapters/:num');
 	var chapterLoaded = false;
 	var ficLoaded = false;
@@ -69,18 +67,15 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 		}
 	);
 	
-	$scope.chapters = $resource('api/fics/:ficId/chapters').query({ ficId: $routeParams.ficId },
-		function(data) {
-			$scope.maxchapter = _.get(_.max(data, 'number'),'number', 0);
-		}
-	);
+	$scope.chapters = $resource('api/fics/:ficId/chapters').query({ ficId: $routeParams.ficId });
 	
 	$scope.setChapter = function(num) {
-		if (!num || (num < 1) || (num > $scope.maxchapter)) {
+		if (!num || (num < 1) || (num > _.get(_.max($scope.chapters, 'number'),'number', 0))) {
 			return false;
 		}
 		loadChapter(num);
 		$locationEx.skipReload().path('/read/' + $routeParams.ficId + '/chapters/' + num);
+		$scope.$broadcast('readerChapterChanged');
 		return true;
 	};
 	
@@ -114,6 +109,18 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 		});
 	});
 	
+}])
+
+.directive('scrollToTopWhen', ['$timeout', function($timeout) {
+	return {
+		link: function (scope, element, attrs) {
+			scope.$on(attrs.scrollToTopWhen, function() {
+				$timeout(function() {
+					element[0].scrollTop = 0;
+				});
+			});
+		}
+	}
 }])
 
 .filter('chapter', function() {
