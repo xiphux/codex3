@@ -63,6 +63,9 @@ angular.module('codex.filters', [])
 
 .filter('matchup', function() {
 	return function(matchup) {
+		if (!matchup || !matchup.characters || (matchup.characters.length < 1)) {
+			return '';
+		}
 		var crossover = false;
 		var firstseries = matchup.characters[0].series.id;
 		for (var i = 1; i < matchup.characters.length; i++) {
