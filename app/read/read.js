@@ -123,15 +123,6 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 	}
 }])
 
-.filter('chapter', function() {
-	return function(chapter) {
-		if (!chapter) {
-			return '';
-		}
-		return chapter.title || ('Chapter ' + chapter.number);
-	}
-})
-
 .directive('codexChapterList', function() {
 	return {
 		restrict: 'E',

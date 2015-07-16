@@ -14,10 +14,6 @@ describe('codex.read module', function() {
 		
 	});
 	
-	describe('chapter filter', function() {
-		
-	});
-	
 	describe('codex-chapter-list directive', function() {
 		
 	});

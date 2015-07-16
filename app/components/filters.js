@@ -102,4 +102,13 @@ angular.module('codex.filters', [])
 		}
 		return retstr;
 	};
-}]);
+}])
+
+.filter('chapter', function() {
+	return function(chapter) {
+		if (!chapter || !(chapter.title || chapter.number)) {
+			return '';
+		}
+		return chapter.title || ('Chapter ' + chapter.number);
+	}
+});
