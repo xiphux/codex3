@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
+angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/', {
@@ -9,7 +9,7 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 	});
 }])
 
-.factory('ficBrowseService', ['$rootScope', '$resource', function($rootScope, $resource) {
+.factory('ficBrowseService', ['$rootScope', 'ficDataService', function($rootScope, ficDataService) {
 	
 	var genreFilters = {};
 	var matchupFilters = {};
@@ -18,8 +18,6 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 	var genreCounts = {};
 	var matchupCounts = {};
 	var seriesCounts = {};
-	
-	var ficResource = $resource('api/fics');
 	
 	var service = {
 		
@@ -69,36 +67,20 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 		},
 		
 		queryFics: function() {
-			var params = {};
+			
 			var genreIds = _.keys(genreFilters);
 			var matchupIds = _.keys(matchupFilters);
 			var seriesIds = _.keys(seriesFilters);
-			if (genreIds.length > 0) {
-				if (genreIds.length > 1) {
-					params['genre[]'] = genreIds;
-				} else {
-					params['genre'] = genreIds[0];
-				}
-			}
-			if (matchupIds.length > 0) {
-				if (matchupIds.length > 1) {
-					params['matchup[]'] = matchupIds;
-				} else {
-					params['matchup'] = matchupIds[0];
-				}
-			}
-			if (seriesIds.length > 0) {
-				if (seriesIds.length > 1) {
-					params['series[]'] = seriesIds;
-				} else {
-					params['series'] = seriesIds[0];
-				}
-			}
 			
 			$rootScope.$broadcast('ficBrowseFicsUpdating');
-			if (_.size(params) > 0) {
+			if ((genreIds.length > 0) || (matchupIds.length > 0) || (seriesIds.length > 0)) {
 				var that = this;
-				this.fics = ficResource.query(params, function(data) {
+				this.fics = ficDataService.getFics({
+					genres: genreIds,
+					matchups: matchupIds,
+					series: seriesIds
+				});
+				this.fics.$promise.then(function(data) {
 					that.recount();
 					$rootScope.$broadcast('ficBrowseFicsUpdated');
 				});
@@ -295,13 +277,13 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 	};
 })
 
-.controller('ficListItemController', ['$scope', '$resource', '$timeout', function($scope, $resource, $timeout) {
+.controller('ficListItemController', ['$scope', 'ficDataService', '$timeout', function($scope, ficDataService, $timeout) {
 	
 	this.expanded = false;
 	
 	this.toggle = function() {
 		if (!this.ficDetail) {
-			this.ficDetail = $resource('api/fics/:ficId').get({ficId: $scope.fic.id});
+			this.ficDetail = ficDataService.getFic($scope.fic.id);
 		}
 		this.expanded = !this.expanded;
 	}
@@ -320,14 +302,14 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 	};
 })
 
-.controller('seriesFilterPanelController', ['$scope', '$resource', 'ficBrowseService', function($scope, $resource, ficBrowseService) {
+.controller('seriesFilterPanelController', ['$scope', 'seriesDataService', 'ficBrowseService', function($scope, seriesDataService, ficBrowseService) {
 	
 	this.expanded = false;
 	this.loaded = false;
 	
 	this.toggleSeriesExpand = function() {
 		if (!this.expanded && !this.loaded) {
-			this.series = $resource('api/series').query();
+			this.series = seriesDataService.getSeries();
 			this.loaded = true;
 		}
 		this.expanded = !this.expanded;
@@ -389,14 +371,14 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 	};
 })
 
-.controller('genreFilterPanelController', ['$scope', '$resource', 'ficBrowseService', function($scope, $resource, ficBrowseService) {
+.controller('genreFilterPanelController', ['$scope', 'genreDataService', 'ficBrowseService', function($scope, genreDataService, ficBrowseService) {
 	
 	this.expanded = false;
 	this.loaded = false;
 	
 	this.toggleGenreExpand = function() {
 		if (!this.expanded && !this.loaded) {
-			this.genres = $resource('api/genres').query();
+			this.genres = genreDataService.getGenres();
 			this.loaded = true;
 		}
 		this.expanded = !this.expanded;
@@ -458,7 +440,7 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 	};
 })
 
-.controller('matchupFilterPanelController', ['$scope', '$resource', 'ficBrowseService', function($scope, $resource, ficBrowseService) {
+.controller('matchupFilterPanelController', ['$scope', 'matchupDataService', 'ficBrowseService', function($scope, matchupDataService, ficBrowseService) {
 	
 	this.expanded = false;
 	this.loaded = false;	
@@ -466,7 +448,7 @@ angular.module('codex.browse', ['ngRoute', 'ngResource', 'codex.filters'])
 	this.toggleMatchupExpand = function() {
 		
 		if (!this.expanded && !this.loaded) {
-			this.matchups = $resource('api/matchups').query();
+			this.matchups = matchupDataService.getMatchups();
 			this.loaded = true;
 		}
 		

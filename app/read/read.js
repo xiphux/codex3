@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.textFormatter'])
+angular.module('codex.read', ['ngRoute', 'codex.filters', 'codex.textFormatter', 'codex.data'])
 
 .config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/read/:ficId', {
@@ -27,9 +27,8 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
     return $location;
 }])
 
-.controller('readerController', ['$scope', '$routeParams', '$locationEx', '$rootScope', '$resource', '$timeout', 'chapterFilter', function($scope, $routeParams, $locationEx, $rootScope, $resource, $timeout, chapterFilter) {
+.controller('readerController', ['$scope', '$routeParams', '$locationEx', '$rootScope', '$timeout', 'chapterFilter', 'ficDataService', 'chapterDataService', function($scope, $routeParams, $locationEx, $rootScope, $timeout, chapterFilter, ficDataService, chapterDataService) {
 	
-	var chapterResource = $resource('api/fics/:ficId/chapters/:num');
 	var chapterLoaded = false;
 	var ficLoaded = false;
 	
@@ -39,35 +38,37 @@ angular.module('codex.read', ['ngRoute', 'ngResource', 'codex.filters', 'codex.t
 	
 	var loadChapter = function(num) {
 		chapterLoaded = false;
-		chapterResource.get({ ficId: $routeParams.ficId, num: num },
-			function(data) {
-				// intentionally setting here and not immediately setting the returned promise
-				// to avoid flicker when the promise is unresolved
-				$scope.chapter = data;
-				
-				chapterLoaded = true;
-				if (chapterLoaded && ficLoaded) {
-					updatePageTitle();
+		var chap = chapterDataService.getChapter($routeParams.ficId, num)
+		if (chap) {
+			chap.$promise.then(
+				function(data) {
+					// intentionally setting here and not immediately setting the returned promise
+					// to avoid flicker when the promise is unresolved
+					$scope.chapter = data;
+					
+					chapterLoaded = true;
+					if (chapterLoaded && ficLoaded) {
+						updatePageTitle();
+					}
+				},
+				function(httpResponse) {
+					$locationEx.path('/');
 				}
-			},
-			function(httpResponse) {
-				$locationEx.path('/');
-			}
-		);
+			);
+		}
 	};
 	
 	loadChapter($routeParams.chapterNum);
 	
-	$scope.fic = $resource('api/fics/:ficId').get({ ficId: $routeParams.ficId },
-		function(data) {
-			ficLoaded = true;
-			if (chapterLoaded && ficLoaded) {
-				updatePageTitle();
-			}
+	$scope.fic = ficDataService.getFic($routeParams.ficId);
+	$scope.fic.$promise.then(function(data) {
+		ficLoaded = true;
+		if (chapterLoaded && ficLoaded) {
+			updatePageTitle();
 		}
-	);
+	});
 	
-	$scope.chapters = $resource('api/fics/:ficId/chapters').query({ ficId: $routeParams.ficId });
+	$scope.chapters = chapterDataService.getChapters($routeParams.ficId);
 	
 	$scope.setChapter = function(num) {
 		if (!num || (num < 1) || (num > _.get(_.max($scope.chapters, 'number'),'number', 0))) {
