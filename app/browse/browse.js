@@ -286,7 +286,18 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 	var that = this;
 	
 	// TODO: apparently directive template/controllers don't get $viewContentLoaded events - is this correct to call on init?
-	componentHandler.upgradeAllRegistered();
+	$timeout(function() {
+		componentHandler.upgradeAllRegistered();
+	});
+	
+	$scope.titleSort = function(fic) {
+		var title = fic.title || 'Untitled';
+		title = title.replace(/[^A-Za-z0-9_ ]/g,"").toUpperCase();
+		if (title.slice(0, 4) == 'THE ') {
+			title = title.slice(4);
+		}
+		return title;
+	};
 	
 	$scope.$on('ficBrowseFicsUpdating', function() {
 		that.searchPending = true;
