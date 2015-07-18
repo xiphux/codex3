@@ -11,27 +11,29 @@ angular.module('codex.data', ['ngResource'])
 		
 		var params = {};
 		
-		if (filters.series && (filters.series.length > 0)) {
-			if (filters.series.length > 1) {
-				params['series[]'] = filters.series;
-			} else {
-				params['series'] = filters.series[0];
+		if (filters) {
+			if (filters.series && (filters.series.length > 0)) {
+				if (filters.series.length > 1) {
+					params['series[]'] = filters.series;
+				} else {
+					params['series'] = filters.series[0];
+				}
 			}
-		}
-		
-		if (filters.genres && (filters.genres.length > 0)) {
-			if (filters.genres.length > 1) {
-				params['genre[]'] = filters.genres;
-			} else {
-				params['genre'] = filters.genres[0];
+			
+			if (filters.genres && (filters.genres.length > 0)) {
+				if (filters.genres.length > 1) {
+					params['genre[]'] = filters.genres;
+				} else {
+					params['genre'] = filters.genres[0];
+				}
 			}
-		}
-		
-		if (filters.matchups && (filters.matchups.length > 0)) {
-			if (filters.matchups.length > 1) {
-				params['matchup[]'] = filters.matchups;
-			} else {
-				params['matchup'] = filters.matchups[0];
+			
+			if (filters.matchups && (filters.matchups.length > 0)) {
+				if (filters.matchups.length > 1) {
+					params['matchup[]'] = filters.matchups;
+				} else {
+					params['matchup'] = filters.matchups[0];
+				}
 			}
 		}
 		
