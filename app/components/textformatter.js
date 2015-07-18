@@ -72,6 +72,11 @@ angular.module('codex.textFormatter', [])
 			return content.replace(rgx, "$1 ").replace(/([\w,]) {2,}([\w,])/, "$1 $2");
 		},
 		
+		wrapBreaklines: function(content) {
+			// preserve breaklines that may have been accidentally wrapped up
+			return content.replace(/([^\*\-=\~_\^`#\$@\+A-Za-z])((([\*\-=\~_#\^`\$@\+]) ?){4,})([^\*\-=\~_#\^`\$@\+])/, "$1\n$2\n$5");
+		},
+		
 		unwrap: function(content) {
 			
 			var unwrapped = content;
@@ -92,8 +97,7 @@ angular.module('codex.textFormatter', [])
 				unwrapped = this.unwrapLineWidths(unwrapped, metrics.averageLineLength);
 			}
 			
-			// preserve breaklines that may have been accidentally wrapped up
-			unwrapped = unwrapped.replace(/([^\*\-=\~_\^`#\$@\+A-Za-z])((([\*\-=\~_#\^`\$@\+]) ?){4,})([^\*\-=\~_#\^`\$@\+])/, "$1\n$2\n$5");
+			unwrapped = this.wrapBreaklines(unwrapped);
 			
 			return unwrapped;
 		},
