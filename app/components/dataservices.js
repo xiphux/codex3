@@ -7,7 +7,7 @@ angular.module('codex.data', ['ngResource'])
 	var ficsResource = $resource('api/fics');
 	var ficResource = $resource('api/fics/:ficId');
 	
-	var getFics = function(filters) {
+	function getFics(filters) {
 		
 		var params = {};
 		
@@ -40,7 +40,7 @@ angular.module('codex.data', ['ngResource'])
 		return ficsResource.query(params);
 	};
 	
-	var getFic = function(ficId) {
+	function getFic(ficId) {
 		if (!ficId) {
 			return null;
 		}
@@ -59,14 +59,14 @@ angular.module('codex.data', ['ngResource'])
 	var chaptersResource = $resource('api/fics/:ficId/chapters');
 	var chapterResource = $resource('api/fics/:ficId/chapters/:num');
 	
-	var getChapters = function(ficId) {
+	function getChapters(ficId) {
 		if (!ficId) {
 			return null;
 		}
 		return chaptersResource.query({ ficId: ficId });
 	};
 	
-	var getChapter = function(ficId, num) {
+	function getChapter(ficId, num) {
 		if (!(ficId && num)) {
 			return null;
 		}
@@ -84,7 +84,7 @@ angular.module('codex.data', ['ngResource'])
 	
 	var seriesResource = $resource('api/series');
 	
-	var getSeries = function() {
+	function getSeries() {
 		return seriesResource.query();
 	};
 	
@@ -98,7 +98,7 @@ angular.module('codex.data', ['ngResource'])
 	
 	var genresResource = $resource('api/genres');
 	
-	var getGenres = function() {
+	function getGenres() {
 		return genresResource.query();
 	};
 	
@@ -112,7 +112,7 @@ angular.module('codex.data', ['ngResource'])
 	
 	var matchupsResource = $resource('api/matchups');
 	
-	var getMatchups = function() {
+	function getMatchups() {
 		return matchupsResource.query();
 	};
 	
