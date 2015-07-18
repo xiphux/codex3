@@ -1,0 +1,8 @@
+<div class="mdl-layout__header-row" ng-show="fbCtrl.hasFilters" style="padding-left: 0px">
+	<nav class="mdl-navigation">
+		<a class="mdl-navigation__link" href ng-click="fbCtrl.clear()"><i class="material-icons">clear</i></a>
+		<codex-filter-bar-series-item ng-repeat="series in fbCtrl.seriesFilters | orderBy:'title'" series="series"></codex-filter-bar-series-item>
+		<codex-filter-bar-genre-item ng-repeat="genre in fbCtrl.genreFilters | orderBy:'name'" genre="genre"></codex-filter-bar-genre-item>
+		<codex-filter-bar-matchup-item ng-repeat="matchup in fbCtrl.matchupFilters" matchup="matchup"></codex-filter-bar-matchup-item>
+	</nav>
+</div>
