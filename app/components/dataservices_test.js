@@ -12,7 +12,7 @@ describe('codex.data module', function() {
 	        angular.mock.inject(function ($injector) {
 	            $httpBackend = $injector.get('$httpBackend');
 	            mockFicDataService = $injector.get('ficDataService');
-	        })
+	        });
 	    });
 		
 		describe('getFics', function() {
