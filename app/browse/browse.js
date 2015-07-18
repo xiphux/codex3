@@ -19,204 +19,228 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 	var matchupCounts = {};
 	var seriesCounts = {};
 	
-	var service = {
+	var fics = null;
+	
+	function recount() {
+		genreCounts = {};
+		matchupCounts = {};
+		seriesCounts = {};
 		
-		fics: null,
+		if (!fics) {
+			return;
+		}
 		
-		recount: function() {
-			genreCounts = {};
-			matchupCounts = {};
-			seriesCounts = {};
+		for (var i = 0; i < fics.length; i++) {
 			
-			if (!this.fics) {
-				return;
+			var fic = fics[i];
+			
+			if (fic.fic_genres && (fic.fic_genres.length > 0)) {
+				for (var j = 0; j < fic.fic_genres.length; j++) {
+					var genre_id = fic.fic_genres[j].genre_id;
+					if (genre_id) {
+						genreCounts[genre_id] = genreCounts[genre_id] ? genreCounts[genre_id] + 1 : 1;
+					}
+				}
 			}
 			
-			for (var i = 0; i < this.fics.length; i++) {
-				
-				var fic = this.fics[i];
-				
-				if (fic.fic_genres && (fic.fic_genres.length > 0)) {
-					for (var j = 0; j < fic.fic_genres.length; j++) {
-						var genre_id = fic.fic_genres[j].genre_id;
-						if (genre_id) {
-							genreCounts[genre_id] = genreCounts[genre_id] ? genreCounts[genre_id] + 1 : 1;
-						}
+			if (fic.fic_matchups && (fic.fic_matchups.length > 0)) {
+				for (var j = 0; j < fic.fic_matchups.length; j++) {
+					var matchup_id = fic.fic_matchups[j].matchup_id;
+					if (matchup_id) {
+						matchupCounts[matchup_id] = matchupCounts[matchup_id] ? matchupCounts[matchup_id] + 1 : 1;
 					}
 				}
-				
-				if (fic.fic_matchups && (fic.fic_matchups.length > 0)) {
-					for (var j = 0; j < fic.fic_matchups.length; j++) {
-						var matchup_id = fic.fic_matchups[j].matchup_id;
-						if (matchup_id) {
-							matchupCounts[matchup_id] = matchupCounts[matchup_id] ? matchupCounts[matchup_id] + 1 : 1;
-						}
-					}
-				}
-				
-				if (fic.fic_series && (fic.fic_series.length > 0)) {
-					for (var j = 0; j < fic.fic_series.length; j++) {
-						var series_id = fic.fic_series[j].series_id;
-						if (series_id) {
-							seriesCounts[series_id] = seriesCounts[series_id] ? seriesCounts[series_id] + 1 : 1;
-						}
-					}
-				}
-				
 			}
-		},
+			
+			if (fic.fic_series && (fic.fic_series.length > 0)) {
+				for (var j = 0; j < fic.fic_series.length; j++) {
+					var series_id = fic.fic_series[j].series_id;
+					if (series_id) {
+						seriesCounts[series_id] = seriesCounts[series_id] ? seriesCounts[series_id] + 1 : 1;
+					}
+				}
+			}
+			
+		}
+	};
+	
+	function getFics() {
+		return fics;
+	};
+	
+	function refresh() {
 		
-		refresh: function() {
-			
-			var genreIds = _.keys(genreFilters);
-			var matchupIds = _.keys(matchupFilters);
-			var seriesIds = _.keys(seriesFilters);
-			
-			$rootScope.$broadcast('ficBrowseFicsUpdating');
-			if ((genreIds.length > 0) || (matchupIds.length > 0) || (seriesIds.length > 0)) {
-				var that = this;
-				this.fics = ficDataService.getFics({
-					genres: genreIds,
-					matchups: matchupIds,
-					series: seriesIds
-				});
-				this.fics.$promise.then(function(data) {
-					that.recount();
-					$rootScope.$broadcast('ficBrowseFicsUpdated');
-				});
-			} else {
-				this.fics = null;
-				this.recount();
+		var genreIds = _.keys(genreFilters);
+		var matchupIds = _.keys(matchupFilters);
+		var seriesIds = _.keys(seriesFilters);
+		
+		$rootScope.$broadcast('ficBrowseFicsUpdating');
+		if ((genreIds.length > 0) || (matchupIds.length > 0) || (seriesIds.length > 0)) {
+			fics = ficDataService.getFics({
+				genres: genreIds,
+				matchups: matchupIds,
+				series: seriesIds
+			});
+			fics.$promise.then(function(data) {
+				recount();
 				$rootScope.$broadcast('ficBrowseFicsUpdated');
-			}
-			return this.fics;
-		},
-		
-		hasSearch: function() {
-			return this.hasAnySeriesFilter() || this.hasAnyGenreFilter() || this.hasAnyMatchupFilter();
-		},
-		
-		addGenreFilter: function(genre) {
-			if (!genre || this.hasGenreFilter(genre)) {
-				return;
-			}
-			genreFilters[genre.id] = genre;
-			$rootScope.$broadcast('ficBrowseGenresUpdated');
-		},
-		
-		removeGenreFilter: function(genre) {
-			if (!(genre && this.hasGenreFilter(genre))) {
-				return;
-			}
-			delete genreFilters[genre.id];
-			$rootScope.$broadcast('ficBrowseGenresUpdated');
-		},
-		
-		hasGenreFilter: function(genre) {
-			if (!genre) {
-				return false;
-			}
-			return _.has(genreFilters, genre.id);
-		},
-		
-		hasAnyGenreFilter: function() {
-			return !_.isEmpty(genreFilters);
-		},
-		
-		ficsWithGenre: function(genre) {
-			if (!(genre && this.fics)) {
-				return 0;
-			}
-			
-			return genreCounts[genre.id] || 0;
-		},
-		
-		addMatchupFilter: function(matchup) {
-			if (!matchup || this.hasMatchupFilter(matchup)) {
-				return;
-			}
-			matchupFilters[matchup.id] = matchup;
-			$rootScope.$broadcast('ficBrowseMatchupsUpdated');
-		},
-		
-		removeMatchupFilter: function(matchup) {
-			if (!(matchup && this.hasMatchupFilter(matchup))) {
-				return;
-			}
-			delete matchupFilters[matchup.id];
-			$rootScope.$broadcast('ficBrowseMatchupsUpdated');
-		},
-		
-		hasMatchupFilter: function(matchup) {
-			if (!matchup) {
-				return false;
-			}
-			return _.has(matchupFilters, matchup.id);
-		},
-		
-		hasAnyMatchupFilter: function() {
-			return !_.isEmpty(matchupFilters);
-		},
-		
-		ficsWithMatchup: function(matchup) {
-			if (!(matchup && this.fics)) {
-				return 0;
-			}
-			
-			return matchupCounts[matchup.id] || 0;
-		},
-		
-		addSeriesFilter: function(series) {
-			if (!series || this.hasSeriesFilter(series)) {
-				return;
-			}
-			seriesFilters[series.id] = series;
-			$rootScope.$broadcast('ficBrowseSeriesUpdated');
-		},
-		
-		removeSeriesFilter: function(series) {
-			if (!(series && this.hasSeriesFilter(series))) {
-				return;
-			}
-			delete seriesFilters[series.id];
-			$rootScope.$broadcast('ficBrowseSeriesUpdated');
-		},
-		
-		hasSeriesFilter: function(series) {
-			if (!series) {
-				return false;
-			}
-			return _.has(seriesFilters, series.id);
-		},
-		
-		hasAnySeriesFilter: function() {
-			return !_.isEmpty(seriesFilters);
-		},
-		
-		ficsWithSeries: function(series) {
-			if (!(series && this.fics)) {
-				return 0;
-			}
-			
-			return seriesCounts[series.id] || 0;
-		},
-		
-		clear: function() {
-			seriesFilters = {};
-			genreFilters = {};
-			matchupFilters = {};
-			$rootScope.$broadcast('ficBrowseFicsUpdating');
-			this.fics = null;
-			this.recount();
-			$rootScope.$broadcast('ficBrowseSeriesUpdated');
-			$rootScope.$broadcast('ficBrowseMatchupsUpdated');
-			$rootScope.$broadcast('ficBrowseGenresUpdated');
+			});
+		} else {
+			fics = null;
+			recount();
 			$rootScope.$broadcast('ficBrowseFicsUpdated');
 		}
+		return fics;
+	};
+	
+	function hasSearch() {
+		return hasAnySeriesFilter() || hasAnyGenreFilter() || hasAnyMatchupFilter();
+	};
+	
+	function hasAnyGenreFilter() {
+		return !_.isEmpty(genreFilters);
+	};
+	
+	function hasAnyMatchupFilter() {
+		return !_.isEmpty(matchupFilters);
+	};
+	
+	function hasAnySeriesFilter() {
+		return !_.isEmpty(seriesFilters);
+	};
+	
+	function hasGenreFilter(genre) {
+		if (!genre) {
+			return false;
+		}
+		return _.has(genreFilters, genre.id);
+	};
+	
+	function hasMatchupFilter(matchup) {
+		if (!matchup) {
+			return false;
+		}
+		return _.has(matchupFilters, matchup.id);
+	};
+	
+	function hasSeriesFilter(series) {
+		if (!series) {
+			return false;
+		}
+		return _.has(seriesFilters, series.id);
+	};
+	
+	function addGenreFilter(genre) {
+		if (!genre || hasGenreFilter(genre)) {
+			return;
+		}
+		genreFilters[genre.id] = genre;
+		$rootScope.$broadcast('ficBrowseGenresUpdated');
+	};
+	
+	function removeGenreFilter(genre) {
+		if (!(genre && hasGenreFilter(genre))) {
+			return;
+		}
+		delete genreFilters[genre.id];
+		$rootScope.$broadcast('ficBrowseGenresUpdated');
+	};
+	
+	function addMatchupFilter(matchup) {
+		if (!matchup || hasMatchupFilter(matchup)) {
+			return;
+		}
+		matchupFilters[matchup.id] = matchup;
+		$rootScope.$broadcast('ficBrowseMatchupsUpdated');
+	};
+	
+	function removeMatchupFilter(matchup) {
+		if (!(matchup && hasMatchupFilter(matchup))) {
+			return;
+		}
+		delete matchupFilters[matchup.id];
+		$rootScope.$broadcast('ficBrowseMatchupsUpdated');
+	};
+	
+	function addSeriesFilter(series) {
+		if (!series || hasSeriesFilter(series)) {
+			return;
+		}
+		seriesFilters[series.id] = series;
+		$rootScope.$broadcast('ficBrowseSeriesUpdated');
+	};
+	
+	function removeSeriesFilter(series) {
+		if (!(series && hasSeriesFilter(series))) {
+			return;
+		}
+		delete seriesFilters[series.id];
+		$rootScope.$broadcast('ficBrowseSeriesUpdated');
+	};
+	
+	function ficsWithGenre(genre) {
+		if (!(genre && fics)) {
+			return 0;
+		}
+		
+		return genreCounts[genre.id] || 0;
+	};
+	
+	function ficsWithMatchup(matchup) {
+		if (!(matchup && fics)) {
+			return 0;
+		}
+		
+		return matchupCounts[matchup.id] || 0;
+	};
+	
+	function ficsWithSeries(series) {
+		if (!(series && fics)) {
+			return 0;
+		}
+		
+		return seriesCounts[series.id] || 0;
+	};
+	
+	function clear() {
+		seriesFilters = {};
+		$rootScope.$broadcast('ficBrowseSeriesUpdated');
+		genreFilters = {};
+		$rootScope.$broadcast('ficBrowseGenresUpdated');
+		matchupFilters = {};
+		$rootScope.$broadcast('ficBrowseMatchupsUpdated');
+		refresh();
+	};
+	
+	return {
+		
+		getFics: getFics,
+		refresh: refresh,
+
+		hasSearch: hasSearch,
+		
+		addGenreFilter: addGenreFilter,		
+		removeGenreFilter: removeGenreFilter,
+		hasGenreFilter: hasGenreFilter,
+		hasAnyGenreFilter: hasAnyGenreFilter,
+		ficsWithGenre: ficsWithGenre,
+		
+		addMatchupFilter: addMatchupFilter,
+		removeMatchupFilter: removeMatchupFilter,
+		hasMatchupFilter: hasMatchupFilter,
+		hasAnyMatchupFilter: hasAnyMatchupFilter,
+		ficsWithMatchup: ficsWithMatchup,
+		
+		addSeriesFilter: addSeriesFilter,
+		removeSeriesFilter: removeSeriesFilter,
+		hasSeriesFilter: hasSeriesFilter,
+		hasAnySeriesFilter: hasAnySeriesFilter,
+		ficsWithSeries: ficsWithSeries,
+		
+		clear: clear
 		
 	};
 	
-	return service;
 }])
 
 .controller('browseController', ['$scope', '$timeout', function($scope, $timeout) {
@@ -231,7 +255,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 	
 	$rootScope.subtitle = '';
 	
-	this.fics = ficBrowseService.fics;
+	this.fics = ficBrowseService.getFics();
 	this.searchActive = ficBrowseService.hasSearch();
 	this.searchPending = false;
 	var that = this;
@@ -246,7 +270,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 	
 	$scope.$on('ficBrowseFicsUpdated', function() {
 		that.searchPending = false;
-		that.fics = ficBrowseService.fics;
+		that.fics = ficBrowseService.getFics();
 		that.searchActive = ficBrowseService.hasSearch();
 	});
 }])
