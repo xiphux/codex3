@@ -66,7 +66,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			}
 		},
 		
-		queryFics: function() {
+		refresh: function() {
 			
 			var genreIds = _.keys(genreFilters);
 			var matchupIds = _.keys(matchupFilters);
@@ -102,7 +102,6 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			}
 			genreFilters[genre.id] = genre;
 			$rootScope.$broadcast('ficBrowseGenresUpdated');
-			this.queryFics();
 		},
 		
 		removeGenreFilter: function(genre) {
@@ -111,7 +110,6 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			}
 			delete genreFilters[genre.id];
 			$rootScope.$broadcast('ficBrowseGenresUpdated');
-			this.queryFics();
 		},
 		
 		hasGenreFilter: function(genre) {
@@ -139,7 +137,6 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			}
 			matchupFilters[matchup.id] = matchup;
 			$rootScope.$broadcast('ficBrowseMatchupsUpdated');
-			this.queryFics();
 		},
 		
 		removeMatchupFilter: function(matchup) {
@@ -148,7 +145,6 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			}
 			delete matchupFilters[matchup.id];
 			$rootScope.$broadcast('ficBrowseMatchupsUpdated');
-			this.queryFics();
 		},
 		
 		hasMatchupFilter: function(matchup) {
@@ -176,7 +172,6 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			}
 			seriesFilters[series.id] = series;
 			$rootScope.$broadcast('ficBrowseSeriesUpdated');
-			this.queryFics();
 		},
 		
 		removeSeriesFilter: function(series) {
@@ -185,7 +180,6 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			}
 			delete seriesFilters[series.id];
 			$rootScope.$broadcast('ficBrowseSeriesUpdated');
-			this.queryFics();
 		},
 		
 		hasSeriesFilter: function(series) {
@@ -354,6 +348,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 		} else {
 			ficBrowseService.addSeriesFilter($scope.series);
 		}
+		ficBrowseService.refresh();
 		this.active = !this.active;
 	};
 }])
@@ -423,6 +418,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 		} else {
 			ficBrowseService.addGenreFilter($scope.genre);
 		}
+		ficBrowseService.refresh();
 		this.active = !this.active;
 	};
 }])
@@ -494,6 +490,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 		} else {
 			ficBrowseService.addMatchupFilter($scope.matchup);
 		}
+		ficBrowseService.refresh();
 		this.active = !this.active;
 	};
 }])
