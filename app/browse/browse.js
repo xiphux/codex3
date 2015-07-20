@@ -15,9 +15,13 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 	var matchupFilters = {};
 	var seriesFilters = {};
 	
+	var searchTerms = [];
+	
 	var genreCounts = {};
 	var matchupCounts = {};
 	var seriesCounts = {};
+	
+	var dirty = false;
 	
 	var fics = null;
 	
@@ -80,33 +84,45 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 		return _.values(matchupFilters);
 	};
 	
+	function getSearchTerms() {
+		return searchTerms;
+	};
+	
 	function refresh() {
+		
+		if (!dirty) {
+			return;
+		}
 		
 		var genreIds = _.keys(genreFilters);
 		var matchupIds = _.keys(matchupFilters);
 		var seriesIds = _.keys(seriesFilters);
 		
 		$rootScope.$broadcast('ficBrowseFicsUpdating');
-		if ((genreIds.length > 0) || (matchupIds.length > 0) || (seriesIds.length > 0)) {
+		if ((genreIds.length > 0) || (matchupIds.length > 0) || (seriesIds.length > 0) || (searchTerms.length > 0)) {
 			fics = ficDataService.getFics({
 				genres: genreIds,
 				matchups: matchupIds,
-				series: seriesIds
+				series: seriesIds,
+				search: searchTerms
 			});
+			dirty = false;
 			fics.$promise.then(function(data) {
 				recount();
 				$rootScope.$broadcast('ficBrowseFicsUpdated');
 			});
 		} else {
 			fics = null;
+			dirty = false;
 			recount();
 			$rootScope.$broadcast('ficBrowseFicsUpdated');
 		}
+		
 		return fics;
 	};
 	
 	function hasSearch() {
-		return hasAnySeriesFilter() || hasAnyGenreFilter() || hasAnyMatchupFilter();
+		return hasAnySeriesFilter() || hasAnyGenreFilter() || hasAnyMatchupFilter() || hasAnySearchTerms();
 	};
 	
 	function hasAnyGenreFilter() {
@@ -119,6 +135,10 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 	
 	function hasAnySeriesFilter() {
 		return !_.isEmpty(seriesFilters);
+	};
+	
+	function hasAnySearchTerms() {
+		return searchTerms.length > 0;
 	};
 	
 	function hasGenreFilter(genre) {
@@ -142,11 +162,19 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 		return _.has(seriesFilters, series.id);
 	};
 	
+	function hasSearchTerm(term) {
+		if (!term) {
+			return false;
+		}
+		return _.includes(searchTerms, term);
+	};
+	
 	function addGenreFilter(genre) {
 		if (!genre || hasGenreFilter(genre)) {
 			return;
 		}
 		genreFilters[genre.id] = genre;
+		dirty = true;
 		$rootScope.$broadcast('ficBrowseGenreAdded', genre);
 	};
 	
@@ -155,6 +183,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			return;
 		}
 		delete genreFilters[genre.id];
+		dirty = true;
 		$rootScope.$broadcast('ficBrowseGenreRemoved', genre);
 	};
 	
@@ -163,6 +192,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			return;
 		}
 		matchupFilters[matchup.id] = matchup;
+		dirty = true;
 		$rootScope.$broadcast('ficBrowseMatchupAdded', matchup);
 	};
 	
@@ -171,6 +201,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			return;
 		}
 		delete matchupFilters[matchup.id];
+		dirty = true;
 		$rootScope.$broadcast('ficBrowseMatchupRemoved', matchup);
 	};
 	
@@ -179,6 +210,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			return;
 		}
 		seriesFilters[series.id] = series;
+		dirty = true;
 		$rootScope.$broadcast('ficBrowseSeriesAdded', series);
 	};
 	
@@ -187,7 +219,17 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			return;
 		}
 		delete seriesFilters[series.id];
+		dirty = true;
 		$rootScope.$broadcast('ficBrowseSeriesRemoved', series);
+	};
+	
+	function setSearchTerms(terms) {
+		var tempTerms = _.uniq(_.compact(terms));
+		if (_.isEqual(tempTerms, searchTerms)) {
+			return;
+		}
+		searchTerms = tempTerms;
+		dirty = true;
 	};
 	
 	function ficsWithGenre(genre) {
@@ -230,6 +272,9 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 		_.forEach(tempMatchupFilters, function(n, key) {
 			$rootScope.$broadcast('ficBrowseMatchupRemoved', n);
 		});
+		searchTerms = [];
+		$rootScope.$broadcast('ficBrowseSearchCleared');
+		dirty = true;
 		refresh();
 	};
 	
@@ -239,6 +284,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 		getGenreFilters: getGenreFilters,
 		getMatchupFilters: getMatchupFilters,
 		getSeriesFilters: getSeriesFilters,
+		getSearchTerms: getSearchTerms,
 		
 		refresh: refresh,
 
@@ -261,6 +307,9 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 		hasSeriesFilter: hasSeriesFilter,
 		hasAnySeriesFilter: hasAnySeriesFilter,
 		ficsWithSeries: ficsWithSeries,
+		
+		hasSearchTerm: hasSearchTerm,
+		setSearchTerms: setSearchTerms,
 		
 		clear: clear
 		
@@ -356,25 +405,62 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 	};
 })
 
+.controller('searchFieldController', ['$scope', 'ficBrowseService', function($scope, ficBrowseService) {
+	
+	
+	
+	function updateSearchField() {
+		$scope.search = ficBrowseService.getSearchTerms().join(' ');
+	}
+	updateSearchField();
+	
+	$scope.$on('ficBrowseSearchCleared', updateSearchField);
+	
+	$scope.$watch('search', function(newValue, oldValue) {
+		if (newValue === oldValue) {
+			return;
+		}
+		
+		ficBrowseService.setSearchTerms(newValue.split(' '));
+		ficBrowseService.refresh();
+	});
+}])
+
+.directive('codexSearchField', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'browse/search-field.html',
+		replace: true,
+		controller: 'searchFieldController',
+		controllerAs: 'sfCtrl',
+		scope: {}
+	};
+})
+
 .controller('filterBarController', ['$scope', 'ficBrowseService', function($scope, ficBrowseService) {
 	
 	this.genreFilters = ficBrowseService.getGenreFilters();
 	this.matchupFilters = ficBrowseService.getMatchupFilters();
 	this.seriesFilters = ficBrowseService.getSeriesFilters();
-	this.hasFilters = ficBrowseService.hasSearch();
 	
 	this.clear = function() {
 		ficBrowseService.clear();
+		ficBrowseService.refresh();
 	};
 	
 	var that = this;
+	
+	function updateFilterState() {
+		that.hasFilters = ficBrowseService.hasAnyGenreFilter() || ficBrowseService.hasAnySeriesFilter() || ficBrowseService.hasAnyMatchupFilter();
+	}
+	updateFilterState();
 	
 	$scope.$on('ficBrowseSeriesAdded', function(e, series) {
 		if (!series) {
 			return;
 		}
 		that.seriesFilters.push(series);
-		that.hasFilters = ficBrowseService.hasSearch();
+		updateFilterState();
 	});
 	
 	$scope.$on('ficBrowseSeriesRemoved', function(e, series) {
@@ -387,7 +473,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 				break;
 			}
 		}
-		that.hasFilters = ficBrowseService.hasSearch();
+		updateFilterState();
 	});
 	
 	$scope.$on('ficBrowseGenreAdded', function(e, genre) {
@@ -395,7 +481,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			return;
 		}
 		that.genreFilters.push(genre);
-		that.hasFilters = ficBrowseService.hasSearch();
+		updateFilterState();
 	});
 	
 	$scope.$on('ficBrowseGenreRemoved', function(e, genre) {
@@ -408,7 +494,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 				break;
 			}
 		}
-		that.hasFilters = ficBrowseService.hasSearch();
+		updateFilterState();
 	});
 	
 	$scope.$on('ficBrowseMatchupAdded', function(e, matchup) {
@@ -416,7 +502,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			return;
 		}
 		that.matchupFilters.push(matchup);
-		that.hasFilters = ficBrowseService.hasSearch();
+		updateFilterState();
 	});
 	
 	$scope.$on('ficBrowseMatchupRemoved', function(e, matchup) {
@@ -429,7 +515,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 				break;
 			}
 		}
-		that.hasFilters = ficBrowseService.hasSearch();
+		updateFilterState();
 	});
 	
 }])

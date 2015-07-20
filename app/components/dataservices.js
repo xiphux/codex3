@@ -35,6 +35,14 @@ angular.module('codex.data', ['ngResource'])
 					params['matchup'] = filters.matchups[0];
 				}
 			}
+			
+			if (filters.search && (filters.search.length > 0)) {
+				if (filters.search.length > 1) {
+					params['search[]'] = filters.search;
+				} else {
+					params['search'] = filters.search[0];
+				}
+			}
 		}
 		
 		return ficsResource.query(params);

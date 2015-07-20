@@ -284,6 +284,80 @@ describe('codex.data module', function() {
 				
 			});
 			
+			it('should request the api for all fics with a single search term', function() {
+				
+				$httpBackend.expectGET('api/fics?search=keywordone').respond(responseData);
+				
+				var result = mockFicDataService.getFics({
+					search: [ 'keywordone' ]
+				});
+				
+				$httpBackend.flush();
+				
+				verifyResult(result);
+				
+			});
+			
+			it('should request the api for all fics with two search terms', function() {
+				
+				$httpBackend.expectGET('api/fics?search%5B%5D=keywordone&search%5B%5D=keywordtwo').respond(responseData);
+				
+				var result = mockFicDataService.getFics({
+					search: [ 'keywordone', 'keywordtwo' ]
+				});
+				
+				$httpBackend.flush();
+				
+				verifyResult(result);
+				
+			});
+			
+			it('should request the api for all fics with three search terms', function() {
+				
+				$httpBackend.expectGET('api/fics?search%5B%5D=keywordone&search%5B%5D=keywordtwo&search%5B%5D=keywordthree').respond(responseData);
+				
+				var result = mockFicDataService.getFics({
+					search: [ 'keywordone', 'keywordtwo', 'keywordthree' ]
+				});
+				
+				$httpBackend.flush();
+				
+				verifyResult(result);
+				
+			});
+			
+			it('should request the api for all fics with a single search term and other filters', function() {
+				
+				$httpBackend.expectGET('api/fics?genre=1&matchup=1&search=keywordone').respond(responseData);
+				
+				var result = mockFicDataService.getFics({
+					search: [ 'keywordone' ],
+					genres: [ 1 ],
+					matchups: [ 1 ]
+				});
+				
+				$httpBackend.flush();
+				
+				verifyResult(result);
+				
+			});
+			
+			it('should request the api for all fics with multiple search terms and other filters', function() {
+				
+				$httpBackend.expectGET('api/fics?genre%5B%5D=3&genre%5B%5D=4&search%5B%5D=keywordone&search%5B%5D=keywordtwo&search%5B%5D=keywordthree&series%5B%5D=1&series%5B%5D=2').respond(responseData);
+				
+				var result = mockFicDataService.getFics({
+					search: [ 'keywordone', 'keywordtwo', 'keywordthree' ],
+					genres: [ 3, 4 ],
+					series: [ 1, 2 ]
+				});
+				
+				$httpBackend.flush();
+				
+				verifyResult(result);
+				
+			});
+			
 			
 		});
 		
