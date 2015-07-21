@@ -1,0 +1,6 @@
+development:
+  adapter: mysql
+  host: localhost
+  database: codex
+  username: codex
+  password: codex
