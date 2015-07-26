@@ -110,5 +110,5 @@ angular.module('codex.filters', [])
 			return '';
 		}
 		return chapter.title || ('Chapter ' + chapter.number);
-	}
+	};
 });

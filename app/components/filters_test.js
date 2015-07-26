@@ -1,3 +1,4 @@
+/* global inject */
 'use strict';
 
 describe('codex.filters module', function() {
@@ -46,7 +47,7 @@ describe('codex.filters module', function() {
 				{ name: 'AuthorOne' },
 				{ name: 'AuthorTwo' },
 				{ name: 'AuthorThree' }
-			]
+			];
 			expect(authorList(authors)).toEqual('AuthorOne, AuthorTwo, and AuthorThree');
 		});
 		

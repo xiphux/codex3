@@ -390,7 +390,7 @@ angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
 			this.ficDetail = ficDataService.getFic($scope.fic.id);
 		}
 		this.expanded = !this.expanded;
-	}
+	};
 }])
 
 .directive('codexFicListItem', function() {
