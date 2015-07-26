@@ -1,3 +1,4 @@
+/* global componentHandler */
 'use strict';
 
 angular.module('codex.browse', ['ngRoute', 'codex.filters', 'codex.data'])
