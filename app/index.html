@@ -9,21 +9,20 @@
   <title ng-bind="'Codex' + (subtitle ? ' :: ' + subtitle : '')">Codex</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
-  <!-- development
-  -->
+
+  <!-- build:css -->
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
   <link rel="stylesheet" href="bower_components/material-design-lite/material.css">
+  <link rel="stylesheet" href="RobotoFont.css">
   <link rel="stylesheet" href="MaterialIcons.css">
-  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
-  <!-- production  
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
-  <link rel="stylesheet" href="//storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css" />
-  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
-  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
-  -->
   <link rel="stylesheet" href="codex.css">
+  <!-- endbuild -->
+  
+  <!-- build:jshead -->
+  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+  <!-- endbuild -->
+ 
 </head>
 <body>
 
@@ -33,25 +32,20 @@
 
   <div ng-view></div>
 
-  <!-- development
-  -->
+  <!-- build:jsbody -->
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/lodash/lodash.js"></script>
   <script src="bower_components/material-design-lite/material.js"></script>
-  <!-- production
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular-route.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular-resource.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.min.js"></script>
-  <script src="//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
-  -->
+  
   <script src="codex.js"></script>
   <script src="components/filters.js"></script>
   <script src="components/textformatter.js"></script>
   <script src="components/dataservices.js"></script>
   <script src="browse/browse.js"></script>
   <script src="read/read.js"></script>
+  <!-- endbuild -->
+  
 </body>
 </html>
