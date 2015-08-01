@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.1",
   "description": "Codex",
-  "repository": "",
   "license": "GPL",
   "devDependencies": {
     "bower": "^1.3.1",

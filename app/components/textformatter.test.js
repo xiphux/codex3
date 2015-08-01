@@ -1,3 +1,4 @@
+/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
 'use strict';
 
 describe('codex.textformatter module', function() {
@@ -10,7 +11,7 @@ describe('codex.textformatter module', function() {
 		
 		beforeEach(function() {
 			angular.mock.inject(function($injector) {
-				mockTextFormatterService = $injector.get('textFormatterService')
+				mockTextFormatterService = $injector.get('textFormatterService');
 			});
 		});
 		
@@ -405,7 +406,7 @@ describe('codex.textformatter module', function() {
 			it('should strong emphasize an underscore bounded word', function() {
 				
 				var original = "This is an _important_ word.  This is _also_ important.";
-				var final = "This is an <strong>important</strong> word.  This is <strong>also</strong> important."
+				var final = "This is an <strong>important</strong> word.  This is <strong>also</strong> important.";
 				
 				expect(mockTextFormatterService.stylize(original)).toEqual(final);
 				
@@ -415,7 +416,7 @@ describe('codex.textformatter module', function() {
 				// TODO: handle this
 				
 				var original = "This is _really important_ text.  This is _also really important_.";
-				var final = "This is <strong>really important</strong> text.  This is <strong>also really important</strong>."
+				var final = "This is <strong>really important</strong> text.  This is <strong>also really important</strong>.";
 				
 				expect(mockTextFormatterService.stylize(original)).toEqual(final);
 				
@@ -425,7 +426,7 @@ describe('codex.textformatter module', function() {
 				// TODO: handle this
 				
 				var original = "This is _really_important_ text.  This is _also_really_important_.";
-				var final = "This is <strong>really important</strong> text.  This is <strong>also really important</strong>."
+				var final = "This is <strong>really important</strong> text.  This is <strong>also really important</strong>.";
 				
 				expect(mockTextFormatterService.stylize(original)).toEqual(final);
 				
@@ -434,7 +435,7 @@ describe('codex.textformatter module', function() {
 			it('should strong emphasize a single asterisk bounded word', function() {
 				
 				var original = "This is an *important* word.  This is *also* important.";
-				var final = "This is an *<strong>important</strong>* word.  This is *<strong>also</strong>* important."
+				var final = "This is an *<strong>important</strong>* word.  This is *<strong>also</strong>* important.";
 				
 				expect(mockTextFormatterService.stylize(original)).toEqual(final);
 				
@@ -443,7 +444,7 @@ describe('codex.textformatter module', function() {
 			it('should strong emphasize a double asterisk bounded word', function() {
 				
 				var original = "This is an **important** word.  This is **also** important.";
-				var final = "This is an **<strong>important</strong>** word.  This is **<strong>also</strong>** important."
+				var final = "This is an **<strong>important</strong>** word.  This is **<strong>also</strong>** important.";
 				
 				expect(mockTextFormatterService.stylize(original)).toEqual(final);
 				
@@ -452,7 +453,7 @@ describe('codex.textformatter module', function() {
 			it('should strong emphasize single asterisk bounded text', function() {
 				
 				var original = "This is *really important* text.  This is *also really important*.";
-				var final = "This is *<strong>really important</strong>* text.  This is *<strong>also really important</strong>*."
+				var final = "This is *<strong>really important</strong>* text.  This is *<strong>also really important</strong>*.";
 				
 				expect(mockTextFormatterService.stylize(original)).toEqual(final);
 				
@@ -461,7 +462,7 @@ describe('codex.textformatter module', function() {
 			it('should strong emphasize double asterisk bounded text', function() {
 				
 				var original = "This is **really important** text.  This is **also really important**.";
-				var final = "This is **<strong>really important</strong>** text.  This is **<strong>also really important</strong>**."
+				var final = "This is **<strong>really important</strong>** text.  This is **<strong>also really important</strong>**.";
 				
 				expect(mockTextFormatterService.stylize(original)).toEqual(final);
 				

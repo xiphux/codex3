@@ -1,4 +1,5 @@
 /* global inject */
+/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
 'use strict';
 
 describe('codex.filters module', function() {

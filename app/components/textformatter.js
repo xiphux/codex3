@@ -1,3 +1,4 @@
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
 'use strict';
 
 angular.module('codex.textFormatter', [])
@@ -6,7 +7,7 @@ angular.module('codex.textFormatter', [])
 	
 	function padDenseText(content) {
 		// pad out dense text with blank lines
-		return content.replace(/([^\w\s,]) *\n([A-Z\t\"]| {3,})/g, "$1\n\n$2")
+		return content.replace(/([^\w\s,]) *\n([A-Z\t\"]| {3,})/g, "$1\n\n$2");
 	};
 	
 	function compactBlankLines(content) {

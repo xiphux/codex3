@@ -1,3 +1,4 @@
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
 'use strict';
 
 angular.module('codex.read', ['ngRoute', 'codex.filters', 'codex.textFormatter', 'codex.data'])
@@ -33,12 +34,12 @@ angular.module('codex.read', ['ngRoute', 'codex.filters', 'codex.textFormatter',
 	var ficLoaded = false;
 	
 	var updatePageTitle = function() {
-		$rootScope.subtitle = $scope.fic.title + " :: " + chapterFilter($scope.chapter)
+		$rootScope.subtitle = $scope.fic.title + " :: " + chapterFilter($scope.chapter);
 	};
 	
 	var loadChapter = function(num) {
 		chapterLoaded = false;
-		var chap = chapterDataService.getChapter($routeParams.ficId, num)
+		var chap = chapterDataService.getChapter($routeParams.ficId, num);
 		if (chap) {
 			chap.$promise.then(
 				function(data) {
@@ -121,7 +122,7 @@ angular.module('codex.read', ['ngRoute', 'codex.filters', 'codex.textFormatter',
 				});
 			});
 		}
-	}
+	};
 }])
 
 .directive('codexChapterList', function() {
@@ -139,7 +140,7 @@ angular.module('codex.read', ['ngRoute', 'codex.filters', 'codex.textFormatter',
 .controller('chapterListItemController', ['$scope', function($scope) {
 	this.setChapter = function() {
 		$scope.$emit('readerSetChapter', $scope.chapter);
-	}
+	};
 }])
 
 .directive('codexChapterListItem', function() {

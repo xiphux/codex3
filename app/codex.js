@@ -1,3 +1,4 @@
+/// <reference path="../typings/angularjs/angular.d.ts"/>
 'use strict';
 
 // Declare app level module which depends on views, and components

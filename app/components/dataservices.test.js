@@ -1,3 +1,4 @@
+/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
 'use strict';
 
 describe('codex.data module', function() {
@@ -448,7 +449,7 @@ describe('codex.data module', function() {
 	        angular.mock.inject(function ($injector) {
 	            $httpBackend = $injector.get('$httpBackend');
 	            mockChapterDataService = $injector.get('chapterDataService');
-	        })
+	        });
 	    });
 		
 		describe('getChapters', function() {
@@ -557,7 +558,7 @@ describe('codex.data module', function() {
 	        angular.mock.inject(function ($injector) {
 	            $httpBackend = $injector.get('$httpBackend');
 	            mockSeriesDataService = $injector.get('seriesDataService');
-	        })
+	        });
 	    });
 		
 		describe('getSeries', function() {
@@ -601,7 +602,7 @@ describe('codex.data module', function() {
 	        angular.mock.inject(function ($injector) {
 	            $httpBackend = $injector.get('$httpBackend');
 	            mockGenreDataService = $injector.get('genreDataService');
-	        })
+	        });
 	    });
 		
 		describe('getGenres', function() {
@@ -645,7 +646,7 @@ describe('codex.data module', function() {
 	        angular.mock.inject(function ($injector) {
 	            $httpBackend = $injector.get('$httpBackend');
 	            mockMatchupDataService = $injector.get('matchupDataService');
-	        })
+	        });
 	    });
 		
 		describe('getMatchups', function() {

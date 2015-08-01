@@ -10,15 +10,6 @@ var minifyCss = require('gulp-minify-css');
 
 var cacheBust = new CacheBuster();
 
-var jsfiles = [
-	'app/components/dataservices.js',
-	'app/components/filters.js',
-	'app/components/textformatter.js',
-	'app/browse/browse.js',
-	'app/read/read.js',
-	'app/codex.js'
-];
-
 gulp.task('clean', function(cb) {
 	del([
 		'dist'
@@ -61,7 +52,7 @@ gulp.task('build-read-templates', function() {
 });
 
 gulp.task('build-js', ['build-browse-templates','build-read-templates'], function() {
-	return gulp.src(jsfiles.concat(['dist/browsetemplates.js','dist/readtemplates.js']))
+	return gulp.src(['app/**/*.js', '!app/bower_components/**/*.js', '!app/**/*.test.js', 'dist/browsetemplates.js','dist/readtemplates.js'])
 		.pipe(concat('codex.min.js'))
 		.pipe(cacheBust.resources())
 		.pipe(sourcemaps.init())
