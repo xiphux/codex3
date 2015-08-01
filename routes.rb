@@ -4,16 +4,16 @@ end
 
 get '/api/authors/:id' do
 	author ||= Author.get(params[:id]) || halt(404)
-	author.to_json(methods: [ :fics ])
+	author.to_json(:methods => [ :fics ])
 end
 
 get '/api/characters' do
-	Character.all.to_json(methods: [ :series ])
+	Character.all.to_json(:methods => [ :series ])
 end
 
 get '/api/characters/:id' do
 	character ||= Character.get(params[:id]) || halt(404)
-	character.to_json(methods: [ :series ])
+	character.to_json(:methods => [ :series ])
 end
 
 get '/api/fics' do
@@ -47,12 +47,12 @@ end
 
 get '/api/fics/:id' do
 	fic ||= Fic.get(params[:id]) || halt(404)
-	fic.to_json(methods: [ :authors, :genres, :series ], relationships: { :matchups => { :relationships => { :characters => { :methods => [ :series ]}}}})
+	fic.to_json(:methods  => [ :authors, :genres, :series ], :relationships => { :matchups => { :relationships => { :characters => { :methods => [ :series ]}}}})
 end
 
 get '/api/fics/:id/chapters' do
 	fic ||= Fic.get(params[:id]) || halt(404)
-	fic.chapters.all(:order => [:number.asc]).to_json(:exclude => [ :data ])
+	fic.chapters.all(:order => [:number.asc]).to_json(:exclude => [ :data, :wrapped, :no_paragraph_spacing, :double_line_breaks ])
 end
 
 get '/api/fics/:id/chapters/:number' do
@@ -67,7 +67,7 @@ end
 
 get '/api/genres/:id' do
 	genre ||= Genre.get(params[:id]) || halt(404)
-	genre.to_json(methods: [ :fics ])
+	genre.to_json(:methods => [ :fics ])
 end
 
 get '/api/matchups' do
@@ -85,5 +85,5 @@ end
 
 get '/api/series/:id' do
 	series ||= Series.get(params[:id]) || halt(404)
-	series.to_json(methods: [ :fics ])
+	series.to_json(:methods => [ :fics ])
 end

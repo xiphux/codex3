@@ -25,7 +25,7 @@ class Chapter
 	property :id,     Serial
 	property :number, Integer
 	property :title,  String, :length => 255
-	property :file,   String, :length => 255
+	#property :file,   String, :length => 255
 	property :data,   Text, :length => 2**32-1
 	
 	property :wrapped, Boolean
@@ -62,8 +62,8 @@ class Fic
 	property :id,    Serial
 	property :title, String, :length => 255
 	
-	has 1, :prequel, self, :child_key => [ :prequel_id ]
-	has 1, :main_story, self, :child_key => [ :main_story_id ]
+	#has 1, :prequel, self, :child_key => [ :prequel_id ]
+	#has 1, :main_story, self, :child_key => [ :main_story_id ]
 	
 	has n, :author_fics
 	has n, :authors, :through => :author_fics
