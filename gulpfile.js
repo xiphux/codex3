@@ -7,6 +7,7 @@ var templateCache = require('gulp-angular-templatecache');
 var CacheBuster = require('gulp-cachebust');
 var htmlReplace = require('gulp-html-replace');
 var minifyCss = require('gulp-minify-css');
+var iife = require('gulp-iife');
 
 var cacheBust = new CacheBuster();
 
@@ -60,6 +61,7 @@ gulp.task('build-js', ['build-browse-templates','build-read-templates'], functio
 			'dist/browsetemplates.js',
 			'dist/readtemplates.js'
 		])
+		.pipe(iife())
 		.pipe(concat('codex.min.js'))
 		.pipe(cacheBust.resources())
 		.pipe(sourcemaps.init())
