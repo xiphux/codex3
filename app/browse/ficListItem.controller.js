@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('ficListItemController', ficListItemController);
 
-.controller('ficListItemController', ['$scope', 'ficDataService', '$timeout', function($scope, ficDataService, $timeout) {
+ficListItemController.$inject = ['$scope', 'ficDataService'];
+
+function ficListItemController($scope, ficDataService) {
 	
 	this.expanded = false;
 	
@@ -13,4 +16,4 @@ angular.module('codex.browse')
 		}
 		this.expanded = !this.expanded;
 	};
-}]);
+}

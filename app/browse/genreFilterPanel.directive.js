@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.browse')
+	.directive('codexGenreFilterPanel', genreFilterPanelDirective);
 
-.directive('codexGenreFilterPanel', function() {
+function genreFilterPanelDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/genreFilterPanel.html',
@@ -12,4 +13,4 @@ angular.module('codex.browse')
 		replace: true,
 		scope: {}
 	};
-});
+}

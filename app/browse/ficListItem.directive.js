@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.browse')
+	.directive('codexFicListItem', ficListItemDirective);
 
-.directive('codexFicListItem', function() {
+function ficListItemDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/ficListItem.html',
@@ -14,4 +15,4 @@ angular.module('codex.browse')
 			fic: '='
 		}
 	};
-});
+}

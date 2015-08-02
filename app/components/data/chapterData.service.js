@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('codex.data')
+	.factory('chapterDataService', chapterDataService);
 
-.factory('chapterDataService', ['$resource', function($resource) {
+chapterDataService.$inject = ['$resource'];
+
+function chapterDataService($resource) {
 	
 	var chaptersResource = $resource('api/fics/:ficId/chapters');
 	var chapterResource = $resource('api/fics/:ficId/chapters/:num');
@@ -26,4 +29,4 @@ angular.module('codex.data')
 		getChapter: getChapter
 	};
 	
-}]);
+}

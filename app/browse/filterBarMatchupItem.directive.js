@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.browse')
+	.directive('codexFilterBarMatchupItem', filterBarMatchupItemDirective);
 
-.directive('codexFilterBarMatchupItem', function() {
+function filterBarMatchupItemDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/filterBarMatchupItem.html',
@@ -14,4 +15,4 @@ angular.module('codex.browse')
 			matchup: '='
 		}
 	};
-});
+}

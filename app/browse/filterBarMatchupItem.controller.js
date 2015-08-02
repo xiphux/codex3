@@ -2,10 +2,13 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('filterBarMatchupItemController', filterBarMatchupItemController);
 
-.controller('filterBarMatchupItemController', ['$scope', 'ficBrowseService', function($scope, ficBrowseService) {
+filterBarMatchupItemController.$inject = ['$scope', 'ficBrowseService'];
+
+function filterBarMatchupItemController($scope, ficBrowseService) {
 	this.remove = function() {
 		ficBrowseService.removeMatchupFilter($scope.matchup);
 		ficBrowseService.refresh();
 	};
-}]);
+}

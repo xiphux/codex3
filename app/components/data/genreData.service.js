@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('codex.data')
+	.factory('genreDataService', genreDataService);
 
-.factory('genreDataService', ['$resource', function($resource) {
+genreDataService.$inject = ['$resource'];
+
+function genreDataService($resource) {
 	
 	var genresResource = $resource('api/genres');
 	
@@ -14,4 +17,4 @@ angular.module('codex.data')
 		getGenres: getGenres
 	};
 	
-}]);
+}

@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('genreFilterPanelItemController', genreFilterPanelItemController);
 
-.controller('genreFilterPanelItemController', ['$scope', 'ficBrowseService', function($scope, ficBrowseService) {
+genreFilterPanelItemController.$inject = ['$scope', 'ficBrowseService'];
+
+function genreFilterPanelItemController($scope, ficBrowseService) {
 	
 	this.active = ficBrowseService.hasGenreFilter($scope.genre);
 	this.matchCount = ficBrowseService.ficsWithGenre($scope.genre);
@@ -38,4 +41,4 @@ angular.module('codex.browse')
 		}
 		ficBrowseService.refresh();
 	};
-}]);
+}

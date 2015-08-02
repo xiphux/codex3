@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('matchupFilterPanelController', matchupFilterPanelController);
 
-.controller('matchupFilterPanelController', ['$scope', 'matchupDataService', function($scope, matchupDataService) {
+matchupFilterPanelController.$inject = ['$scope', 'matchupDataService'];
+
+function matchupFilterPanelController($scope, matchupDataService) {
 	
 	this.expanded = false;
 	this.loaded = false;	
@@ -18,4 +21,4 @@ angular.module('codex.browse')
 		this.expanded = !this.expanded;
 		
 	};
-}]);
+}

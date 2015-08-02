@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.browse')
+	.directive('codexFilterBar', filterBarDirective);
 
-.directive('codexFilterBar', function() {
+function filterBarDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/filterBar.html',
@@ -12,4 +13,4 @@ angular.module('codex.browse')
 		controllerAs: 'fbCtrl',
 		scope: {}
 	};
-});
+}

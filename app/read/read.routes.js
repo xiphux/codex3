@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.read')
+	.config(readRoutes);
 
-.config(['$routeProvider', function($routeProvider) {
+readRoutes.$inject = ['$routeProvider'];
+
+function readRoutes($routeProvider) {
 	$routeProvider.when('/read/:ficId', {
 		redirectTo: function(routeParams, path, search) {
 			return '/read/' + routeParams.ficId + '/chapters/1';
@@ -14,4 +17,4 @@ angular.module('codex.read')
 		controller: 'readController',
 		controllerAs: 'rCtrl'
 	});
-}]);
+}

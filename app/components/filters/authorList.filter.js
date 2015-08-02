@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.filters')
+	.filter('authorList', authorListFilter);
 
-.filter('authorList', function() {
+function authorListFilter() {
 	return function(authors) {
 		if (!authors || (authors.length < 1)) {
 			return 'Unknown';
@@ -28,4 +29,4 @@ angular.module('codex.filters')
 		}
 		return retstr;
 	};
-});
+}

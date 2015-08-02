@@ -1,7 +1,10 @@
 'use strict';
 
 angular.module('codex')
+  .config(codexRoutes);
 
-.config(['$routeProvider', function($routeProvider) {
+codexRoutes.$inject = ['$routeProvider'];
+
+function codexRoutes($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/'});
-}]);
+}

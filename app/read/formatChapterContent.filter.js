@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.read')
+	.filter('formatChapterContent', formatChapterContentFilter);
 
-.filter('formatChapterContent', ['$sce', 'textFormatterService', function($sce, textFormatterService) {
+formatChapterContentFilter.$inject = ['$sce', 'textFormatterService'];
+
+function formatChapterContentFilter($sce, textFormatterService) {
 	
 	return function(chapter) {
 		if (!chapter) {
@@ -13,4 +16,4 @@ angular.module('codex.read')
 		return $sce.trustAsHtml(textFormatterService.format(chapter.data, chapter.wrapped, chapter.no_paragraph_spacing, chapter.double_line_breaks));
 	};
 	
-}]);
+}

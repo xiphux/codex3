@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('codex.data')
+	.factory('matchupDataService', matchupDataService);
 
-.factory('matchupDataService', ['$resource', function($resource) {
+matchupDataService.$inject = ['$resource'];
+
+function matchupDataService($resource) {
 	
 	var matchupsResource = $resource('api/matchups');
 	
@@ -14,4 +17,4 @@ angular.module('codex.data')
 		getMatchups: getMatchups
 	};
 	
-}]);
+}

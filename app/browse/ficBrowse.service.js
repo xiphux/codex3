@@ -3,8 +3,11 @@
 'use strict';
 
 angular.module('codex.browse')
+	.factory('ficBrowseService', ficBrowseService);
 
-.factory('ficBrowseService', ['$rootScope', 'ficDataService', function($rootScope, ficDataService) {
+ficBrowseService.$inject = ['$rootScope', 'ficDataService'];
+
+function ficBrowseService($rootScope, ficDataService) {
 	
 	var genreFilters = {};
 	var matchupFilters = {};
@@ -310,4 +313,4 @@ angular.module('codex.browse')
 		
 	};
 	
-}]);
+}

@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.browse')
+	.directive('codexMatchupFilterPanel', matchupFilterPanelDirective);
 
-.directive('codexMatchupFilterPanel', function() {
+function matchupFilterPanelDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/matchupFilterPanel.html',
@@ -12,4 +13,4 @@ angular.module('codex.browse')
 		replace: true,
 		scope: {}
 	};
-});
+}

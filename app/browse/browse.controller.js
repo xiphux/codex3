@@ -3,11 +3,14 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('browseController', browseController);
 
-.controller('browseController', ['$scope', '$timeout', function($scope, $timeout) {
+browseController.$inject = ['$scope', '$timeout'];
+
+function browseController($scope, $timeout) {
 	$scope.$on('$viewContentLoaded', function() {
 		$timeout(function() {
 			componentHandler.upgradeAllRegistered();
 		});
 	});
-}]);
+}

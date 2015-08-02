@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.read')
+	.directive('codexReaderFooterNav', readerFooterNavDirective);
 
-.directive('codexReaderFooterNav', function() {
+function readerFooterNavDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'read/readerFooterNav.html',
@@ -15,4 +16,4 @@ angular.module('codex.read')
 			chapters: '='
 		}
 	};
-});
+}

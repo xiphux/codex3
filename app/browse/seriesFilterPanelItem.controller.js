@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('seriesFilterPanelItemController', seriesFilterPanelItemController);
 
-.controller('seriesFilterPanelItemController', ['$scope', 'ficBrowseService', function($scope, ficBrowseService) {
+seriesFilterPanelItemController.$inject = ['$scope', 'ficBrowseService'];
+
+function seriesFilterPanelItemController($scope, ficBrowseService) {
 	
 	this.active = ficBrowseService.hasSeriesFilter($scope.series);
 	this.matchCount = ficBrowseService.ficsWithSeries($scope.series);
@@ -38,4 +41,4 @@ angular.module('codex.browse')
 		}
 		ficBrowseService.refresh();
 	};
-}]);
+}

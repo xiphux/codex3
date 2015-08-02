@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.browse')
+	.directive('codexSearchField', searchFieldDirective);
 
-.directive('codexSearchField', function() {
+function searchFieldDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/searchField.html',
@@ -12,4 +13,4 @@ angular.module('codex.browse')
 		controllerAs: 'sfCtrl',
 		scope: {}
 	};
-});
+}

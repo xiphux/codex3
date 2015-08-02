@@ -2,10 +2,13 @@
 'use strict';
 
 angular.module('codex.browse')
+	.config(browseRoutes);
+	
+browseRoutes.$inject = ['$routeProvider'];
 
-.config(['$routeProvider', function($routeProvider) {
+function browseRoutes($routeProvider) {
 	$routeProvider.when('/', {
 		templateUrl: 'browse/browse.html',
 		controller: 'browseController'
 	});
-}]);
+}

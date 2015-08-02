@@ -3,8 +3,11 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('ficListController', ficListController);
 
-.controller('ficListController', ['$scope', '$rootScope', '$timeout', 'ficBrowseService', function($scope, $rootScope, $timeout, ficBrowseService) {
+ficListController.$inject = ['$scope', '$rootScope', '$timeout', 'ficBrowseService'];
+
+function ficListController($scope, $rootScope, $timeout, ficBrowseService) {
 	
 	$rootScope.subtitle = '';
 	
@@ -37,4 +40,4 @@ angular.module('codex.browse')
 		that.fics = ficBrowseService.getFics();
 		that.searchActive = ficBrowseService.hasSearch();
 	});
-}]);
+}

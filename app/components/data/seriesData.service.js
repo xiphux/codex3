@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('codex.data')
+	.factory('seriesDataService', seriesDataService);
 
-.factory('seriesDataService', ['$resource', function($resource) {
+seriesDataService.$inject = ['$resource'];
+
+function seriesDataService($resource) {
 	
 	var seriesResource = $resource('api/series');
 	
@@ -14,4 +17,4 @@ angular.module('codex.data')
 		getSeries: getSeries
 	};
 	
-}]);
+}

@@ -3,7 +3,9 @@
 
 angular.module('codex.browse')
 
-.directive('codexFicList', function() {
+.directive('codexFicList', ficListDirective);
+
+function ficListDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/ficList.html',
@@ -12,4 +14,4 @@ angular.module('codex.browse')
 		replace: true,
 		scope: {}
 	};
-});
+}

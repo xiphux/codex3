@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.browse')
+	.directive('codexFilterBarSeriesItem', filterBarSeriesItemDirective);
 
-.directive('codexFilterBarSeriesItem', function() {
+function filterBarSeriesItemDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/filterBarSeriesItem.html',
@@ -14,4 +15,4 @@ angular.module('codex.browse')
 			series: '='
 		}
 	};
-});
+}

@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.filters')
+	.filter('seriesList', seriesListFilter);
 
-.filter('seriesList', function() {
+function seriesListFilter() {
 	return function(series) {
 		if (!series) {
 			return "";
@@ -17,4 +18,4 @@ angular.module('codex.filters')
 		}
 		return retstr;
 	};
-});
+}

@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.read')
+	.directive('codexChapterListItem', chapterListItemDirective);
 
-.directive('codexChapterListItem', function() {
+function chapterListItemDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'read/chapterListItem.html',
@@ -15,4 +16,4 @@ angular.module('codex.read')
 			currentChapter: '='
 		}
 	};
-});
+}

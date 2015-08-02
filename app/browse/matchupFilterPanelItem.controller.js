@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('matchupFilterPanelItemController', matchupFilterPanelItemController);
 
-.controller('matchupFilterPanelItemController', ['$scope', 'ficBrowseService', function($scope, ficBrowseService) {
+matchupFilterPanelItemController.$inject = ['$scope', 'ficBrowseService'];
+
+function matchupFilterPanelItemController($scope, ficBrowseService) {
 	this.active = ficBrowseService.hasMatchupFilter($scope.matchup);
 	this.matchCount = ficBrowseService.ficsWithMatchup($scope.matchup);
 	this.showBadge = ficBrowseService.hasSearch();
@@ -37,4 +40,4 @@ angular.module('codex.browse')
 		}
 		ficBrowseService.refresh();
 	};
-}]);
+}

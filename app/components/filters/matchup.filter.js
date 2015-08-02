@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.filters')
+	.filter('matchup', matchupFilter);
 
-.filter('matchup', function() {
+function matchupFilter() {
 	return function(matchup) {
 		if (!matchup || !matchup.characters || (matchup.characters.length < 1)) {
 			return '';
@@ -28,4 +29,4 @@ angular.module('codex.filters')
 		}
 		return retstr;
 	};
-});
+}

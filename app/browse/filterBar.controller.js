@@ -3,7 +3,11 @@
 
 angular.module('codex.browse')
 
-.controller('filterBarController', ['$scope', 'ficBrowseService', function($scope, ficBrowseService) {
+.controller('filterBarController', filterBarController);
+
+filterBarController.$inject = ['$scope', 'ficBrowseService'];
+
+function filterBarController($scope, ficBrowseService) {
 	
 	this.genreFilters = ficBrowseService.getGenreFilters();
 	this.matchupFilters = ficBrowseService.getMatchupFilters();
@@ -84,4 +88,4 @@ angular.module('codex.browse')
 		updateFilterState();
 	});
 	
-}]);
+}

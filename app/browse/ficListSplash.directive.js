@@ -2,12 +2,13 @@
 'use strict';
 
 angular.module('codex.browse')
+	.directive('codexFicListSplash', ficListSplashDirective);
 
-.directive('codexFicListSplash', function() {
+function ficListSplashDirective() {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/ficListSplash.html',
 		replace: true,
 		scope: {}
 	};
-});
+}

@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.filters')
+	.filter('matchupList', matchupListFilter);
 
-.filter('matchupList', ['matchupFilter', function(matchupFilter) {
+matchupListFilter.$inject = ['matchupFilter'];
+
+function matchupListFilter(matchupFilter) {
 	return function(matchups) {
 		if (!matchups) {
 			return "";
@@ -17,4 +20,4 @@ angular.module('codex.filters')
 		}
 		return retstr;
 	};
-}]);
+}

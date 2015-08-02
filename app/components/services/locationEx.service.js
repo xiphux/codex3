@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('codex.services')
+    .service('$locationEx', locationExService);
 
-.service('$locationEx', ['$location', '$route', '$rootScope', function($location, $route, $rootScope) {
+locationExService.$inject = ['$location', '$route', '$rootScope'];
+
+function locationExService($location, $route, $rootScope) {
 	$location.skipReload = function () {
         var lastRoute = $route.current;
         var un = $rootScope.$on('$locationChangeSuccess', function () {
@@ -12,4 +15,4 @@ angular.module('codex.services')
         return $location;
     };
     return $location;
-}]);
+}

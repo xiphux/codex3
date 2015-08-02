@@ -2,10 +2,13 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('filterBarGenreItemController', filterBarGenreItemController);
 
-.controller('filterBarGenreItemController', ['$scope', 'ficBrowseService', function($scope, ficBrowseService) {
+filterBarGenreItemController.$inject = ['$scope', 'ficBrowseService'];
+
+function filterBarGenreItemController($scope, ficBrowseService) {
 	this.remove = function() {
 		ficBrowseService.removeGenreFilter($scope.genre);
 		ficBrowseService.refresh();
 	};
-}]);
+}

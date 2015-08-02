@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('genreFilterPanelController', genreFilterPanelController);
 
-.controller('genreFilterPanelController', ['$scope', 'genreDataService', function($scope, genreDataService) {
+genreFilterPanelController.$inject = ['$scope', 'genreDataService'];
+
+function genreFilterPanelController($scope, genreDataService) {
 	
 	this.expanded = false;
 	this.loaded = false;
@@ -15,4 +18,4 @@ angular.module('codex.browse')
 		}
 		this.expanded = !this.expanded;
 	};
-}]);
+}

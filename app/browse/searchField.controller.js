@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.browse')
+	.controller('searchFieldController', searchFieldController);
 
-.controller('searchFieldController', ['$scope', 'ficBrowseService', function($scope, ficBrowseService) {
+searchFieldController.$inject = ['$scope', 'ficBrowseService'];
+
+function searchFieldController($scope, ficBrowseService) {
 	
 	function updateSearchField() {
 		$scope.search = ficBrowseService.getSearchTerms().join(' ');
@@ -20,4 +23,4 @@ angular.module('codex.browse')
 		ficBrowseService.setSearchTerms(newValue.split(' '));
 		ficBrowseService.refresh();
 	});
-}]);
+}

@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.read')
+	.controller('readerFooterNavController', readerFooterNavController);
 
-.controller('readerFooterNavController', ['$scope', function($scope) {
+readerFooterNavController.$inject = ['$scope'];
+
+function readerFooterNavController($scope) {
 	
 	this.nextChapter = null;
 	this.prevChapter = null;
@@ -48,4 +51,4 @@ angular.module('codex.read')
 		}
 	};
 	
-}]);
+}

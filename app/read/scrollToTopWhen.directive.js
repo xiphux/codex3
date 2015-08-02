@@ -2,8 +2,11 @@
 'use strict';
 
 angular.module('codex.read')
+	.directive('scrollToTopWhen', scrollToTopWhenDirective);
 
-.directive('scrollToTopWhen', ['$timeout', function($timeout) {
+scrollToTopWhenDirective.$inject = ['$timeout'];
+
+function scrollToTopWhenDirective($timeout) {
 	return {
 		link: function (scope, element, attrs) {
 			scope.$on(attrs.scrollToTopWhen, function() {
@@ -13,4 +16,4 @@ angular.module('codex.read')
 			});
 		}
 	};
-}]);
+}

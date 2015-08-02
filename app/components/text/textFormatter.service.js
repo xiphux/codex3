@@ -3,8 +3,9 @@
 'use strict';
 
 angular.module('codex.text')
+	.factory('textFormatterService', textFormatterService);
 
-.factory('textFormatterService', function() {
+function textFormatterService() {
 	
 	function padDenseText(content) {
 		// pad out dense text with blank lines
@@ -174,4 +175,4 @@ angular.module('codex.text')
 		format: format
 		
 	};
-});
+}

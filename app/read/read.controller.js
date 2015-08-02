@@ -3,8 +3,11 @@
 'use strict';
 
 angular.module('codex.read')
+	.controller('readController', readController);
 
-.controller('readController', ['$scope', '$routeParams', '$locationEx', '$rootScope', '$timeout', 'chapterFilter', 'ficDataService', 'chapterDataService', function($scope, $routeParams, $locationEx, $rootScope, $timeout, chapterFilter, ficDataService, chapterDataService) {
+readController.$inject = ['$scope', '$routeParams', '$locationEx', '$rootScope', '$timeout', 'chapterFilter', 'ficDataService', 'chapterDataService'];
+
+function readController($scope, $routeParams, $locationEx, $rootScope, $timeout, chapterFilter, ficDataService, chapterDataService) {
 	
 	var chapterLoaded = false;
 	var ficLoaded = false;
@@ -87,4 +90,4 @@ angular.module('codex.read')
 		});
 	});
 	
-}]);
+}

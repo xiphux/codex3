@@ -2,8 +2,9 @@
 'use strict';
 
 angular.module('codex.filters')
+	.filter('genreList', genreListFilter);
 
-.filter('genreList', function() {
+function genreListFilter() {
 	return function(genres) {
 		if (!genres) {
 			return "";
@@ -17,4 +18,4 @@ angular.module('codex.filters')
 		}
 		return retstr;
 	};
-});
+}
