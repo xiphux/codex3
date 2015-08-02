@@ -8,3 +8,5 @@ tmp
 .DS_Store
 .idea
 dist/
+dev/
+public
