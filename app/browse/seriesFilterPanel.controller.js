@@ -1,0 +1,18 @@
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
+'use strict';
+
+angular.module('codex.browse')
+
+.controller('seriesFilterPanelController', ['$scope', 'seriesDataService', function($scope, seriesDataService) {
+	
+	this.expanded = false;
+	this.loaded = false;
+	
+	this.toggleSeriesExpand = function() {
+		if (!this.expanded && !this.loaded) {
+			this.series = seriesDataService.getSeries();
+			this.loaded = true;
+		}
+		this.expanded = !this.expanded;
+	};
+}]);

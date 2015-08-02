@@ -52,7 +52,14 @@ gulp.task('build-read-templates', function() {
 });
 
 gulp.task('build-js', ['build-browse-templates','build-read-templates'], function() {
-	return gulp.src(['app/**/*.js', '!app/bower_components/**/*.js', '!app/**/*.test.js', 'dist/browsetemplates.js','dist/readtemplates.js'])
+	return gulp.src([
+			'app/**/*.module.js',
+			'app/**/*.js',
+			'!app/bower_components/**/*.js',
+			'!app/**/*.test.js',
+			'dist/browsetemplates.js',
+			'dist/readtemplates.js'
+		])
 		.pipe(concat('codex.min.js'))
 		.pipe(cacheBust.resources())
 		.pipe(sourcemaps.init())

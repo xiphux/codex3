@@ -1,9 +1,9 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
+/// <reference path="../../../typings/jasmine/jasmine.d.ts"/>
 'use strict';
 
-describe('codex.textformatter module', function() {
+describe('codex.text module', function() {
 	
-	beforeEach(module('codex.textFormatter'));
+	beforeEach(module('codex.text'));
 	
 	describe('text formatter service', function() {
 		

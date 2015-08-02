@@ -1,7 +1,8 @@
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../typings/lodash/lodash.d.ts"/>
+/// <reference path="../../../typings/angularjs/angular.d.ts"/>
 'use strict';
 
-angular.module('codex.textFormatter', [])
+angular.module('codex.text')
 
 .factory('textFormatterService', function() {
 	

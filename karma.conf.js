@@ -10,8 +10,11 @@ module.exports = function(config){
       'app/bower_components/angular-resource/angular-resource.js',
       'app/bower_components/lodash/lodash.js',
       'app/bower_components/material-design-lite/material.js',
+      'app/components/**/*.module.js',
       'app/components/**/*.js',
+      'app/browse/**/*.module.js',
       'app/browse/**/*.js',
+      'app/read/**/*.module.js',
       'app/read/**/*.js'
     ],
 
