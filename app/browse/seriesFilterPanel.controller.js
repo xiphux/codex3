@@ -8,14 +8,19 @@ seriesFilterPanelController.$inject = ['$scope', 'seriesDataService'];
 
 function seriesFilterPanelController($scope, seriesDataService) {
 	
-	this.expanded = false;
-	this.loaded = false;
+	var vm = this;
 	
-	this.toggleSeriesExpand = function() {
-		if (!this.expanded && !this.loaded) {
-			this.series = seriesDataService.getSeries();
-			this.loaded = true;
+	vm.expanded = false;
+	vm.toggleSeriesExpand = toggleSeriesExpand;
+	vm.series = null;
+	
+	var loaded = false;
+	
+	function toggleSeriesExpand() {
+		if (!vm.expanded && !loaded) {
+			vm.series = seriesDataService.getSeries();
+			loaded = true;
 		}
-		this.expanded = !this.expanded;
-	};
+		vm.expanded = !vm.expanded;
+	}
 }

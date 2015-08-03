@@ -8,37 +8,38 @@ genreFilterPanelItemController.$inject = ['$scope', 'ficBrowseService'];
 
 function genreFilterPanelItemController($scope, ficBrowseService) {
 	
-	this.active = ficBrowseService.hasGenreFilter($scope.genre);
-	this.matchCount = ficBrowseService.ficsWithGenre($scope.genre);
-	this.showBadge = ficBrowseService.hasSearch();
+	var vm = this;
 	
-	var that = this;
+	vm.active = ficBrowseService.hasGenreFilter($scope.genre);
+	vm.matchCount = ficBrowseService.ficsWithGenre($scope.genre);
+	vm.showBadge = ficBrowseService.hasSearch();
+	vm.toggleGenreFilter = toggleGenreFilter;
 	
 	$scope.$on('ficBrowseFicsUpdated', function() {
-		that.matchCount = ficBrowseService.ficsWithGenre($scope.genre);
-		that.showBadge = ficBrowseService.hasSearch();
+		vm.matchCount = ficBrowseService.ficsWithGenre($scope.genre);
+		vm.showBadge = ficBrowseService.hasSearch();
 	});
 	
 	$scope.$on('ficBrowseGenreAdded', function(e, genre) {
 		if (!(genre && (genre.id == $scope.genre.id))) {
 			return;
 		}
-		that.active = true;
+		vm.active = true;
 	});
 	
 	$scope.$on('ficBrowseGenreRemoved', function(e, genre) {
 		if (!(genre && (genre.id == $scope.genre.id))) {
 			return;
 		}
-		that.active = false;
+		vm.active = false;
 	});
 	
-	this.toggleGenreFilter = function() {
-		if (this.active) {
+	function toggleGenreFilter() {
+		if (vm.active) {
 			ficBrowseService.removeGenreFilter($scope.genre);
 		} else {
 			ficBrowseService.addGenreFilter($scope.genre);
 		}
 		ficBrowseService.refresh();
-	};
+	}
 }

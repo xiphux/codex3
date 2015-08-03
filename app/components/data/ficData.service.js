@@ -10,6 +10,12 @@ function ficDataService($resource) {
 	var ficsResource = $resource('api/fics');
 	var ficResource = $resource('api/fics/:ficId');
 	
+	var service = {
+		getFics: getFics,
+		getFic: getFic
+	};
+	return service;
+	
 	function getFics(filters) {
 		
 		var params = {};
@@ -56,11 +62,6 @@ function ficDataService($resource) {
 			return null;
 		}
 		return ficResource.get({ ficId: ficId });
-	};
-	
-	return {
-		getFics: getFics,
-		getFic: getFic
 	};
 
 }

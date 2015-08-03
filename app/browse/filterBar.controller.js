@@ -9,27 +9,20 @@ filterBarController.$inject = ['$scope', 'ficBrowseService'];
 
 function filterBarController($scope, ficBrowseService) {
 	
-	this.genreFilters = ficBrowseService.getGenreFilters();
-	this.matchupFilters = ficBrowseService.getMatchupFilters();
-	this.seriesFilters = ficBrowseService.getSeriesFilters();
+	var vm = this;
 	
-	this.clear = function() {
-		ficBrowseService.clear();
-		ficBrowseService.refresh();
-	};
+	vm.genreFilters = ficBrowseService.getGenreFilters();
+	vm.matchupFilters = ficBrowseService.getMatchupFilters();
+	vm.seriesFilters = ficBrowseService.getSeriesFilters();
+	vm.clear = clear;
 	
-	var that = this;
-	
-	function updateFilterState() {
-		that.hasFilters = ficBrowseService.hasAnyGenreFilter() || ficBrowseService.hasAnySeriesFilter() || ficBrowseService.hasAnyMatchupFilter();
-	}
 	updateFilterState();
 	
 	$scope.$on('ficBrowseSeriesAdded', function(e, series) {
 		if (!series) {
 			return;
 		}
-		that.seriesFilters.push(series);
+		vm.seriesFilters.push(series);
 		updateFilterState();
 	});
 	
@@ -37,9 +30,9 @@ function filterBarController($scope, ficBrowseService) {
 		if (!series) {
 			return;
 		}
-		for (var i = 0; i < that.seriesFilters.length; i++) {
-			if (that.seriesFilters[i].id == series.id) {
-				that.seriesFilters.splice(i, 1);
+		for (var i = 0; i < vm.seriesFilters.length; i++) {
+			if (vm.seriesFilters[i].id == series.id) {
+				vm.seriesFilters.splice(i, 1);
 				break;
 			}
 		}
@@ -50,7 +43,7 @@ function filterBarController($scope, ficBrowseService) {
 		if (!genre) {
 			return;
 		}
-		that.genreFilters.push(genre);
+		vm.genreFilters.push(genre);
 		updateFilterState();
 	});
 	
@@ -58,9 +51,9 @@ function filterBarController($scope, ficBrowseService) {
 		if (!genre) {
 			return;
 		}
-		for (var i = 0; i < that.genreFilters.length; i++) {
-			if (that.genreFilters[i].id == genre.id) {
-				that.genreFilters.splice(i, 1);
+		for (var i = 0; i < vm.genreFilters.length; i++) {
+			if (vm.genreFilters[i].id == genre.id) {
+				vm.genreFilters.splice(i, 1);
 				break;
 			}
 		}
@@ -71,7 +64,7 @@ function filterBarController($scope, ficBrowseService) {
 		if (!matchup) {
 			return;
 		}
-		that.matchupFilters.push(matchup);
+		vm.matchupFilters.push(matchup);
 		updateFilterState();
 	});
 	
@@ -79,13 +72,22 @@ function filterBarController($scope, ficBrowseService) {
 		if (!matchup) {
 			return;
 		}
-		for (var i = 0; i < that.matchupFilters.length; i++) {
-			if (that.matchupFilters[i].id == matchup.id) {
-				that.matchupFilters.splice(i, 1);
+		for (var i = 0; i < vm.matchupFilters.length; i++) {
+			if (vm.matchupFilters[i].id == matchup.id) {
+				vm.matchupFilters.splice(i, 1);
 				break;
 			}
 		}
 		updateFilterState();
 	});
+	
+	function clear() {
+		ficBrowseService.clear();
+		ficBrowseService.refresh();
+	}
+	
+	function updateFilterState() {
+		vm.hasFilters = ficBrowseService.hasAnyGenreFilter() || ficBrowseService.hasAnySeriesFilter() || ficBrowseService.hasAnyMatchupFilter();
+	}
 	
 }

@@ -7,8 +7,13 @@ angular.module('codex.browse')
 filterBarGenreItemController.$inject = ['$scope', 'ficBrowseService'];
 
 function filterBarGenreItemController($scope, ficBrowseService) {
-	this.remove = function() {
+	
+	var vm = this;
+	
+	vm.remove = remove;
+	
+	function remove() {
 		ficBrowseService.removeGenreFilter($scope.genre);
 		ficBrowseService.refresh();
-	};
+	}
 }

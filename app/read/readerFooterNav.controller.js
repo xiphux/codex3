@@ -8,29 +8,18 @@ readerFooterNavController.$inject = ['$scope'];
 
 function readerFooterNavController($scope) {
 	
-	this.nextChapter = null;
-	this.prevChapter = null;
-	var that = this;
+	var vm = this;
 	
-	var updateChapters = function() {
-		if (($scope.currentChapter == null) || ($scope.chapters == null)) {
-			that.nextChapter = null;
-			that.prevChapter = null;
-			return;
-		}
-		
-		for (var i = 0; i < $scope.chapters.length; i++) {
-			var chapter = $scope.chapters[i];
-			if (chapter.id == $scope.currentChapter.id) {
-				that.prevChapter = i > 0 ? $scope.chapters[i-1] : null;
-				that.nextChapter = i < ($scope.chapters.length - 1) ? $scope.chapters[i+1] : null;
-				break;
-			}
-		}
-	};
+	vm.nextChapter = null;
+	vm.prevChapter = null;
+	vm.gotoNextChapter = gotoNextChapter; 
+	vm.gotoPrevChapter = gotoPrevChapter;
+	
 	
 	updateChapters();
+	
 	$scope.$watch('currentChapter', updateChapters);
+	
 	$scope.$watch('chapters', function() {
 		if ($scope.chapters != null) {
 			$scope.chapters.$promise.then(updateChapters);
@@ -39,16 +28,33 @@ function readerFooterNavController($scope) {
 		}
 	});
 	
-	this.gotoNextChapter = function() {
-		if ($scope.currentChapter && this.nextChapter) {
+	function updateChapters() {
+		if (($scope.currentChapter == null) || ($scope.chapters == null)) {
+			vm.nextChapter = null;
+			vm.prevChapter = null;
+			return;
+		}
+		
+		for (var i = 0; i < $scope.chapters.length; i++) {
+			var chapter = $scope.chapters[i];
+			if (chapter.id == $scope.currentChapter.id) {
+				vm.prevChapter = i > 0 ? $scope.chapters[i-1] : null;
+				vm.nextChapter = i < ($scope.chapters.length - 1) ? $scope.chapters[i+1] : null;
+				break;
+			}
+		}
+	}
+	
+	function gotoNextChapter() {
+		if ($scope.currentChapter && vm.nextChapter) {
 			$scope.$emit('readerNextChapter');
 		}
-	};
+	}
 	
-	this.gotoPrevChapter = function() {
-		if ($scope.currentChapter && this.prevChapter) {
+	function gotoPrevChapter() {
+		if ($scope.currentChapter && vm.prevChapter) {
 			$scope.$emit('readerPrevChapter');
 		}
-	};
+	}
 	
 }

@@ -7,37 +7,39 @@ angular.module('codex.browse')
 matchupFilterPanelItemController.$inject = ['$scope', 'ficBrowseService'];
 
 function matchupFilterPanelItemController($scope, ficBrowseService) {
-	this.active = ficBrowseService.hasMatchupFilter($scope.matchup);
-	this.matchCount = ficBrowseService.ficsWithMatchup($scope.matchup);
-	this.showBadge = ficBrowseService.hasSearch();
 	
-	var that = this;
+	var vm = this;
+	
+	vm.active = ficBrowseService.hasMatchupFilter($scope.matchup);
+	vm.matchCount = ficBrowseService.ficsWithMatchup($scope.matchup);
+	vm.showBadge = ficBrowseService.hasSearch();
+	vm.toggleMatchupFilter = toggleMatchupFilter;
 	
 	$scope.$on('ficBrowseFicsUpdated', function() {
-		that.matchCount = ficBrowseService.ficsWithMatchup($scope.matchup);
-		that.showBadge = ficBrowseService.hasSearch();
+		vm.matchCount = ficBrowseService.ficsWithMatchup($scope.matchup);
+		vm.showBadge = ficBrowseService.hasSearch();
 	});
 	
 	$scope.$on('ficBrowseMatchupAdded', function(e, matchup) {
 		if (!(matchup && (matchup.id == $scope.matchup.id))) {
 			return;
 		}
-		that.active = true;
+		vm.active = true;
 	});
 	
 	$scope.$on('ficBrowseMatchupRemoved', function(e, matchup) {
 		if (!(matchup && (matchup.id == $scope.matchup.id))) {
 			return;
 		}
-		that.active = false;
+		vm.active = false;
 	});
 	
-	this.toggleMatchupFilter = function() {
-		if (this.active) {
+	function toggleMatchupFilter() {
+		if (vm.active) {
 			ficBrowseService.removeMatchupFilter($scope.matchup);
 		} else {
 			ficBrowseService.addMatchupFilter($scope.matchup);
 		}
 		ficBrowseService.refresh();
-	};
+	}
 }

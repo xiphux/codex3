@@ -9,19 +9,32 @@ ficListController.$inject = ['$scope', '$rootScope', '$timeout', 'ficBrowseServi
 
 function ficListController($scope, $rootScope, $timeout, ficBrowseService) {
 	
-	$rootScope.subtitle = '';
+	var vm = this;
 	
-	this.fics = ficBrowseService.getFics();
-	this.searchActive = ficBrowseService.hasSearch();
-	this.searchPending = false;
-	var that = this;
+	vm.fics = ficBrowseService.getFics();
+	vm.searchActive = ficBrowseService.hasSearch();
+	vm.searchPending = false;
+	vm.titleSort = titleSort;
+	
+	$rootScope.subtitle = '';
 	
 	// TODO: apparently directive template/controllers don't get $viewContentLoaded events - is this correct to call on init?
 	$timeout(function() {
 		componentHandler.upgradeAllRegistered();
 	});
 	
-	$scope.titleSort = function(fic) {
+	$scope.$on('ficBrowseFicsUpdating', function() {
+		vm.searchPending = true;
+		vm.searchActive = ficBrowseService.hasSearch();
+	});
+	
+	$scope.$on('ficBrowseFicsUpdated', function() {
+		vm.searchPending = false;
+		vm.fics = ficBrowseService.getFics();
+		vm.searchActive = ficBrowseService.hasSearch();
+	});
+	
+	function titleSort(fic) {
 		var title = fic.title || 'Untitled';
 		title = title.replace(/[^A-Za-z0-9_ ]/g,"").toUpperCase();
 		if (title.slice(0, 4) == 'THE ') {
@@ -29,15 +42,4 @@ function ficListController($scope, $rootScope, $timeout, ficBrowseService) {
 		}
 		return title;
 	};
-	
-	$scope.$on('ficBrowseFicsUpdating', function() {
-		that.searchPending = true;
-		that.searchActive = ficBrowseService.hasSearch();
-	});
-	
-	$scope.$on('ficBrowseFicsUpdated', function() {
-		that.searchPending = false;
-		that.fics = ficBrowseService.getFics();
-		that.searchActive = ficBrowseService.hasSearch();
-	});
 }

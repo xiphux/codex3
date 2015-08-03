@@ -8,37 +8,38 @@ seriesFilterPanelItemController.$inject = ['$scope', 'ficBrowseService'];
 
 function seriesFilterPanelItemController($scope, ficBrowseService) {
 	
-	this.active = ficBrowseService.hasSeriesFilter($scope.series);
-	this.matchCount = ficBrowseService.ficsWithSeries($scope.series);
-	this.showBadge = ficBrowseService.hasSearch();
+	var vm = this;
 	
-	var that = this;
+	vm.active = ficBrowseService.hasSeriesFilter($scope.series);
+	vm.matchCount = ficBrowseService.ficsWithSeries($scope.series);
+	vm.showBadge = ficBrowseService.hasSearch();
+	vm.toggleSeriesFilter = toggleSeriesFilter;
 	
 	$scope.$on('ficBrowseFicsUpdated', function() {
-		that.matchCount = ficBrowseService.ficsWithSeries($scope.series);
-		that.showBadge = ficBrowseService.hasSearch();
+		vm.matchCount = ficBrowseService.ficsWithSeries($scope.series);
+		vm.showBadge = ficBrowseService.hasSearch();
 	});
 	
 	$scope.$on('ficBrowseSeriesAdded', function(e, series) {
 		if (!(series && (series.id == $scope.series.id))) {
 			return;
 		}
-		that.active = true;
+		vm.active = true;
 	});
 	
 	$scope.$on('ficBrowseSeriesRemoved', function(e, series) {
 		if (!(series && (series.id == $scope.series.id))) {
 			return;
 		}
-		that.active = false;
+		vm.active = false;
 	});
 	
-	this.toggleSeriesFilter = function() {
-		if (this.active) {
+	function toggleSeriesFilter() {
+		if (vm.active) {
 			ficBrowseService.removeSeriesFilter($scope.series);
 		} else {
 			ficBrowseService.addSeriesFilter($scope.series);
 		}
 		ficBrowseService.refresh();
-	};
+	}
 }

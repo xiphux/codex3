@@ -7,7 +7,12 @@ angular.module('codex.read')
 chapterListItemController.$inject = ['$scope'];
 
 function chapterListItemController($scope) {
-	this.setChapter = function() {
+	
+	var vm = this;
+	
+	vm.setChapter = setChapter;
+	
+	function setChapter() {
 		$scope.$emit('readerSetChapter', $scope.chapter);
-	};
+	}
 }

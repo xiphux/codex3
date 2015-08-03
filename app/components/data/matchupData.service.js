@@ -9,12 +9,13 @@ function matchupDataService($resource) {
 	
 	var matchupsResource = $resource('api/matchups');
 	
+	var service = {
+		getMatchups: getMatchups
+	};
+	return service;
+	
 	function getMatchups() {
 		return matchupsResource.query();
-	};
-	
-	return {
-		getMatchups: getMatchups
 	};
 	
 }

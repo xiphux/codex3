@@ -10,6 +10,12 @@ function chapterDataService($resource) {
 	var chaptersResource = $resource('api/fics/:ficId/chapters');
 	var chapterResource = $resource('api/fics/:ficId/chapters/:num');
 	
+	var service = {
+		getChapters: getChapters,
+		getChapter: getChapter
+	};
+	return service;
+	
 	function getChapters(ficId) {
 		if (!ficId) {
 			return null;
@@ -22,11 +28,6 @@ function chapterDataService($resource) {
 			return null;
 		}
 		return chapterResource.get({ ficId: ficId, num: num });
-	};
-	
-	return {
-		getChapters: getChapters,
-		getChapter: getChapter
 	};
 	
 }

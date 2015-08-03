@@ -8,9 +8,6 @@ searchFieldController.$inject = ['$scope', 'ficBrowseService'];
 
 function searchFieldController($scope, ficBrowseService) {
 	
-	function updateSearchField() {
-		$scope.search = ficBrowseService.getSearchTerms().join(' ');
-	}
 	updateSearchField();
 	
 	$scope.$on('ficBrowseSearchCleared', updateSearchField);
@@ -23,4 +20,8 @@ function searchFieldController($scope, ficBrowseService) {
 		ficBrowseService.setSearchTerms(newValue.split(' '));
 		ficBrowseService.refresh();
 	});
+	
+	function updateSearchField() {
+		$scope.search = ficBrowseService.getSearchTerms().join(' ');
+	}
 }

@@ -8,17 +8,22 @@ matchupFilterPanelController.$inject = ['$scope', 'matchupDataService'];
 
 function matchupFilterPanelController($scope, matchupDataService) {
 	
-	this.expanded = false;
-	this.loaded = false;	
+	var vm = this;
+	
+	vm.expanded = false;
+	vm.toggleMatchupExpand = toggleMatchupExpand;
+	vm.matchups = null;
+	 
+	var loaded = false;	
 
-	this.toggleMatchupExpand = function() {
+	function toggleMatchupExpand() {
 		
-		if (!this.expanded && !this.loaded) {
-			this.matchups = matchupDataService.getMatchups();
-			this.loaded = true;
+		if (!vm.expanded && !loaded) {
+			vm.matchups = matchupDataService.getMatchups();
+			loaded = true;
 		}
 		
-		this.expanded = !this.expanded;
+		vm.expanded = !vm.expanded;
 		
-	};
+	}
 }

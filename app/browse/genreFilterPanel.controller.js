@@ -8,14 +8,19 @@ genreFilterPanelController.$inject = ['$scope', 'genreDataService'];
 
 function genreFilterPanelController($scope, genreDataService) {
 	
-	this.expanded = false;
-	this.loaded = false;
+	var vm = this;
 	
-	this.toggleGenreExpand = function() {
-		if (!this.expanded && !this.loaded) {
-			this.genres = genreDataService.getGenres();
-			this.loaded = true;
+	vm.expanded = false;
+	vm.toggleGenreExpand = toggleGenreExpand;
+	vm.genres = null;
+	
+	var loaded = false;
+	
+	function toggleGenreExpand() {
+		if (!vm.expanded && !loaded) {
+			vm.genres = genreDataService.getGenres();
+			loaded = true;
 		}
-		this.expanded = !this.expanded;
-	};
+		vm.expanded = !vm.expanded;
+	}
 }

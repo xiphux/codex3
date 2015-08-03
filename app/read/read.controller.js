@@ -9,14 +9,65 @@ readController.$inject = ['$scope', '$routeParams', '$locationEx', '$rootScope',
 
 function readController($scope, $routeParams, $locationEx, $rootScope, $timeout, chapterFilter, ficDataService, chapterDataService) {
 	
+	var vm = this;
+	
+	vm.chapters = chapterDataService.getChapters($routeParams.ficId);
+	vm.chapter = null;
+	vm.fic = ficDataService.getFic($routeParams.ficId);
+	
 	var chapterLoaded = false;
 	var ficLoaded = false;
 	
-	var updatePageTitle = function() {
-		$rootScope.subtitle = $scope.fic.title + " :: " + chapterFilter($scope.chapter);
+	loadChapter($routeParams.chapterNum);
+	
+	vm.fic.$promise.then(function(data) {
+		ficLoaded = true;
+		if (chapterLoaded && ficLoaded) {
+			updatePageTitle();
+		}
+	});
+	
+	$scope.$on('readerPrevChapter', prevChapter);
+	
+	$scope.$on('readerNextChapter', nextChapter);
+	
+	$scope.$on('readerSetChapter', function (e, chapter) {
+		if (!chapter) {
+			return;
+		}
+		
+		setChapter(chapter.number);
+	});
+	
+	$scope.$on('$viewContentLoaded', function() {
+		$timeout(function() {
+			componentHandler.upgradeAllRegistered();
+		});
+	});
+	
+	function setChapter(num) {
+		if (!num || (num < 1) || (num > _.get(_.max(vm.chapters, 'number'),'number', 0))) {
+			return false;
+		}
+		loadChapter(num);
+		$locationEx.skipReload().path('/read/' + $routeParams.ficId + '/chapters/' + num);
+		$scope.$broadcast('readerChapterChanged');
+		return true;
 	};
 	
-	var loadChapter = function(num) {
+	function prevChapter() {
+		return setChapter(vm.chapter.number - 1);
+	};
+	
+	function nextChapter() {
+		return setChapter(vm.chapter.number + 1);
+	};
+	
+	function updatePageTitle() {
+		$rootScope.subtitle = vm.fic.title + " :: " + chapterFilter(vm.chapter);
+	}
+	
+	function loadChapter(num) {
 		chapterLoaded = false;
 		var chap = chapterDataService.getChapter($routeParams.ficId, num);
 		if (chap) {
@@ -24,7 +75,7 @@ function readController($scope, $routeParams, $locationEx, $rootScope, $timeout,
 				function(data) {
 					// intentionally setting here and not immediately setting the returned promise
 					// to avoid flicker when the promise is unresolved
-					$scope.chapter = data;
+					vm.chapter = data;
 					
 					chapterLoaded = true;
 					if (chapterLoaded && ficLoaded) {
@@ -36,58 +87,6 @@ function readController($scope, $routeParams, $locationEx, $rootScope, $timeout,
 				}
 			);
 		}
-	};
-	
-	loadChapter($routeParams.chapterNum);
-	
-	$scope.fic = ficDataService.getFic($routeParams.ficId);
-	$scope.fic.$promise.then(function(data) {
-		ficLoaded = true;
-		if (chapterLoaded && ficLoaded) {
-			updatePageTitle();
-		}
-	});
-	
-	$scope.chapters = chapterDataService.getChapters($routeParams.ficId);
-	
-	$scope.setChapter = function(num) {
-		if (!num || (num < 1) || (num > _.get(_.max($scope.chapters, 'number'),'number', 0))) {
-			return false;
-		}
-		loadChapter(num);
-		$locationEx.skipReload().path('/read/' + $routeParams.ficId + '/chapters/' + num);
-		$scope.$broadcast('readerChapterChanged');
-		return true;
-	};
-	
-	$scope.prevChapter = function() {
-		return $scope.setChapter($scope.chapter.number - 1);
-	};
-	
-	$scope.nextChapter = function() {
-		return $scope.setChapter($scope.chapter.number + 1);
-	};
-	
-	$scope.$on('readerPrevChapter', function() {
-		$scope.prevChapter();
-	});
-	
-	$scope.$on('readerNextChapter', function() {
-		$scope.nextChapter();
-	});
-	
-	$scope.$on('readerSetChapter', function (e, chapter) {
-		if (!chapter) {
-			return;
-		}
-		
-		$scope.setChapter(chapter.number);
-	});
-	
-	$scope.$on('$viewContentLoaded', function() {
-		$timeout(function() {
-			componentHandler.upgradeAllRegistered();
-		});
-	});
+	}
 	
 }

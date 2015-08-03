@@ -7,7 +7,11 @@ angular.module('codex.browse')
 filterBarSeriesItemController.$inject = ['$scope', 'ficBrowseService'];
 
 function filterBarSeriesItemController($scope, ficBrowseService) {
-	this.remove = function() {
+	var vm = this;
+	
+	vm.remove = remove; 
+	
+	function remove() {
 		ficBrowseService.removeSeriesFilter($scope.series);
 		ficBrowseService.refresh();
 	};

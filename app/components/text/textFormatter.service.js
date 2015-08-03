@@ -7,6 +7,26 @@ angular.module('codex.text')
 
 function textFormatterService() {
 	
+	var service = {
+		
+		padDenseText: padDenseText,
+		compactBlankLines: compactBlankLines,
+		
+		getUnwrapMetrics: getUnwrapMetrics,
+		unwrapTrailingSpaces: unwrapTrailingSpaces,
+		unwrapIndentedLines: unwrapIndentedLines,
+		unwrapBlankLines: unwrapBlankLines,
+		unwrapLineWidths: unwrapLineWidths,
+		wrapBreaklines: wrapBreaklines,
+		unwrap: unwrap,
+		
+		stylize: stylize,
+		
+		format: format
+		
+	};
+	return service;
+	
 	function padDenseText(content) {
 		// pad out dense text with blank lines
 		return content.replace(/([^\w\s,]) *\n([A-Z\t\"]| {3,})/g, "$1\n\n$2");
@@ -155,24 +175,5 @@ function textFormatterService() {
 		content = stylize(content);							// stylize text
 		
 		return content;
-	};
-	
-	return {
-		
-		padDenseText: padDenseText,
-		compactBlankLines: compactBlankLines,
-		
-		getUnwrapMetrics: getUnwrapMetrics,
-		unwrapTrailingSpaces: unwrapTrailingSpaces,
-		unwrapIndentedLines: unwrapIndentedLines,
-		unwrapBlankLines: unwrapBlankLines,
-		unwrapLineWidths: unwrapLineWidths,
-		wrapBreaklines: wrapBreaklines,
-		unwrap: unwrap,
-		
-		stylize: stylize,
-		
-		format: format
-		
 	};
 }

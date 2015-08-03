@@ -8,12 +8,15 @@ ficListItemController.$inject = ['$scope', 'ficDataService'];
 
 function ficListItemController($scope, ficDataService) {
 	
-	this.expanded = false;
+	var vm = this;
 	
-	this.toggle = function() {
-		if (!this.ficDetail) {
-			this.ficDetail = ficDataService.getFic($scope.fic.id);
+	vm.expanded = false;
+	vm.toggle = toggle;
+	
+	function toggle() {
+		if (!vm.ficDetail) {
+			vm.ficDetail = ficDataService.getFic($scope.fic.id);
 		}
-		this.expanded = !this.expanded;
-	};
+		vm.expanded = !vm.expanded;
+	}
 }

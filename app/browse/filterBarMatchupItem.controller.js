@@ -7,8 +7,12 @@ angular.module('codex.browse')
 filterBarMatchupItemController.$inject = ['$scope', 'ficBrowseService'];
 
 function filterBarMatchupItemController($scope, ficBrowseService) {
-	this.remove = function() {
+	var vm = this;
+	
+	vm.remove = remove;
+	
+	function remove() {
 		ficBrowseService.removeMatchupFilter($scope.matchup);
 		ficBrowseService.refresh();
-	};
+	}
 }
