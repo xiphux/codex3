@@ -35,14 +35,9 @@ function readerFooterNavController($scope) {
 			return;
 		}
 		
-		for (var i = 0; i < $scope.chapters.length; i++) {
-			var chapter = $scope.chapters[i];
-			if (chapter.id == $scope.currentChapter.id) {
-				vm.prevChapter = i > 0 ? $scope.chapters[i-1] : null;
-				vm.nextChapter = i < ($scope.chapters.length - 1) ? $scope.chapters[i+1] : null;
-				break;
-			}
-		}
+		var index = _.findIndex($scope.chapters, 'id', $scope.currentChapter.id);
+		vm.prevChapter = index > 0 ? $scope.chapters[index-1] : null;
+		vm.nextChapter = index >= 0 && index < ($scope.chapters.length - 1) ? $scope.chapters[index+1] : null;
 	}
 	
 	function gotoNextChapter() {

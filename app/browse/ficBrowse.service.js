@@ -24,46 +24,9 @@ function ficBrowseService($rootScope, ficDataService) {
 	var fics = null;
 	
 	function recount() {
-		genreCounts = {};
-		matchupCounts = {};
-		seriesCounts = {};
-		
-		if (!fics) {
-			return;
-		}
-		
-		for (var i = 0; i < fics.length; i++) {
-			
-			var fic = fics[i];
-			
-			if (fic.fic_genres && (fic.fic_genres.length > 0)) {
-				for (var j = 0; j < fic.fic_genres.length; j++) {
-					var genre_id = fic.fic_genres[j].genre_id;
-					if (genre_id) {
-						genreCounts[genre_id] = genreCounts[genre_id] ? genreCounts[genre_id] + 1 : 1;
-					}
-				}
-			}
-			
-			if (fic.fic_matchups && (fic.fic_matchups.length > 0)) {
-				for (var j = 0; j < fic.fic_matchups.length; j++) {
-					var matchup_id = fic.fic_matchups[j].matchup_id;
-					if (matchup_id) {
-						matchupCounts[matchup_id] = matchupCounts[matchup_id] ? matchupCounts[matchup_id] + 1 : 1;
-					}
-				}
-			}
-			
-			if (fic.fic_series && (fic.fic_series.length > 0)) {
-				for (var j = 0; j < fic.fic_series.length; j++) {
-					var series_id = fic.fic_series[j].series_id;
-					if (series_id) {
-						seriesCounts[series_id] = seriesCounts[series_id] ? seriesCounts[series_id] + 1 : 1;
-					}
-				}
-			}
-			
-		}
+		genreCounts = fics ? _(fics).pluck('fic_genres').flatten().countBy('genre_id').value() : {};
+		matchupCounts = fics ? _(fics).pluck('fic_matchups').flatten().countBy('matchup_id').value() : {};
+		seriesCounts = fics ? _(fics).pluck('fic_series').flatten().countBy('series_id').value() : {};
 	};
 	
 	function getFics() {

@@ -30,12 +30,9 @@ function filterBarController($scope, ficBrowseService) {
 		if (!series) {
 			return;
 		}
-		for (var i = 0; i < vm.seriesFilters.length; i++) {
-			if (vm.seriesFilters[i].id == series.id) {
-				vm.seriesFilters.splice(i, 1);
-				break;
-			}
-		}
+		_.remove(vm.seriesFilters, function(s) {
+			return s.id == series.id;
+		});
 		updateFilterState();
 	});
 	
@@ -51,12 +48,9 @@ function filterBarController($scope, ficBrowseService) {
 		if (!genre) {
 			return;
 		}
-		for (var i = 0; i < vm.genreFilters.length; i++) {
-			if (vm.genreFilters[i].id == genre.id) {
-				vm.genreFilters.splice(i, 1);
-				break;
-			}
-		}
+		_.remove(vm.genreFilters, function(g) {
+			return g.id == genre.id;
+		});
 		updateFilterState();
 	});
 	
@@ -72,12 +66,9 @@ function filterBarController($scope, ficBrowseService) {
 		if (!matchup) {
 			return;
 		}
-		for (var i = 0; i < vm.matchupFilters.length; i++) {
-			if (vm.matchupFilters[i].id == matchup.id) {
-				vm.matchupFilters.splice(i, 1);
-				break;
-			}
-		}
+		_.remove(vm.matchupFilters, function(m) {
+			return m.id == matchup.id;
+		});
 		updateFilterState();
 	});
 	
