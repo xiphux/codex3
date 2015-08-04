@@ -18,41 +18,23 @@ function ficDataService($resource) {
 	
 	function getFics(filters) {
 		
-		var params = {};
+		var params = filters ? _.pick(filters, ['series', 'genres', 'matchups', 'search']) : {};
 		
-		if (filters) {
-			if (filters.series && (filters.series.length > 0)) {
-				if (filters.series.length > 1) {
-					params['series[]'] = filters.series;
-				} else {
-					params['series'] = filters.series[0];
-				}
+		params = _.transform(params, function(result, n, key) {
+			if (!n || n.length < 1) {
+				return;
 			}
-			
-			if (filters.genres && (filters.genres.length > 0)) {
-				if (filters.genres.length > 1) {
-					params['genre[]'] = filters.genres;
-				} else {
-					params['genre'] = filters.genres[0];
-				}
+			if (key == 'genres') {
+				key = 'genre';
+			} else if (key == 'matchups') {
+				key = 'matchup';
 			}
-			
-			if (filters.matchups && (filters.matchups.length > 0)) {
-				if (filters.matchups.length > 1) {
-					params['matchup[]'] = filters.matchups;
-				} else {
-					params['matchup'] = filters.matchups[0];
-				}
+			if (n.length > 1) {
+				result[key + '[]'] = n;
+			} else {
+				result[key] = n[0];
 			}
-			
-			if (filters.search && (filters.search.length > 0)) {
-				if (filters.search.length > 1) {
-					params['search[]'] = filters.search;
-				} else {
-					params['search'] = filters.search[0];
-				}
-			}
-		}
+		});
 		
 		return ficsResource.query(params);
 	};
