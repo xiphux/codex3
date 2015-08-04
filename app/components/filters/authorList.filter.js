@@ -9,24 +9,15 @@ function authorListFilter() {
 		if (!authors || (authors.length < 1)) {
 			return 'Unknown';
 		}
-		if (authors.length == 1) {
-			return authors[0].name;
-		}
-		if (authors.length == 2) {
-			return authors[0].name + " and " + authors[1].name;
-		}
 		
-		var retstr = "";
-		for (var i = 0; i < authors.length; i++) {
-			if (i > 0) {
-				if (i == (authors.length - 1)) {
-					retstr += ", and ";
-				} else {
-					retstr += ", ";
-				}
-			}
-			retstr += authors[i].name;
+		var authorNames = _.pluck(authors, 'name');
+		
+		if (authorNames.length == 1) {
+			return authorNames[0];
 		}
-		return retstr;
+		if (authorNames.length == 2) {
+			return authorNames.join(' and ');
+		}
+		return authorNames.slice(0, -1).join(', ') + ', and ' + authorNames.slice(-1);
 	};
 }

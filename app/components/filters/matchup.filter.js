@@ -9,24 +9,13 @@ function matchupFilter() {
 		if (!matchup || !matchup.characters || (matchup.characters.length < 1)) {
 			return '';
 		}
-		var crossover = false;
-		var firstseries = matchup.characters[0].series.id;
-		for (var i = 1; i < matchup.characters.length; i++) {
-			if (matchup.characters[i].series.id != firstseries) {
-				crossover = true;
-				break;
-			}
+		var crossover = _(matchup.characters).pluck('series.id').uniq().value().length > 1;
+		if (crossover) {
+			return _.map(matchup.characters, function(character) {
+				return character.name + ' (' + character.series.title + ')';
+			}).join(' + ');
+		} else {
+			return _.pluck(matchup.characters, 'name').join(' + ');
 		}
-		var retstr = "";
-		for (var j = 0; j < matchup.characters.length; j++) {
-			if (j > 0) {
-				retstr += " + ";
-			}
-			retstr += matchup.characters[j].name;
-			if (crossover) {
-				retstr += " (" + matchup.characters[j].series.title + ")";
-			}
-		}
-		return retstr;
 	};
 }

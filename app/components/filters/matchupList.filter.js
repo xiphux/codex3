@@ -11,13 +11,6 @@ function matchupListFilter(matchupFilter) {
 		if (!matchups) {
 			return "";
 		}
-		var retstr = "";
-		for (var i = 0; i < matchups.length; i++) {
-			if (i > 0) {
-				retstr += ", ";
-			}
-			retstr += matchupFilter(matchups[i]);
-		}
-		return retstr;
+		return _.map(matchups, matchupFilter).join(', ');
 	};
 }

@@ -9,13 +9,6 @@ function genreListFilter() {
 		if (!genres) {
 			return "";
 		}
-		var retstr = "";
-		for (var i = 0; i < genres.length; i++) {
-			if (i > 0) {
-				retstr += ", ";
-			}
-			retstr += genres[i].name;
-		}
-		return retstr;
+		return _.pluck(genres, 'name').join(', ');
 	};
 }
