@@ -23,6 +23,44 @@ function ficBrowseService($rootScope, ficDataService) {
 	
 	var fics = null;
 	
+	var service = {
+		
+		getFics: getFics,
+		getGenreFilters: getGenreFilters,
+		getMatchupFilters: getMatchupFilters,
+		getSeriesFilters: getSeriesFilters,
+		getSearchTerms: getSearchTerms,
+		
+		refresh: refresh,
+
+		hasSearch: hasSearch,
+		
+		addGenreFilter: addGenreFilter,		
+		removeGenreFilter: removeGenreFilter,
+		hasGenreFilter: hasGenreFilter,
+		hasAnyGenreFilter: hasAnyGenreFilter,
+		ficsWithGenre: ficsWithGenre,
+		
+		addMatchupFilter: addMatchupFilter,
+		removeMatchupFilter: removeMatchupFilter,
+		hasMatchupFilter: hasMatchupFilter,
+		hasAnyMatchupFilter: hasAnyMatchupFilter,
+		ficsWithMatchup: ficsWithMatchup,
+		
+		addSeriesFilter: addSeriesFilter,
+		removeSeriesFilter: removeSeriesFilter,
+		hasSeriesFilter: hasSeriesFilter,
+		hasAnySeriesFilter: hasAnySeriesFilter,
+		ficsWithSeries: ficsWithSeries,
+		
+		hasSearchTerm: hasSearchTerm,
+		setSearchTerms: setSearchTerms,
+		
+		clear: clear
+		
+	};
+	return service;
+	
 	function recount() {
 		genreCounts = fics ? _(fics).pluck('fic_genres').flatten().countBy('genre_id').value() : {};
 		matchupCounts = fics ? _(fics).pluck('fic_matchups').flatten().countBy('matchup_id').value() : {};
@@ -237,43 +275,6 @@ function ficBrowseService($rootScope, ficDataService) {
 		$rootScope.$broadcast('ficBrowseSearchCleared');
 		dirty = true;
 		refresh();
-	};
-	
-	return {
-		
-		getFics: getFics,
-		getGenreFilters: getGenreFilters,
-		getMatchupFilters: getMatchupFilters,
-		getSeriesFilters: getSeriesFilters,
-		getSearchTerms: getSearchTerms,
-		
-		refresh: refresh,
-
-		hasSearch: hasSearch,
-		
-		addGenreFilter: addGenreFilter,		
-		removeGenreFilter: removeGenreFilter,
-		hasGenreFilter: hasGenreFilter,
-		hasAnyGenreFilter: hasAnyGenreFilter,
-		ficsWithGenre: ficsWithGenre,
-		
-		addMatchupFilter: addMatchupFilter,
-		removeMatchupFilter: removeMatchupFilter,
-		hasMatchupFilter: hasMatchupFilter,
-		hasAnyMatchupFilter: hasAnyMatchupFilter,
-		ficsWithMatchup: ficsWithMatchup,
-		
-		addSeriesFilter: addSeriesFilter,
-		removeSeriesFilter: removeSeriesFilter,
-		hasSeriesFilter: hasSeriesFilter,
-		hasAnySeriesFilter: hasAnySeriesFilter,
-		ficsWithSeries: ficsWithSeries,
-		
-		hasSearchTerm: hasSearchTerm,
-		setSearchTerms: setSearchTerms,
-		
-		clear: clear
-		
 	};
 	
 }
