@@ -4,7 +4,7 @@
 			<span class="mdl-layout-title">
 				<a href="#/">Codex</a>
 				<i class="material-icons">chevron_right</i>
-				{{rCtrl.fic.title}}
+				{{::rCtrl.fic.title}}
 				<span ng-show="rCtrl.chapters.length > 1 || rCtrl.chapter.name">
 					<i class="material-icons">chevron_right</i>
 					{{ rCtrl.chapter | chapter }}
@@ -13,19 +13,19 @@
 		</div>
 	</header>
 	<div class="mdl-layout__drawer">
-		<span class="mdl-layout-title">{{rCtrl.fic.title}}</span>
-		<span class="mdl-layout-title">by {{rCtrl.fic.authors | authorList}}</span>
-		<div ng-show="rCtrl.fic.series && rCtrl.fic.series.length > 0">
-			Series: {{rCtrl.fic.series | seriesList}}
+		<span class="mdl-layout-title">{{::rCtrl.fic.title}}</span>
+		<span class="mdl-layout-title">by {{::rCtrl.fic.authors | authorList}}</span>
+		<div ng-show="::(rCtrl.fic.series && rCtrl.fic.series.length > 0)">
+			Series: {{::rCtrl.fic.series | seriesList}}
 		</div>
-		<div ng-show="rCtrl.fic.genres && rCtrl.fic.genres.length > 0">
-			Genres: {{rCtrl.fic.genres | genreList}}
+		<div ng-show="::(rCtrl.fic.genres && rCtrl.fic.genres.length > 0)">
+			Genres: {{::rCtrl.fic.genres | genreList}}
 		</div>
-		<div ng-show="rCtrl.fic.matchups && rCtrl.fic.matchups.length > 0">
-			Matchups: {{rCtrl.fic.matchups | matchupList}}
+		<div ng-show="::(rCtrl.fic.matchups && rCtrl.fic.matchups.length > 0)">
+			Matchups: {{::rCtrl.fic.matchups | matchupList}}
 		</div>
 		<div class="mdl-layout-spacer"></div>
-		<codex-chapter-list chapters="rCtrl.chapters" current-chapter="rCtrl.chapter" ></codex-chapter-list>
+		<codex-chapter-list chapters="::rCtrl.chapters" current-chapter="rCtrl.chapter" ></codex-chapter-list>
 	</div>
 	<main class="mdl-layout__content" scroll-to-top-when="readerChapterChanged">
 		<div class="page-content">
@@ -36,7 +36,7 @@
 				</div>
 				<div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 			</div>
-			<codex-reader-footer-nav ng-show="rCtrl.chapters.length > 1" current-chapter="rCtrl.chapter" chapters="rCtrl.chapters"></codex-reader-footer-nav>
+			<codex-reader-footer-nav ng-show="::(rCtrl.chapters === undefined ? undefined : rCtrl.chapters.length > 1)" current-chapter="rCtrl.chapter" chapters="::rCtrl.chapters"></codex-reader-footer-nav>
 		</div>
 	</main>
 </div>

@@ -11,20 +11,26 @@ function readController($scope, $routeParams, $locationEx, $rootScope, $timeout,
 	
 	var vm = this;
 	
-	vm.chapters = chapterDataService.getChapters($routeParams.ficId);
-	vm.chapter = null;
-	vm.fic = ficDataService.getFic($routeParams.ficId);
+	vm.chapters = undefined;
+	vm.chapter = undefined;
+	vm.fic = undefined;
 	
 	var chapterLoaded = false;
 	var ficLoaded = false;
 	
 	loadChapter($routeParams.chapterNum);
 	
-	vm.fic.$promise.then(function(data) {
+	var fic = ficDataService.getFic($routeParams.ficId);
+	fic.$promise.then(function(data) {
+		vm.fic = data;
 		ficLoaded = true;
 		if (chapterLoaded && ficLoaded) {
 			updatePageTitle();
 		}
+	});
+	var chapters = chapterDataService.getChapters($routeParams.ficId);
+	chapters.$promise.then(function(data) {
+		vm.chapters = data;
 	});
 	
 	$scope.$on('readerPrevChapter', prevChapter);

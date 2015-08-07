@@ -6,6 +6,9 @@ angular.module('codex.filters')
 
 function authorListFilter() {
 	return function(authors) {
+		if (authors === undefined) {
+			return undefined;
+		}
 		if (!authors || (authors.length < 1)) {
 			return 'Unknown';
 		}
