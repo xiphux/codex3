@@ -12,14 +12,14 @@ function genreFilterPanelController($scope, genreDataService) {
 	
 	vm.expanded = false;
 	vm.toggleGenreExpand = toggleGenreExpand;
-	vm.genres = null;
-	
-	var loaded = false;
+	vm.genres = undefined;
 	
 	function toggleGenreExpand() {
-		if (!vm.expanded && !loaded) {
-			vm.genres = genreDataService.getGenres();
-			loaded = true;
+		if (!vm.expanded && (vm.genres === undefined)) {
+			var genres = genreDataService.getGenres();
+			genres.$promise.then(function(data) {
+				vm.genres = data;
+			});
 		}
 		vm.expanded = !vm.expanded;
 	}

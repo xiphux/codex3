@@ -3,6 +3,6 @@
 		<h6><i class="material-icons">{{ sfpCtrl.expanded ? 'expand_less' : 'expand_more' }}</i> Series</h6>
 	</a>
 	<div ng-show="sfpCtrl.expanded">
-		<codex-series-filter-panel-item series="s" ng-repeat="s in sfpCtrl.series | orderBy:'title'"></codex-series-filter-panel-item>
+		<codex-series-filter-panel-item series="s" ng-repeat="s in ::sfpCtrl.series | orderBy:'title'"></codex-series-filter-panel-item>
 	</div>
 </nav>

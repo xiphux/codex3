@@ -7,7 +7,7 @@ angular.module('codex.filters')
 function chapterFilter() {
 	return function(chapter) {
 		if (!chapter || !(chapter.title || chapter.number)) {
-			return '';
+			return undefined;
 		}
 		return chapter.title || ('Chapter ' + chapter.number);
 	};

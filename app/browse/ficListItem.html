@@ -1,21 +1,21 @@
 <div class="mdl-cell mdl-cell--4-col">
 	<div class="mdl-card mdl-shadow--2dp" ng-click="fliCtrl.toggle()" style="min-height: 100px; width: 100%">
 		<div class="mdl-card__title">
-			<h3 class="mdl-card__title-text">{{fic.title}}</h3> <h5 class="mdl-card__subtitle-text">by {{fic.authors | authorList}}</h5>
+			<h3 class="mdl-card__title-text">{{::fic.title}}</h3> <h5 class="mdl-card__subtitle-text">by {{::fic.authors | authorList}}</h5>
 		</div>
 		<div class="mdl-card__supporting-text mdl-card--border" ng-show="fliCtrl.expanded">
-			<div ng-show="fliCtrl.ficDetail.series && fliCtrl.ficDetail.series.length > 0">
-				Series: {{fliCtrl.ficDetail.series | seriesList}}
+			<div ng-show="::(fliCtrl.ficDetail.series && fliCtrl.ficDetail.series.length > 0)">
+				Series: {{::fliCtrl.ficDetail.series | seriesList}}
 			</div>
-			<div ng-show="fliCtrl.ficDetail.genres && fliCtrl.ficDetail.genres.length > 0">
-				Genres: {{fliCtrl.ficDetail.genres | genreList}}
+			<div ng-show="::(fliCtrl.ficDetail.genres && fliCtrl.ficDetail.genres.length > 0)">
+				Genres: {{::fliCtrl.ficDetail.genres | genreList}}
 			</div>
-			<div ng-show="fliCtrl.ficDetail.matchups && fliCtrl.ficDetail.matchups.length > 0">
-				Matchups: {{fliCtrl.ficDetail.matchups | matchupList}}
+			<div ng-show="::(fliCtrl.ficDetail.matchups && fliCtrl.ficDetail.matchups.length > 0)">
+				Matchups: {{::fliCtrl.ficDetail.matchups | matchupList}}
 			</div>
 		</div>
 		<div class="mdl-card__actions mdl-card--border">
-			<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="#/read/{{fic.id}}">Read</a>
+			<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="#/read/{{::fic.id}}">Read</a>
 		</div>
 	</div>
 </div>

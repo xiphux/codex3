@@ -7,7 +7,7 @@ angular.module('codex.filters')
 function genreListFilter() {
 	return function(genres) {
 		if (!genres) {
-			return "";
+			return undefined;
 		}
 		return _.pluck(genres, 'name').join(', ');
 	};

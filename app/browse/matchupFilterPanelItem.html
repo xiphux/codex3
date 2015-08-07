@@ -1,4 +1,4 @@
 <a href class="mdl-navigation__link" ng-class="{active:mfpiCtrl.active}" ng-click="mfpiCtrl.toggleMatchupFilter()">
 	<i class="material-icons">{{ mfpiCtrl.active ? 'check_box' : 'check_box_outline_blank' }}</i>
-	<span ng-class="{'mdl-badge':mfpiCtrl.showBadge}" ng-attr-data-badge="{{mfpiCtrl.matchCount}}">{{matchup | matchup}}</span>
+	<span ng-class="{'mdl-badge':mfpiCtrl.showBadge}" ng-attr-data-badge="{{mfpiCtrl.matchCount}}">{{::matchup | matchup}}</span>
 </a>

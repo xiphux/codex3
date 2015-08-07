@@ -12,17 +12,15 @@ function matchupFilterPanelController($scope, matchupDataService) {
 	
 	vm.expanded = false;
 	vm.toggleMatchupExpand = toggleMatchupExpand;
-	vm.matchups = null;
-	 
-	var loaded = false;	
+	vm.matchups = undefined;
 
 	function toggleMatchupExpand() {
-		
-		if (!vm.expanded && !loaded) {
-			vm.matchups = matchupDataService.getMatchups();
-			loaded = true;
-		}
-		
+		if (!vm.expanded && (vm.matchups === undefined)) {
+			var matchups = matchupDataService.getMatchups();
+			matchups.$promise.then(function(data) {
+				vm.matchups = data;
+			});
+		}	
 		vm.expanded = !vm.expanded;
 		
 	}

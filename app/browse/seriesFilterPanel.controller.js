@@ -12,14 +12,14 @@ function seriesFilterPanelController($scope, seriesDataService) {
 	
 	vm.expanded = false;
 	vm.toggleSeriesExpand = toggleSeriesExpand;
-	vm.series = null;
-	
-	var loaded = false;
+	vm.series = undefined;
 	
 	function toggleSeriesExpand() {
-		if (!vm.expanded && !loaded) {
-			vm.series = seriesDataService.getSeries();
-			loaded = true;
+		if (!vm.expanded && (vm.series === undefined)) {
+			var series = seriesDataService.getSeries();
+			series.$promise.then(function(data) {
+				vm.series = data;
+			});
 		}
 		vm.expanded = !vm.expanded;
 	}

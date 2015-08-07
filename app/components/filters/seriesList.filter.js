@@ -7,7 +7,7 @@ angular.module('codex.filters')
 function seriesListFilter() {
 	return function(series) {
 		if (!series) {
-			return "";
+			return undefined;
 		}
 		return _.pluck(series, 'title').join(', ');
 	};

@@ -1,4 +1,4 @@
 <a href class="mdl-navigation__link" ng-class="{active:sfpiCtrl.active}" ng-click="sfpiCtrl.toggleSeriesFilter()">
 	<i class="material-icons">{{ sfpiCtrl.active ? 'check_box' : 'check_box_outline_blank' }}</i>
-	<span ng-class="{'mdl-badge':sfpiCtrl.showBadge}" ng-attr-data-badge="{{sfpiCtrl.matchCount}}">{{series.title}}</span>
+	<span ng-class="{'mdl-badge':sfpiCtrl.showBadge}" ng-attr-data-badge="{{sfpiCtrl.matchCount}}">{{::series.title}}</span>
 </a>

@@ -7,7 +7,7 @@ angular.module('codex.filters')
 function matchupFilter() {
 	return function(matchup) {
 		if (!matchup || !matchup.characters || (matchup.characters.length < 1)) {
-			return '';
+			return undefined;
 		}
 		var crossover = _(matchup.characters).pluck('series.id').uniq().value().length > 1;
 		if (crossover) {

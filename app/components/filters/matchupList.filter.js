@@ -9,7 +9,7 @@ matchupListFilter.$inject = ['matchupFilter'];
 function matchupListFilter(matchupFilter) {
 	return function(matchups) {
 		if (!matchups) {
-			return "";
+			return undefined;
 		}
 		return _.map(matchups, matchupFilter).join(', ');
 	};
