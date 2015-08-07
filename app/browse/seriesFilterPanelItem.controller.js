@@ -10,29 +10,34 @@ function seriesFilterPanelItemController($scope, ficBrowseService) {
 	
 	var vm = this;
 	
-	vm.active = ficBrowseService.hasSeriesFilter($scope.series);
-	vm.matchCount = ficBrowseService.ficsWithSeries($scope.series);
-	vm.showBadge = ficBrowseService.hasSearch();
+	vm.active = false;
+	vm.matchCount = null;
+	vm.showBadge = false;
 	vm.toggleSeriesFilter = toggleSeriesFilter;
 	
-	$scope.$on('ficBrowseFicsUpdated', function() {
+	$scope.$watch(function() {
+		return ficBrowseService.getFics();
+	}, function(newValue, oldValue) {
+		if (newValue !== null) {
+			newValue.$promise.then(function(data) {
+				updateBadge();
+			});
+		} else {
+			updateBadge();
+		}
+	});
+	
+	
+	$scope.$watch(function() {
+		return !!ficBrowseService.hasSeriesFilter($scope.series);
+	}, function(newValue, oldValue) {
+		vm.active = newValue;
+	});
+	
+	function updateBadge() {
 		vm.matchCount = ficBrowseService.ficsWithSeries($scope.series);
 		vm.showBadge = ficBrowseService.hasSearch();
-	});
-	
-	$scope.$on('ficBrowseSeriesAdded', function(e, series) {
-		if (!(series && (series.id == $scope.series.id))) {
-			return;
-		}
-		vm.active = true;
-	});
-	
-	$scope.$on('ficBrowseSeriesRemoved', function(e, series) {
-		if (!(series && (series.id == $scope.series.id))) {
-			return;
-		}
-		vm.active = false;
-	});
+	}
 	
 	function toggleSeriesFilter() {
 		if (vm.active) {

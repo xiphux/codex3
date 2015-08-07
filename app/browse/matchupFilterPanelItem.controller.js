@@ -10,29 +10,33 @@ function matchupFilterPanelItemController($scope, ficBrowseService) {
 	
 	var vm = this;
 	
-	vm.active = ficBrowseService.hasMatchupFilter($scope.matchup);
-	vm.matchCount = ficBrowseService.ficsWithMatchup($scope.matchup);
-	vm.showBadge = ficBrowseService.hasSearch();
+	vm.active = false;
+	vm.matchCount = null;
+	vm.showBadge = false;
 	vm.toggleMatchupFilter = toggleMatchupFilter;
 	
-	$scope.$on('ficBrowseFicsUpdated', function() {
+	$scope.$watch(function() {
+		return ficBrowseService.getFics();
+	}, function(newValue, oldValue) {
+		if (newValue !== null) {
+			newValue.$promise.then(function(data) {
+				updateBadge();
+			});
+		} else {
+			updateBadge();
+		}
+	});
+	
+	$scope.$watch(function() {
+		return !!ficBrowseService.hasMatchupFilter($scope.matchup);
+	}, function(newValue, oldValue) {
+		vm.active = newValue;
+	});
+	
+	function updateBadge() {
 		vm.matchCount = ficBrowseService.ficsWithMatchup($scope.matchup);
 		vm.showBadge = ficBrowseService.hasSearch();
-	});
-	
-	$scope.$on('ficBrowseMatchupAdded', function(e, matchup) {
-		if (!(matchup && (matchup.id == $scope.matchup.id))) {
-			return;
-		}
-		vm.active = true;
-	});
-	
-	$scope.$on('ficBrowseMatchupRemoved', function(e, matchup) {
-		if (!(matchup && (matchup.id == $scope.matchup.id))) {
-			return;
-		}
-		vm.active = false;
-	});
+	}
 	
 	function toggleMatchupFilter() {
 		if (vm.active) {

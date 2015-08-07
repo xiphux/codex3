@@ -10,29 +10,33 @@ function genreFilterPanelItemController($scope, ficBrowseService) {
 	
 	var vm = this;
 	
-	vm.active = ficBrowseService.hasGenreFilter($scope.genre);
-	vm.matchCount = ficBrowseService.ficsWithGenre($scope.genre);
-	vm.showBadge = ficBrowseService.hasSearch();
+	vm.active = false;
+	vm.matchCount = null;
+	vm.showBadge = false;
 	vm.toggleGenreFilter = toggleGenreFilter;
 	
-	$scope.$on('ficBrowseFicsUpdated', function() {
+	$scope.$watch(function() {
+		return ficBrowseService.getFics();
+	}, function(newValue, oldValue) {
+		if (newValue !== null) {
+			newValue.$promise.then(function(data) {
+				updateBadge();
+			});
+		} else {
+			updateBadge();
+		}
+	});
+	
+	$scope.$watch(function() {
+		return !!ficBrowseService.hasGenreFilter($scope.genre);
+	}, function(newValue, oldValue) {
+		vm.active = newValue;
+	});
+	
+	function updateBadge() {
 		vm.matchCount = ficBrowseService.ficsWithGenre($scope.genre);
 		vm.showBadge = ficBrowseService.hasSearch();
-	});
-	
-	$scope.$on('ficBrowseGenreAdded', function(e, genre) {
-		if (!(genre && (genre.id == $scope.genre.id))) {
-			return;
-		}
-		vm.active = true;
-	});
-	
-	$scope.$on('ficBrowseGenreRemoved', function(e, genre) {
-		if (!(genre && (genre.id == $scope.genre.id))) {
-			return;
-		}
-		vm.active = false;
-	});
+	}
 	
 	function toggleGenreFilter() {
 		if (vm.active) {

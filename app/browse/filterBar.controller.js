@@ -11,65 +11,86 @@ function filterBarController($scope, ficBrowseService) {
 	
 	var vm = this;
 	
-	vm.genreFilters = ficBrowseService.getGenreFilters();
-	vm.matchupFilters = ficBrowseService.getMatchupFilters();
-	vm.seriesFilters = ficBrowseService.getSeriesFilters();
+	vm.genreFilters = [];
+	vm.matchupFilters = [];
+	vm.seriesFilters = [];
 	vm.clear = clear;
 	
 	updateFilterState();
 	
-	$scope.$on('ficBrowseSeriesAdded', function(e, series) {
-		if (!series) {
-			return;
-		}
-		vm.seriesFilters.push(series);
-		updateFilterState();
-	});
-	
-	$scope.$on('ficBrowseSeriesRemoved', function(e, series) {
-		if (!series) {
-			return;
-		}
-		_.remove(vm.seriesFilters, function(s) {
-			return s.id == series.id;
+	$scope.$watchCollection(function() {
+		return ficBrowseService.getGenreFilters();
+	}, function(newValues, oldValues) {
+		var oldKeys = _.keys(oldValues);
+		var newKeys = _.keys(newValues);
+		var addedKeys = _.difference(newKeys, oldKeys);
+		var removedKeys = _.difference(oldKeys, newKeys);
+		var modified = false;
+		
+		_.forEach(addedKeys, function(id) {
+			vm.genreFilters.push(newValues[id]);
+			modified = true;
 		});
-		updateFilterState();
-	});
-	
-	$scope.$on('ficBrowseGenreAdded', function(e, genre) {
-		if (!genre) {
-			return;
-		}
-		vm.genreFilters.push(genre);
-		updateFilterState();
-	});
-	
-	$scope.$on('ficBrowseGenreRemoved', function(e, genre) {
-		if (!genre) {
-			return;
-		}
-		_.remove(vm.genreFilters, function(g) {
-			return g.id == genre.id;
+		_.forEach(removedKeys, function(id) {
+			_.remove(vm.genreFilters, function(g) {
+				return g.id == id;
+			});
+			modified = true;
 		});
-		updateFilterState();
+		
+		if (modified) {
+			updateFilterState();
+		}
 	});
 	
-	$scope.$on('ficBrowseMatchupAdded', function(e, matchup) {
-		if (!matchup) {
-			return;
-		}
-		vm.matchupFilters.push(matchup);
-		updateFilterState();
-	});
-	
-	$scope.$on('ficBrowseMatchupRemoved', function(e, matchup) {
-		if (!matchup) {
-			return;
-		}
-		_.remove(vm.matchupFilters, function(m) {
-			return m.id == matchup.id;
+	$scope.$watchCollection(function() {
+		return ficBrowseService.getMatchupFilters();
+	}, function(newValues, oldValues) {
+		var oldKeys = _.keys(oldValues);
+		var newKeys = _.keys(newValues);
+		var addedKeys = _.difference(newKeys, oldKeys);
+		var removedKeys = _.difference(oldKeys, newKeys);
+		var modified = false;
+		
+		_.forEach(addedKeys, function(id) {
+			vm.matchupFilters.push(newValues[id]);
+			modified = true;
 		});
-		updateFilterState();
+		_.forEach(removedKeys, function(id) {
+			_.remove(vm.matchupFilters, function(m) {
+				return m.id == id;
+			});
+			modified = true;
+		});
+		
+		if (modified) {
+			updateFilterState();
+		}
+	});
+	
+	$scope.$watchCollection(function() {
+		return ficBrowseService.getSeriesFilters();
+	}, function(newValues, oldValues) {
+		var oldKeys = _.keys(oldValues);
+		var newKeys = _.keys(newValues);
+		var addedKeys = _.difference(newKeys, oldKeys);
+		var removedKeys = _.difference(oldKeys, newKeys);
+		var modified = false;
+		
+		_.forEach(addedKeys, function(id) {
+			vm.seriesFilters.push(newValues[id]);
+			modified = true;
+		});
+		_.forEach(removedKeys, function(id) {
+			_.remove(vm.seriesFilters, function(s) {
+				return s.id == id;
+			});
+			modified = true;
+		});
+		
+		if (modified) {
+			updateFilterState();
+		}
 	});
 	
 	function clear() {

@@ -11,8 +11,8 @@ function ficListController($scope, $rootScope, $timeout, ficBrowseService) {
 	
 	var vm = this;
 	
-	vm.fics = ficBrowseService.getFics();
-	vm.searchActive = ficBrowseService.hasSearch();
+	vm.fics = null;
+	vm.searchActive = false;
 	vm.searchPending = false;
 	vm.titleSort = titleSort;
 	
@@ -23,15 +23,20 @@ function ficListController($scope, $rootScope, $timeout, ficBrowseService) {
 		componentHandler.upgradeAllRegistered();
 	});
 	
-	$scope.$on('ficBrowseFicsUpdating', function() {
-		vm.searchPending = true;
-		vm.searchActive = ficBrowseService.hasSearch();
-	});
-	
-	$scope.$on('ficBrowseFicsUpdated', function() {
-		vm.searchPending = false;
-		vm.fics = ficBrowseService.getFics();
-		vm.searchActive = ficBrowseService.hasSearch();
+	$scope.$watch(function() {
+		return ficBrowseService.getFics();
+	}, function(newValue, oldValue) {
+		vm.fics = newValue;
+		if (vm.fics !== null) {
+			vm.searchPending = true;
+			vm.searchActive = ficBrowseService.hasSearch();
+			vm.fics.$promise.then(function(data) {
+				vm.searchPending = false;
+			});
+		} else {
+			vm.searchPending = false;
+			vm.searchActive = ficBrowseService.hasSearch();
+		}
 	});
 	
 	function titleSort(fic) {

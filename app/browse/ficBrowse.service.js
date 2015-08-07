@@ -72,15 +72,15 @@ function ficBrowseService($rootScope, ficDataService) {
 	};
 	
 	function getGenreFilters() {
-		return _.values(genreFilters);
+		return genreFilters;
 	};
 	
 	function getSeriesFilters() {
-		return _.values(seriesFilters);
+		return seriesFilters;
 	};
 	
 	function getMatchupFilters() {
-		return _.values(matchupFilters);
+		return matchupFilters;
 	};
 	
 	function getSearchTerms() {
@@ -97,7 +97,6 @@ function ficBrowseService($rootScope, ficDataService) {
 		var matchupIds = _.keys(matchupFilters);
 		var seriesIds = _.keys(seriesFilters);
 		
-		$rootScope.$broadcast('ficBrowseFicsUpdating');
 		if ((genreIds.length > 0) || (matchupIds.length > 0) || (seriesIds.length > 0) || (searchTerms.length > 0)) {
 			fics = ficDataService.getFics({
 				genres: genreIds,
@@ -108,13 +107,11 @@ function ficBrowseService($rootScope, ficDataService) {
 			dirty = false;
 			fics.$promise.then(function(data) {
 				recount();
-				$rootScope.$broadcast('ficBrowseFicsUpdated');
 			});
 		} else {
 			fics = null;
 			dirty = false;
 			recount();
-			$rootScope.$broadcast('ficBrowseFicsUpdated');
 		}
 		
 		return fics;
@@ -144,21 +141,21 @@ function ficBrowseService($rootScope, ficDataService) {
 		if (!genre) {
 			return false;
 		}
-		return _.has(genreFilters, genre.id);
+		return genre.id in genreFilters;
 	};
 	
 	function hasMatchupFilter(matchup) {
 		if (!matchup) {
 			return false;
 		}
-		return _.has(matchupFilters, matchup.id);
+		return matchup.id in matchupFilters;
 	};
 	
 	function hasSeriesFilter(series) {
 		if (!series) {
 			return false;
 		}
-		return _.has(seriesFilters, series.id);
+		return series.id in seriesFilters;
 	};
 	
 	function hasSearchTerm(term) {
@@ -174,7 +171,6 @@ function ficBrowseService($rootScope, ficDataService) {
 		}
 		genreFilters[genre.id] = genre;
 		dirty = true;
-		$rootScope.$broadcast('ficBrowseGenreAdded', genre);
 	};
 	
 	function removeGenreFilter(genre) {
@@ -183,7 +179,6 @@ function ficBrowseService($rootScope, ficDataService) {
 		}
 		delete genreFilters[genre.id];
 		dirty = true;
-		$rootScope.$broadcast('ficBrowseGenreRemoved', genre);
 	};
 	
 	function addMatchupFilter(matchup) {
@@ -192,7 +187,6 @@ function ficBrowseService($rootScope, ficDataService) {
 		}
 		matchupFilters[matchup.id] = matchup;
 		dirty = true;
-		$rootScope.$broadcast('ficBrowseMatchupAdded', matchup);
 	};
 	
 	function removeMatchupFilter(matchup) {
@@ -201,7 +195,6 @@ function ficBrowseService($rootScope, ficDataService) {
 		}
 		delete matchupFilters[matchup.id];
 		dirty = true;
-		$rootScope.$broadcast('ficBrowseMatchupRemoved', matchup);
 	};
 	
 	function addSeriesFilter(series) {
@@ -210,7 +203,6 @@ function ficBrowseService($rootScope, ficDataService) {
 		}
 		seriesFilters[series.id] = series;
 		dirty = true;
-		$rootScope.$broadcast('ficBrowseSeriesAdded', series);
 	};
 	
 	function removeSeriesFilter(series) {
@@ -219,7 +211,6 @@ function ficBrowseService($rootScope, ficDataService) {
 		}
 		delete seriesFilters[series.id];
 		dirty = true;
-		$rootScope.$broadcast('ficBrowseSeriesRemoved', series);
 	};
 	
 	function setSearchTerms(terms) {
@@ -256,23 +247,10 @@ function ficBrowseService($rootScope, ficDataService) {
 	};
 	
 	function clear() {
-		var tempSeriesFilters = seriesFilters;
 		seriesFilters = {};
-		_.forEach(tempSeriesFilters, function(n, key) {
-			$rootScope.$broadcast('ficBrowseSeriesRemoved', n);
-		});
-		var tempGenreFilters = genreFilters;
 		genreFilters = {};
-		_.forEach(tempGenreFilters, function(n, key) {
-			$rootScope.$broadcast('ficBrowseGenreRemoved', n);
-		});
-		var tempMatchupFilters = matchupFilters;
 		matchupFilters = {};
-		_.forEach(tempMatchupFilters, function(n, key) {
-			$rootScope.$broadcast('ficBrowseMatchupRemoved', n);
-		});
 		searchTerms = [];
-		$rootScope.$broadcast('ficBrowseSearchCleared');
 		dirty = true;
 		refresh();
 	};
