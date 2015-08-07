@@ -15,83 +15,54 @@ function filterBarController($scope, ficBrowseService) {
 	vm.matchupFilters = [];
 	vm.seriesFilters = [];
 	vm.clear = clear;
-	
-	updateFilterState();
+	vm.hasFilters = false;
 	
 	$scope.$watchCollection(function() {
 		return ficBrowseService.getGenreFilters();
 	}, function(newValues, oldValues) {
-		var oldKeys = _.keys(oldValues);
-		var newKeys = _.keys(newValues);
-		var addedKeys = _.difference(newKeys, oldKeys);
-		var removedKeys = _.difference(oldKeys, newKeys);
-		var modified = false;
-		
-		_.forEach(addedKeys, function(id) {
-			vm.genreFilters.push(newValues[id]);
-			modified = true;
-		});
-		_.forEach(removedKeys, function(id) {
-			_.remove(vm.genreFilters, function(g) {
-				return g.id == id;
-			});
-			modified = true;
-		});
-		
-		if (modified) {
-			updateFilterState();
-		}
+		updateFilters('genreFilters', newValues, oldValues);
 	});
 	
 	$scope.$watchCollection(function() {
 		return ficBrowseService.getMatchupFilters();
 	}, function(newValues, oldValues) {
-		var oldKeys = _.keys(oldValues);
-		var newKeys = _.keys(newValues);
-		var addedKeys = _.difference(newKeys, oldKeys);
-		var removedKeys = _.difference(oldKeys, newKeys);
-		var modified = false;
-		
-		_.forEach(addedKeys, function(id) {
-			vm.matchupFilters.push(newValues[id]);
-			modified = true;
-		});
-		_.forEach(removedKeys, function(id) {
-			_.remove(vm.matchupFilters, function(m) {
-				return m.id == id;
-			});
-			modified = true;
-		});
-		
-		if (modified) {
-			updateFilterState();
-		}
+		updateFilters('matchupFilters', newValues, oldValues);
 	});
 	
 	$scope.$watchCollection(function() {
 		return ficBrowseService.getSeriesFilters();
 	}, function(newValues, oldValues) {
+		updateFilters('seriesFilters', newValues, oldValues);
+	});
+	
+	function updateFilters(filterProp, newValues, oldValues) {
 		var oldKeys = _.keys(oldValues);
 		var newKeys = _.keys(newValues);
+		
 		var addedKeys = _.difference(newKeys, oldKeys);
 		var removedKeys = _.difference(oldKeys, newKeys);
-		var modified = false;
+		
+		if ((addedKeys.length == 0) && (removedKeys.length == 0)) {
+			// this is an initialization - populate all keys (if present) 
+			if (newKeys.length > 0) {
+				addedKeys = newKeys;
+			} else {
+				return;
+			}
+		}
 		
 		_.forEach(addedKeys, function(id) {
-			vm.seriesFilters.push(newValues[id]);
-			modified = true;
-		});
-		_.forEach(removedKeys, function(id) {
-			_.remove(vm.seriesFilters, function(s) {
-				return s.id == id;
-			});
-			modified = true;
+			vm[filterProp].push(newValues[id]);
 		});
 		
-		if (modified) {
-			updateFilterState();
-		}
-	});
+		_.forEach(removedKeys, function(id) {
+			_.remove(vm[filterProp], function(i) {
+				return i.id == id;
+			});
+		});
+		
+		updateFilterState();
+	}
 	
 	function clear() {
 		ficBrowseService.clear();
