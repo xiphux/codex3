@@ -16,8 +16,6 @@ function ficListController($scope, $rootScope, $timeout, ficBrowseService) {
 	vm.searchPending = false;
 	vm.titleSort = titleSort;
 	
-	$rootScope.subtitle = '';
-	
 	// TODO: apparently directive template/controllers don't get $viewContentLoaded events - is this correct to call on init?
 	$timeout(function() {
 		componentHandler.upgradeAllRegistered();

@@ -5,9 +5,9 @@
 angular.module('codex.read')
 	.controller('readController', readController);
 
-readController.$inject = ['$scope', '$routeParams', '$locationEx', '$rootScope', '$timeout', 'chapterFilter', 'ficDataService', 'chapterDataService'];
+readController.$inject = ['$scope', '$routeParams', '$locationEx', '$timeout', 'chapterFilter', 'ficDataService', 'chapterDataService', 'pageService'];
 
-function readController($scope, $routeParams, $locationEx, $rootScope, $timeout, chapterFilter, ficDataService, chapterDataService) {
+function readController($scope, $routeParams, $locationEx, $timeout, chapterFilter, ficDataService, chapterDataService, pageService) {
 	
 	var vm = this;
 	
@@ -17,6 +17,7 @@ function readController($scope, $routeParams, $locationEx, $rootScope, $timeout,
 	
 	var chapterLoaded = false;
 	var ficLoaded = false;
+	var chaptersLoaded = false;
 	
 	loadChapter($routeParams.chapterNum);
 	
@@ -24,13 +25,13 @@ function readController($scope, $routeParams, $locationEx, $rootScope, $timeout,
 	fic.$promise.then(function(data) {
 		vm.fic = data;
 		ficLoaded = true;
-		if (chapterLoaded && ficLoaded) {
-			updatePageTitle();
-		}
+		updatePageTitle();
 	});
 	var chapters = chapterDataService.getChapters($routeParams.ficId);
 	chapters.$promise.then(function(data) {
 		vm.chapters = data;
+		chaptersLoaded = true;
+		updatePageTitle();
 	});
 	
 	$scope.$on('readerPrevChapter', prevChapter);
@@ -70,7 +71,14 @@ function readController($scope, $routeParams, $locationEx, $rootScope, $timeout,
 	};
 	
 	function updatePageTitle() {
-		$rootScope.subtitle = vm.fic.title + " :: " + chapterFilter(vm.chapter);
+		if (!(chapterLoaded && chaptersLoaded && ficLoaded)) {
+			return;
+		}
+		var subtitle = vm.fic.title;
+		if (chapters.length > 1) {
+			subtitle += ' :: ' + chapterFilter(vm.chapter);
+		}
+		pageService.setSubtitle(subtitle);
 	}
 	
 	function loadChapter(num) {
@@ -84,9 +92,7 @@ function readController($scope, $routeParams, $locationEx, $rootScope, $timeout,
 					vm.chapter = data;
 					
 					chapterLoaded = true;
-					if (chapterLoaded && ficLoaded) {
-						updatePageTitle();
-					}
+					updatePageTitle
 				},
 				function(httpResponse) {
 					$locationEx.path('/');

@@ -5,9 +5,12 @@
 angular.module('codex.browse')
 	.controller('browseController', browseController);
 
-browseController.$inject = ['$scope', '$timeout'];
+browseController.$inject = ['$scope', '$timeout', 'pageService'];
 
-function browseController($scope, $timeout) {
+function browseController($scope, $timeout, pageService) {
+	
+	pageService.setSubtitle(null);
+	
 	$scope.$on('$viewContentLoaded', function() {
 		$timeout(function() {
 			componentHandler.upgradeAllRegistered();
