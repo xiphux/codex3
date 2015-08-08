@@ -115,6 +115,7 @@ gulp.task('build-read-templates', function() {
 gulp.task('build-js', ['build-browse-templates','build-read-templates'], function() {
 	return gulp.src([
 			'app/**/*.module.js',
+			'app/**/*.production.js',
 			'app/**/*.js',
 			'!app/**/*.test.js',
 			'dist/browsetemplates.js',
@@ -161,7 +162,8 @@ gulp.task('build-js-dev', function() {
 		return gulp.src([
 			'app/**/*.module.js',
 			'app/**/*.js',
-			'!app/**/*.test.js'
+			'!app/**/*.test.js',
+			'!app/**/*.production.js'
 		])
 		.pipe(iife())
 		.pipe(concat('codex.js'))
