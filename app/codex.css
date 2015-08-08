@@ -1,2 +1,21 @@
-/* app css stylesheet */
+.codex-spinner {
+	width:96px;
+	height:96px;
+}
 
+.codex-ficcard {
+	min-height: 100px;
+	width: 100%;
+}
+
+.codex-filterbar {
+	padding-left: 0;
+}
+
+.codex-searchfield {
+	margin: 0 auto;
+}
+
+.codex-chaptertext {
+	white-space: pre-line;
+}

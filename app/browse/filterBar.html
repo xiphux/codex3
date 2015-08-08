@@ -1,4 +1,4 @@
-<div class="mdl-layout__header-row" ng-show="fbCtrl.hasFilters" style="padding-left: 0px">
+<div class="mdl-layout__header-row codex-filterbar" ng-show="fbCtrl.hasFilters">
 	<nav class="mdl-navigation">
 		<a class="mdl-navigation__link" href ng-click="fbCtrl.clear()"><i class="material-icons">clear</i></a>
 		<codex-filter-bar-series-item ng-repeat="series in fbCtrl.seriesFilters | orderBy:'title'" series="series"></codex-filter-bar-series-item>
