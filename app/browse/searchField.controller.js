@@ -8,7 +8,9 @@ searchFieldController.$inject = ['$scope', 'ficBrowseService'];
 
 function searchFieldController($scope, ficBrowseService) {
 	
-	$scope.search = null;
+	var vm = this;
+	
+	vm.search = null;
 	
 	$scope.$watchCollection(function() {
 		return ficBrowseService.getSearchTerms();
@@ -18,11 +20,11 @@ function searchFieldController($scope, ficBrowseService) {
 		}
 		var searchString = newValue.join(' ');
 		if (searchString != $scope.search) {
-			$scope.search = searchString;
+			vm.search = searchString;
 		}
 	});
 	
-	$scope.$watch('search', function(newValue, oldValue) {
+	$scope.$watch('sfCtrl.search', function(newValue, oldValue) {
 		if (newValue === oldValue) {
 			return;
 		}
