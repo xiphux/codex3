@@ -19,7 +19,7 @@ function searchFieldController($scope, ficBrowseService) {
 			return;
 		}
 		var searchString = newValue.join(' ');
-		if (searchString != $scope.search) {
+		if (searchString != vm.search) {
 			vm.search = searchString;
 		}
 	});
