@@ -5,9 +5,9 @@
 angular.module('codex.browse')
 	.factory('ficBrowseService', ficBrowseService);
 
-ficBrowseService.$inject = ['$rootScope', 'ficDataService'];
+ficBrowseService.$inject = ['ficDataService'];
 
-function ficBrowseService($rootScope, ficDataService) {
+function ficBrowseService(ficDataService) {
 	
 	var genreFilters = {};
 	var matchupFilters = {};

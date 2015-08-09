@@ -5,9 +5,9 @@
 angular.module('codex.browse')
 	.controller('ficListController', ficListController);
 
-ficListController.$inject = ['$scope', '$rootScope', '$timeout', 'ficBrowseService'];
+ficListController.$inject = ['$scope', '$timeout', 'ficBrowseService'];
 
-function ficListController($scope, $rootScope, $timeout, ficBrowseService) {
+function ficListController($scope, $timeout, ficBrowseService) {
 	
 	var vm = this;
 	

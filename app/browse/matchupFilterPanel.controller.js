@@ -4,9 +4,9 @@
 angular.module('codex.browse')
 	.controller('matchupFilterPanelController', matchupFilterPanelController);
 
-matchupFilterPanelController.$inject = ['$scope', 'matchupDataService'];
+matchupFilterPanelController.$inject = ['matchupDataService'];
 
-function matchupFilterPanelController($scope, matchupDataService) {
+function matchupFilterPanelController(matchupDataService) {
 	
 	var vm = this;
 	

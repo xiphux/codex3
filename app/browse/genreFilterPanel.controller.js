@@ -4,9 +4,9 @@
 angular.module('codex.browse')
 	.controller('genreFilterPanelController', genreFilterPanelController);
 
-genreFilterPanelController.$inject = ['$scope', 'genreDataService'];
+genreFilterPanelController.$inject = ['genreDataService'];
 
-function genreFilterPanelController($scope, genreDataService) {
+function genreFilterPanelController(genreDataService) {
 	
 	var vm = this;
 	

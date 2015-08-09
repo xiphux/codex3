@@ -4,9 +4,9 @@
 angular.module('codex.browse')
 	.controller('seriesFilterPanelController', seriesFilterPanelController);
 	
-seriesFilterPanelController.$inject = ['$scope', 'seriesDataService'];
+seriesFilterPanelController.$inject = ['seriesDataService'];
 
-function seriesFilterPanelController($scope, seriesDataService) {
+function seriesFilterPanelController(seriesDataService) {
 	
 	var vm = this;
 	
