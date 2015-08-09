@@ -38,10 +38,17 @@ function ficListController($scope, $rootScope, $timeout, ficBrowseService) {
 	});
 	
 	function titleSort(fic) {
-		var title = fic.title || 'Untitled';
-		title = title.replace(/[^A-Za-z0-9_ ]/g,"").toUpperCase();
+		if (!fic.title) {
+			return 'Untitled';
+		}
+		var title = fic.title;
+		title = title.replace(/[^A-Za-z0-9_ ]/g,'').toUpperCase();
 		if (title.slice(0, 4) == 'THE ') {
 			title = title.slice(4);
+		} else if (title.slice(0, 3) == 'AN ') {
+			title = title.slice(3);
+		} else if (title.slice(0, 2) == 'A ') {
+			title = title.slice(2);
 		}
 		return title;
 	};
