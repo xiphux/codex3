@@ -92,7 +92,7 @@ function readController($scope, $routeParams, $locationEx, $timeout, chapterFilt
 					vm.chapter = data;
 					
 					chapterLoaded = true;
-					updatePageTitle
+					updatePageTitle();
 				},
 				function(httpResponse) {
 					$locationEx.path('/');
