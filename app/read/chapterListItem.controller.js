@@ -4,15 +4,22 @@
 angular.module('codex.read')
 	.controller('chapterListItemController', chapterListItemController);
 
-chapterListItemController.$inject = ['$scope'];
+chapterListItemController.$inject = ['$scope', 'readService'];
 
-function chapterListItemController($scope) {
+function chapterListItemController($scope, readService) {
 	
 	var vm = this;
 	
 	vm.setChapter = setChapter;
+	vm.active = false;
+	
+	$scope.$watch(function() {
+		return readService.getChapterNumber();
+	}, function(newValue) {
+		vm.active = newValue == $scope.chapter.number;
+	});
 	
 	function setChapter() {
-		$scope.$emit('readerSetChapter', $scope.chapter);
+		readService.setChapter($scope.chapter.number);
 	}
 }

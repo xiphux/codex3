@@ -12,8 +12,7 @@ function chapterListItemDirective() {
 		controller: 'chapterListItemController',
 		controllerAs: 'cliCtrl',
 		scope: {
-			chapter: '=',
-			currentChapter: '='
+			chapter: '='
 		}
 	};
 }

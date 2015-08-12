@@ -9,8 +9,8 @@ function chapterTextDirective() {
 		restrict: 'E',
 		templateUrl: 'read/chapterText.html',
 		replace: true,
-		scope: {
-			chapter: '='
-		}
+		controller: 'chapterTextController',
+		controllerAs: 'ctCtrl',
+		scope: {}
 	};
 }

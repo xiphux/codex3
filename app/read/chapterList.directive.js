@@ -9,9 +9,8 @@ function chapterListDirective() {
 		restrict: 'E',
 		templateUrl: 'read/chapterList.html',
 		replace: true,
-		scope: {
-			chapters: '=',
-			currentChapter: '='
-		}
+		controller: 'chapterListController',
+		controllerAs: 'clCtrl',
+		scope: {}
 	};
 }

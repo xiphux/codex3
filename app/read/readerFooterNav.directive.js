@@ -11,9 +11,6 @@ function readerFooterNavDirective() {
 		replace: true,
 		controller: 'readerFooterNavController',
 		controllerAs: 'rfnCtrl',
-		scope: {
-			currentChapter: '=',
-			chapters: '='
-		}
+		scope: {}
 	};
 }

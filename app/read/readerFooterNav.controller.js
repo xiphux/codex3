@@ -4,9 +4,9 @@
 angular.module('codex.read')
 	.controller('readerFooterNavController', readerFooterNavController);
 
-readerFooterNavController.$inject = ['$scope'];
+readerFooterNavController.$inject = ['$scope', 'readService'];
 
-function readerFooterNavController($scope) {
+function readerFooterNavController($scope, readService) {
 	
 	var vm = this;
 	
@@ -15,41 +15,24 @@ function readerFooterNavController($scope) {
 	vm.gotoNextChapter = gotoNextChapter; 
 	vm.gotoPrevChapter = gotoPrevChapter;
 	
-	
-	updateChapters();
-	
-	$scope.$watch('currentChapter', updateChapters);
-	
-	$scope.$watch('chapters', function() {
-		if ($scope.chapters != null) {
-			$scope.chapters.$promise.then(updateChapters);
-		} else {
-			updateChapters();
-		}
+	$scope.$watch(function() {
+		return readService.getNextChapter();
+	}, function(newValue, oldValue) {
+		vm.nextChapter = newValue;
 	});
 	
-	function updateChapters() {
-		if (($scope.currentChapter == null) || ($scope.chapters == null)) {
-			vm.nextChapter = null;
-			vm.prevChapter = null;
-			return;
-		}
-		
-		var index = _.findIndex($scope.chapters, 'id', $scope.currentChapter.id);
-		vm.prevChapter = index > 0 ? $scope.chapters[index-1] : null;
-		vm.nextChapter = index >= 0 && index < ($scope.chapters.length - 1) ? $scope.chapters[index+1] : null;
-	}
+	$scope.$watch(function() {
+		return readService.getPrevChapter();
+	}, function(newValue, oldValue) {
+		vm.prevChapter = newValue;
+	});
 	
 	function gotoNextChapter() {
-		if ($scope.currentChapter && vm.nextChapter) {
-			$scope.$emit('readerNextChapter');
-		}
+		readService.nextChapter();
 	}
 	
 	function gotoPrevChapter() {
-		if ($scope.currentChapter && vm.prevChapter) {
-			$scope.$emit('readerPrevChapter');
-		}
+		readService.prevChapter();
 	}
 	
 }
