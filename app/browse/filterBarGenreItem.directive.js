@@ -13,6 +13,7 @@ function filterBarGenreItemDirective() {
 		controllerAs: 'fbgiCtrl',
 		scope: {
 			genre: '='
-		}
+		},
+		bindToController: true
 	};
 }

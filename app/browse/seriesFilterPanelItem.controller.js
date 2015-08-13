@@ -29,21 +29,21 @@ function seriesFilterPanelItemController($scope, ficBrowseService) {
 	
 	
 	$scope.$watch(function() {
-		return !!ficBrowseService.hasSeriesFilter($scope.series);
+		return !!ficBrowseService.hasSeriesFilter(vm.series);
 	}, function(newValue, oldValue) {
 		vm.active = newValue;
 	});
 	
 	function updateBadge() {
-		vm.matchCount = ficBrowseService.ficsWithSeries($scope.series);
+		vm.matchCount = ficBrowseService.ficsWithSeries(vm.series);
 		vm.showBadge = ficBrowseService.hasSearch();
 	}
 	
 	function toggleSeriesFilter() {
 		if (vm.active) {
-			ficBrowseService.removeSeriesFilter($scope.series);
+			ficBrowseService.removeSeriesFilter(vm.series);
 		} else {
-			ficBrowseService.addSeriesFilter($scope.series);
+			ficBrowseService.addSeriesFilter(vm.series);
 		}
 		ficBrowseService.refresh();
 	}

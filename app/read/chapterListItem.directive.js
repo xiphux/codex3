@@ -13,6 +13,7 @@ function chapterListItemDirective() {
 		controllerAs: 'cliCtrl',
 		scope: {
 			chapter: '='
-		}
+		},
+		bindToController: true
 	};
 }

@@ -13,6 +13,7 @@ function ficListItemDirective() {
 		replace: true,
 		scope: {
 			fic: '='
-		}
+		},
+		bindToController: true
 	};
 }

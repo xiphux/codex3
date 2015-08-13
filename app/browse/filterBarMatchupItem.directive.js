@@ -13,6 +13,7 @@ function filterBarMatchupItemDirective() {
 		controllerAs: 'fbmiCtrl',
 		scope: {
 			matchup: '='
-		}
+		},
+		bindToController: true
 	};
 }

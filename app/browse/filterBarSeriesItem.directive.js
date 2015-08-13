@@ -13,6 +13,7 @@ function filterBarSeriesItemDirective() {
 		controllerAs: 'fbsiCtrl',
 		scope: {
 			series: '='
-		}
+		},
+		bindToController: true
 	};
 }

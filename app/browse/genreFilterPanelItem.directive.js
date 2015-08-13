@@ -13,6 +13,7 @@ function genreFilterPanelItemDirective() {
 		replace: true,
 		scope: {
 			genre: '='
-		}
+		},
+		bindToController: true
 	};
 }

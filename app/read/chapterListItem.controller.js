@@ -16,10 +16,10 @@ function chapterListItemController($scope, readService) {
 	$scope.$watch(function() {
 		return readService.getChapterNumber();
 	}, function(newValue) {
-		vm.active = newValue == $scope.chapter.number;
+		vm.active = newValue == vm.chapter.number;
 	});
 	
 	function setChapter() {
-		readService.setChapter($scope.chapter.number);
+		readService.setChapter(vm.chapter.number);
 	}
 }

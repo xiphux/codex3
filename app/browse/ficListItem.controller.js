@@ -4,9 +4,9 @@
 angular.module('codex.browse')
 	.controller('ficListItemController', ficListItemController);
 
-ficListItemController.$inject = ['$scope', 'ficDataService'];
+ficListItemController.$inject = ['ficDataService'];
 
-function ficListItemController($scope, ficDataService) {
+function ficListItemController(ficDataService) {
 	
 	var vm = this;
 	
@@ -15,7 +15,7 @@ function ficListItemController($scope, ficDataService) {
 	
 	function toggle() {
 		if (!vm.ficDetail) {
-			vm.ficDetail = ficDataService.getFic($scope.fic.id);
+			vm.ficDetail = ficDataService.getFic(vm.fic.id);
 		}
 		vm.expanded = !vm.expanded;
 	}

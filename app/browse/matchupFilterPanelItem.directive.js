@@ -13,6 +13,7 @@ function matchupFilterPanelItemDirective() {
 		replace: true,
 		scope: {
 			matchup: '='
-		}
+		},
+		bindToController: true
 	};
 }

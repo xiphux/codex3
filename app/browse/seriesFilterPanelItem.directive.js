@@ -13,6 +13,7 @@ function seriesFilterPanelItemDirective() {
 		replace: true,
 		scope: {
 			series: '='
-		}
+		},
+		bindToController: true
 	};
 }

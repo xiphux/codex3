@@ -28,21 +28,21 @@ function matchupFilterPanelItemController($scope, ficBrowseService) {
 	});
 	
 	$scope.$watch(function() {
-		return !!ficBrowseService.hasMatchupFilter($scope.matchup);
+		return !!ficBrowseService.hasMatchupFilter(vm.matchup);
 	}, function(newValue, oldValue) {
 		vm.active = newValue;
 	});
 	
 	function updateBadge() {
-		vm.matchCount = ficBrowseService.ficsWithMatchup($scope.matchup);
+		vm.matchCount = ficBrowseService.ficsWithMatchup(vm.matchup);
 		vm.showBadge = ficBrowseService.hasSearch();
 	}
 	
 	function toggleMatchupFilter() {
 		if (vm.active) {
-			ficBrowseService.removeMatchupFilter($scope.matchup);
+			ficBrowseService.removeMatchupFilter(vm.matchup);
 		} else {
-			ficBrowseService.addMatchupFilter($scope.matchup);
+			ficBrowseService.addMatchupFilter(vm.matchup);
 		}
 		ficBrowseService.refresh();
 	}

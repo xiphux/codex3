@@ -4,15 +4,15 @@
 angular.module('codex.browse')
 	.controller('filterBarSeriesItemController', filterBarSeriesItemController);
 
-filterBarSeriesItemController.$inject = ['$scope', 'ficBrowseService'];
+filterBarSeriesItemController.$inject = ['ficBrowseService'];
 
-function filterBarSeriesItemController($scope, ficBrowseService) {
+function filterBarSeriesItemController(ficBrowseService) {
 	var vm = this;
 	
 	vm.remove = remove; 
 	
 	function remove() {
-		ficBrowseService.removeSeriesFilter($scope.series);
+		ficBrowseService.removeSeriesFilter(vm.series);
 		ficBrowseService.refresh();
 	};
 }

@@ -28,21 +28,21 @@ function genreFilterPanelItemController($scope, ficBrowseService) {
 	});
 	
 	$scope.$watch(function() {
-		return !!ficBrowseService.hasGenreFilter($scope.genre);
+		return !!ficBrowseService.hasGenreFilter(vm.genre);
 	}, function(newValue, oldValue) {
 		vm.active = newValue;
 	});
 	
 	function updateBadge() {
-		vm.matchCount = ficBrowseService.ficsWithGenre($scope.genre);
+		vm.matchCount = ficBrowseService.ficsWithGenre(vm.genre);
 		vm.showBadge = ficBrowseService.hasSearch();
 	}
 	
 	function toggleGenreFilter() {
 		if (vm.active) {
-			ficBrowseService.removeGenreFilter($scope.genre);
+			ficBrowseService.removeGenreFilter(vm.genre);
 		} else {
-			ficBrowseService.addGenreFilter($scope.genre);
+			ficBrowseService.addGenreFilter(vm.genre);
 		}
 		ficBrowseService.refresh();
 	}
