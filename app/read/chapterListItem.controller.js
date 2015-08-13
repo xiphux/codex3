@@ -13,11 +13,17 @@ function chapterListItemController($scope, readService) {
 	vm.setChapter = setChapter;
 	vm.active = false;
 	
-	$scope.$watch(function() {
-		return readService.getChapterNumber();
-	}, function(newValue) {
-		vm.active = newValue == vm.chapter.number;
-	});
+	activate();
+	
+	function activate() {
+	
+		$scope.$watch(function() {
+			return readService.getChapterNumber();
+		}, function(newValue) {
+			vm.active = newValue == vm.chapter.number;
+		});
+	
+	}
 	
 	function setChapter() {
 		readService.setChapter(vm.chapter.number);

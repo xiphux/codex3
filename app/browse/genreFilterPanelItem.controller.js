@@ -15,23 +15,29 @@ function genreFilterPanelItemController($scope, ficBrowseService) {
 	vm.showBadge = false;
 	vm.toggleGenreFilter = toggleGenreFilter;
 	
-	$scope.$watch(function() {
-		return ficBrowseService.getFics();
-	}, function(newValue, oldValue) {
-		if (newValue !== null) {
-			newValue.$promise.then(function(data) {
-				updateBadge();
-			});
-		} else {
-			updateBadge();
-		}
-	});
+	activate();
 	
-	$scope.$watch(function() {
-		return !!ficBrowseService.hasGenreFilter(vm.genre);
-	}, function(newValue, oldValue) {
-		vm.active = newValue;
-	});
+	function activate() {
+	
+		$scope.$watch(function() {
+			return ficBrowseService.getFics();
+		}, function(newValue, oldValue) {
+			if (newValue !== null) {
+				newValue.$promise.then(function(data) {
+					updateBadge();
+				});
+			} else {
+				updateBadge();
+			}
+		});
+		
+		$scope.$watch(function() {
+			return !!ficBrowseService.hasGenreFilter(vm.genre);
+		}, function(newValue, oldValue) {
+			vm.active = newValue;
+		});
+	
+	}
 	
 	function updateBadge() {
 		vm.matchCount = ficBrowseService.ficsWithGenre(vm.genre);

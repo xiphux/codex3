@@ -12,10 +12,14 @@ function chapterTextController($scope, readService) {
 	
 	vm.chapter = null;
 	
-	$scope.$watch(function() {
-		return readService.getChapter();
-	}, function(newValue) {
-		vm.chapter = newValue;
-	});
+	activate();
+	
+	function activate() {
+		$scope.$watch(function() {
+			return readService.getChapter();
+		}, function(newValue) {
+			vm.chapter = newValue;
+		});
+	}
 	
 }

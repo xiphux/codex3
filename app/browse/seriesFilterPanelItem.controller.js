@@ -15,24 +15,30 @@ function seriesFilterPanelItemController($scope, ficBrowseService) {
 	vm.showBadge = false;
 	vm.toggleSeriesFilter = toggleSeriesFilter;
 	
-	$scope.$watch(function() {
-		return ficBrowseService.getFics();
-	}, function(newValue, oldValue) {
-		if (newValue !== null) {
-			newValue.$promise.then(function(data) {
+	activate();
+	
+	function activate() {
+	
+		$scope.$watch(function() {
+			return ficBrowseService.getFics();
+		}, function(newValue, oldValue) {
+			if (newValue !== null) {
+				newValue.$promise.then(function(data) {
+					updateBadge();
+				});
+			} else {
 				updateBadge();
-			});
-		} else {
-			updateBadge();
-		}
-	});
+			}
+		});
+		
+		
+		$scope.$watch(function() {
+			return !!ficBrowseService.hasSeriesFilter(vm.series);
+		}, function(newValue, oldValue) {
+			vm.active = newValue;
+		});
 	
-	
-	$scope.$watch(function() {
-		return !!ficBrowseService.hasSeriesFilter(vm.series);
-	}, function(newValue, oldValue) {
-		vm.active = newValue;
-	});
+	}
 	
 	function updateBadge() {
 		vm.matchCount = ficBrowseService.ficsWithSeries(vm.series);

@@ -9,11 +9,15 @@ browseController.$inject = ['$scope', '$timeout', 'pageService'];
 
 function browseController($scope, $timeout, pageService) {
 	
-	pageService.setSubtitle(null);
+	activate();
 	
-	$scope.$on('$viewContentLoaded', function() {
-		$timeout(function() {
-			componentHandler.upgradeAllRegistered();
+	function activate() {
+		pageService.setSubtitle(null);
+		
+		$scope.$on('$viewContentLoaded', function() {
+			$timeout(function() {
+				componentHandler.upgradeAllRegistered();
+			});
 		});
-	});
+	}
 }

@@ -17,23 +17,29 @@ function filterBarController($scope, ficBrowseService) {
 	vm.clear = clear;
 	vm.hasFilters = false;
 	
-	$scope.$watchCollection(function() {
-		return ficBrowseService.getGenreFilters();
-	}, function(newValues, oldValues) {
-		updateFilters('genreFilters', newValues, oldValues);
-	});
+	activate();
 	
-	$scope.$watchCollection(function() {
-		return ficBrowseService.getMatchupFilters();
-	}, function(newValues, oldValues) {
-		updateFilters('matchupFilters', newValues, oldValues);
-	});
+	function activate() {
 	
-	$scope.$watchCollection(function() {
-		return ficBrowseService.getSeriesFilters();
-	}, function(newValues, oldValues) {
-		updateFilters('seriesFilters', newValues, oldValues);
-	});
+		$scope.$watchCollection(function() {
+			return ficBrowseService.getGenreFilters();
+		}, function(newValues, oldValues) {
+			updateFilters('genreFilters', newValues, oldValues);
+		});
+		
+		$scope.$watchCollection(function() {
+			return ficBrowseService.getMatchupFilters();
+		}, function(newValues, oldValues) {
+			updateFilters('matchupFilters', newValues, oldValues);
+		});
+		
+		$scope.$watchCollection(function() {
+			return ficBrowseService.getSeriesFilters();
+		}, function(newValues, oldValues) {
+			updateFilters('seriesFilters', newValues, oldValues);
+		});
+	
+	}
 	
 	function updateFilters(filterProp, newValues, oldValues) {
 		var oldKeys = _.keys(oldValues);

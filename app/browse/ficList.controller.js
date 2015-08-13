@@ -15,21 +15,27 @@ function ficListController($scope, $timeout, ficBrowseService) {
 	vm.searchPending = false;
 	vm.titleSort = titleSort;
 	
-	$scope.$watch(function() {
-		return ficBrowseService.getFics();
-	}, function(newValue, oldValue) {
-		vm.fics = newValue;
-		if (vm.fics !== null) {
-			vm.searchPending = true;
-			vm.searchActive = ficBrowseService.hasSearch();
-			vm.fics.$promise.then(function(data) {
+	activate();
+	
+	function activate() {
+	
+		$scope.$watch(function() {
+			return ficBrowseService.getFics();
+		}, function(newValue, oldValue) {
+			vm.fics = newValue;
+			if (vm.fics !== null) {
+				vm.searchPending = true;
+				vm.searchActive = ficBrowseService.hasSearch();
+				vm.fics.$promise.then(function(data) {
+					vm.searchPending = false;
+				});
+			} else {
 				vm.searchPending = false;
-			});
-		} else {
-			vm.searchPending = false;
-			vm.searchActive = ficBrowseService.hasSearch();
-		}
-	});
+				vm.searchActive = ficBrowseService.hasSearch();
+			}
+		});
+		
+	}
 	
 	function titleSort(fic) {
 		if (!fic.title) {

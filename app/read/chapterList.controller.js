@@ -11,18 +11,18 @@ function chapterListController($scope, readService) {
 	
 	vm.chapters = undefined;
 	
-	var chapters = undefined;
+	activate();
 	
-	var unbindChaptersWatch = $scope.$watch(function() {
-		return readService.getChapters();
-	}, function(newValue) {
-		if (newValue) {
-			chapters = newValue;
-			chapters.$promise.then(function(data) {
-				vm.chapters = data;
-				chapters = null;
-			});
-			unbindChaptersWatch();
-		}
-	});
+	function activate() {
+		var unbindChaptersWatch = $scope.$watch(function() {
+			return readService.getChapters();
+		}, function(newValue) {
+			if (newValue) {
+				newValue.$promise.then(function(data) {
+					vm.chapters = data;
+				});
+				unbindChaptersWatch();
+			}
+		});
+	}
 }

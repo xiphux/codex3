@@ -12,24 +12,30 @@ function searchFieldController($scope, ficBrowseService) {
 	
 	vm.search = null;
 	
-	$scope.$watchCollection(function() {
-		return ficBrowseService.getSearchTerms();
-	}, function(newValue) {
-		if (!newValue) {
-			return;
-		}
-		var searchString = newValue.join(' ');
-		if (searchString != vm.search) {
-			vm.search = searchString;
-		}
-	});
+	activate();
 	
-	$scope.$watch('sfCtrl.search', function(newValue, oldValue) {
-		if (newValue === oldValue) {
-			return;
-		}
+	function activate() {
+	
+		$scope.$watchCollection(function() {
+			return ficBrowseService.getSearchTerms();
+		}, function(newValue) {
+			if (!newValue) {
+				return;
+			}
+			var searchString = newValue.join(' ');
+			if (searchString != vm.search) {
+				vm.search = searchString;
+			}
+		});
 		
-		ficBrowseService.setSearchTerms(newValue.split(' '));
-		ficBrowseService.refresh();
-	});
+		$scope.$watch('sfCtrl.search', function(newValue, oldValue) {
+			if (newValue === oldValue) {
+				return;
+			}
+			
+			ficBrowseService.setSearchTerms(newValue.split(' '));
+			ficBrowseService.refresh();
+		});
+	
+	}
 }

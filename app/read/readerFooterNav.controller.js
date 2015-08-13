@@ -15,17 +15,23 @@ function readerFooterNavController($scope, readService) {
 	vm.gotoNextChapter = gotoNextChapter; 
 	vm.gotoPrevChapter = gotoPrevChapter;
 	
-	$scope.$watch(function() {
-		return readService.getNextChapter();
-	}, function(newValue, oldValue) {
-		vm.nextChapter = newValue;
-	});
+	activate();
 	
-	$scope.$watch(function() {
-		return readService.getPrevChapter();
-	}, function(newValue, oldValue) {
-		vm.prevChapter = newValue;
-	});
+	function activate() {
+	
+		$scope.$watch(function() {
+			return readService.getNextChapter();
+		}, function(newValue, oldValue) {
+			vm.nextChapter = newValue;
+		});
+		
+		$scope.$watch(function() {
+			return readService.getPrevChapter();
+		}, function(newValue, oldValue) {
+			vm.prevChapter = newValue;
+		});
+	
+	}
 	
 	function gotoNextChapter() {
 		readService.nextChapter();
