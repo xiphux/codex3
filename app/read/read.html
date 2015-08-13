@@ -32,11 +32,12 @@
 			<div class="mdl-grid">
 				<div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 				<div class="mdl-cell mdl-cell--10-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
-					<codex-chapter-text></codex-chapter-text>
+					<codex-chapter-text ng-show="!rCtrl.loading"></codex-chapter-text>
+					<codex-spinner active="rCtrl.loading"></codex-spinner>
 				</div>
 				<div class="mdl-cell mdl-cell--1-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 			</div>
-			<codex-reader-footer-nav ng-show="::rCtrl.multipleChapters"></codex-reader-footer-nav>
+			<codex-reader-footer-nav ng-show="rCtrl.multipleChapters && !rCtrl.loading"></codex-reader-footer-nav>
 		</div>
 	</main>
 </div>

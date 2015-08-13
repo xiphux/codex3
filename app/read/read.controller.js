@@ -15,6 +15,7 @@ function readController($scope, $routeParams, $locationEx, $timeout, $q, chapter
 	vm.chapter = undefined;
 	vm.fic = undefined;
 	vm.multipleChapters = undefined;
+	vm.loading = false;
 	
 	var ficInternal = undefined;
 	var chaptersInternal = undefined;
@@ -37,6 +38,12 @@ function readController($scope, $routeParams, $locationEx, $timeout, $q, chapter
 		return readService.getChapter();
 	}, function(newValue, oldValue) {
 		vm.chapter = newValue;
+		if (vm.chapter) {
+			vm.loading = true;
+			vm.chapter.$promise.then(function(data) {
+				vm.loading = false;
+			});
+		}
 		updatePageTitleAsync();
 		if (newValue !== oldValue) {
 			$locationEx.skipReload().path('/read/' + $routeParams.ficId + '/chapters/' + readService.getChapterNumber());
