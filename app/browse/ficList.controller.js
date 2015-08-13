@@ -1,5 +1,4 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
-/* global componentHandler */
 'use strict';
 
 angular.module('codex.browse')
@@ -15,11 +14,6 @@ function ficListController($scope, $timeout, ficBrowseService) {
 	vm.searchActive = false;
 	vm.searchPending = false;
 	vm.titleSort = titleSort;
-	
-	// TODO: apparently directive template/controllers don't get $viewContentLoaded events - is this correct to call on init?
-	$timeout(function() {
-		componentHandler.upgradeAllRegistered();
-	});
 	
 	$scope.$watch(function() {
 		return ficBrowseService.getFics();

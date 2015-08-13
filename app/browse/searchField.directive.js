@@ -3,14 +3,21 @@
 
 angular.module('codex.browse')
 	.directive('codexSearchField', searchFieldDirective);
+	
+searchFieldDirective.$inject = ['$timeout'];
 
-function searchFieldDirective() {
+function searchFieldDirective($timeout) {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/searchField.html',
 		replace: true,
 		controller: 'searchFieldController',
 		controllerAs: 'sfCtrl',
-		scope: {}
+		scope: {},
+		link: function(scope, el, attr, ctrl) {
+			$timeout(function() {
+				componentHandler.upgradeAllRegistered();
+			});
+		}
 	};
 }

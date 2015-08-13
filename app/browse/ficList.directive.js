@@ -5,13 +5,20 @@ angular.module('codex.browse')
 
 .directive('codexFicList', ficListDirective);
 
-function ficListDirective() {
+ficListDirective.$inject = ['$timeout'];
+
+function ficListDirective($timeout) {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/ficList.html',
 		controller: 'ficListController',
 		controllerAs: 'flCtrl',
 		replace: true,
-		scope: {}
+		scope: {},
+		link: function(scope, el, attr, ctrl) {
+			$timeout(function() {
+				componentHandler.upgradeAllRegistered();
+			});
+		}
 	};
 }
