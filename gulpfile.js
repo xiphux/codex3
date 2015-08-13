@@ -10,6 +10,7 @@ var minifyCss = require('gulp-minify-css');
 var iife = require('gulp-iife');
 var shell = require('gulp-shell');
 var install = require('gulp-install');
+var ngAnnotate = require('gulp-ng-annotate');
 
 var cacheBust = new CacheBuster();
 
@@ -112,19 +113,32 @@ gulp.task('build-read-templates', function() {
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('build-js', ['build-browse-templates','build-read-templates'], function() {
+gulp.task('build-directive-templates', function() {
+	return gulp.src('app/components/directives/*.html')
+		.pipe(templateCache('directivetemplates.js',{
+			module: 'codex.directives',
+			transformUrl: function(url) {
+				return 'components/directives/' + url;
+			}
+		}))
+		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('build-js', ['build-browse-templates','build-read-templates','build-directive-templates'], function() {
 	return gulp.src([
 			'app/**/*.module.js',
 			'app/**/*.production.js',
 			'app/**/*.js',
 			'!app/**/*.test.js',
 			'dist/browsetemplates.js',
-			'dist/readtemplates.js'
+			'dist/readtemplates.js',
+			'dist/directivetemplates.js'
 		])
 		.pipe(iife())
 		.pipe(concat('codex.min.js'))
 		.pipe(cacheBust.resources())
 		.pipe(sourcemaps.init())
+		.pipe(ngAnnotate())
 		.pipe(uglify())
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest('dist'));
@@ -133,7 +147,8 @@ gulp.task('build-js', ['build-browse-templates','build-read-templates'], functio
 gulp.task('build', ['clean', 'build-css', 'build-js'], function() {
 	del([
 		'dist/browsetemplates.js',
-		'dist/readtemplates.js'
+		'dist/readtemplates.js',
+		'dist/directivetemplates.js'
 	]);
 	
 	return gulp.src('app/index.html')
