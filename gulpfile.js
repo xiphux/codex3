@@ -22,8 +22,8 @@ var cssDev = [
 	'bower_components/html5-boilerplate/dist/css/normalize.css',
 	'bower_components/html5-boilerplate/dist/css/main.css',
 	'bower_components/material-design-lite/material.css',
-	'RobotoFont.css',
-	'MaterialIcons.css',
+	'fonts/RobotoFont.css',
+	'fonts/MaterialIcons.css',
 	'codex.css'
 ];
 var cssPrd = [
@@ -189,10 +189,10 @@ gulp.task('build-static-dev', function() {
 	// piping fonts through gulp corrupts the font data
 	gulp.src('')
 		.pipe(shell([
-			'cp app/*.ttf app/*.eot app/*.woff app/*.woff2 dev/'
+			'cp -R app/fonts dev/'
 		]));
 	
-	return gulp.src(['app/**/*.css', 'app/**/*.html'])
+	return gulp.src(['app/**/*.css', 'app/**/*.html','!app/fonts/*.css'])
 		.pipe(htmlReplace({
 			css: cssDev,
 			jshead: jsHeadDev,
@@ -201,7 +201,7 @@ gulp.task('build-static-dev', function() {
 		.pipe(gulp.dest('dev'));
 });
 
-gulp.task('build-dev', ['clean', 'bower', 'build-js-dev', 'build-static-dev']);
+gulp.task('build-dev', ['clean-dev', 'bower', 'build-js-dev', 'build-static-dev']);
 
 gulp.task('watch-js-dev', function() {
 	return gulp.watch([
