@@ -24,7 +24,12 @@
 	margin: 0 auto;
 }
 
-.codex-chaptertext {
+.codex-chapter {
+	padding: 80px 56px;
+	margin-bottom: 80px;
+}
+
+.codex-chapter__text {
 	white-space: pre-line;
 }
 
