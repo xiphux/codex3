@@ -3,6 +3,7 @@
 
 angular.module('codex', [
   'ngRoute',
+  'ngAnimate',
   'codex.browse',
   'codex.read'
 ]);

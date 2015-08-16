@@ -3,7 +3,15 @@
 	height:120px;
 }
 
-.codex-ficcard {
+.codex-ficcard.ng-enter {
+	animation: 300ms fade-in ease;
+}
+
+.codex-ficcard.ng-leave {
+	animation: 300ms fade-out ease;
+}
+
+.codex-ficcard__card {
 	min-height: 100px;
 	width: 100%;
 }
@@ -19,3 +27,60 @@
 .codex-chaptertext {
 	white-space: pre-line;
 }
+
+.codex-ficcard__details {
+	height: 72px;
+}
+
+.codex-ficcard__details.ng-hide-remove {
+	animation: 300ms slide-ficcard-details-down ease;
+}
+
+.codex-ficcard__details.ng-hide-add {
+	animation: 300ms slide-ficcard-details-up ease;
+}
+
+@keyframes slide-ficcard-details-down {
+	from {
+		height: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+	to {
+		padding-top: 16px;
+		padding-bottom: 16px;
+		height: 72px;
+	}
+}
+
+@keyframes slide-ficcard-details-up {
+	from {
+		padding-top: 16px;
+		padding-bottom: 16px;
+		height: 72px;
+	}
+	to {
+		height: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fade-out {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
