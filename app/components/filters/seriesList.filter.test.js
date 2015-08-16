@@ -20,9 +20,12 @@ describe('codex.filters module', function() {
 			seriesList = $filter('seriesList');
 		});
 		
+		it('returns undefined when given undefined', function() {
+			expect(seriesList(null)).toBeUndefined();
+		});
 		
-		it('returns empty when given null', function() {
-			expect(seriesList(null)).toEqual('');
+		it('returns undefined when given null', function() {
+			expect(seriesList(null)).toBeUndefined();
 		});
 		
 		it('returns empty when given an empty list', function() {

@@ -20,8 +20,12 @@ describe('codex.filters module', function() {
 			genreList = $filter('genreList');
 		});
 		
-		it('returns empty when given null', function() {
-			expect(genreList(null)).toEqual('');
+		it('returns undefined when given undefined', function() {
+			expect(genreList(undefined)).toBeUndefined();
+		});
+		
+		it('returns undefined when given null', function() {
+			expect(genreList(null)).toBeUndefined();
 		});
 		
 		it('returns empty when given an empty list', function() {

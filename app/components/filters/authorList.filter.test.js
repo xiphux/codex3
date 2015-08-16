@@ -20,6 +20,10 @@ describe('codex.filters module', function() {
 			authorList = $filter('authorList');
 		});
 		
+		it('returns undefined when given undefined', function() {
+			expect(authorList(undefined)).toBeUndefined();	
+		};
+		
 		it('returns Unknown when given null', function() {
 			expect(authorList(null)).toEqual('Unknown');
 		});

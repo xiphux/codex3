@@ -20,19 +20,23 @@ describe('codex.filters module', function() {
 			chapter = $filter('chapter');
 		});
 		
-		it('should return empty if a null is passed', function() {
-			expect(chapter(null)).toEqual('');
+		it('should return undefined if given undefined', function() {
+			expect(chapter(undefined)).toBeUndefined();
 		});
 		
-		it('should return empty if an empty object is passed', function() {
-			expect(chapter({})).toEqual('');
+		it('should return undefined if a null is passed', function() {
+			expect(chapter(null)).toBeUndefined();
 		});
 		
-		it('should return empty if there is no title or number', function() {
+		it('should return undefined if an empty object is passed', function() {
+			expect(chapter({})).toBeUndefined();
+		});
+		
+		it('should return undefined if there is no title or number', function() {
 			var chapterData = {
 				id: 1
 			};
-			expect(chapter(chapterData)).toEqual('');
+			expect(chapter(chapterData)).toBeUndefined();
 		});
 		
 		it('should return the title if the chapter has a title', function() {

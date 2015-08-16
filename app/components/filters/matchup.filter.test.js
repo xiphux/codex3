@@ -20,27 +20,27 @@ describe('codex.filters module', function() {
 			matchup = $filter('matchup');
 		});
 		
-		it('returns empty when given null', function() {
-			expect(matchup(null)).toEqual('');
+		it('returns undefined when given null', function() {
+			expect(matchup(null)).toBeUndefined();
 		});
 		
-		it('returns empty when given a matchup without a character list', function() {
+		it('returns undefined when given a matchup without a character list', function() {
 			var matchupData = {};
-			expect(matchup(matchupData)).toEqual('');
+			expect(matchup(matchupData)).toBeUndefined;
 		});
 		
-		it('returns empty when given a matchup with a null character list', function() {
+		it('returns undefined when given a matchup with a null character list', function() {
 			var matchupData = {
 				characters: null
 			};
-			expect(matchup(matchupData)).toEqual('');
+			expect(matchup(matchupData)).toBeUndefined();
 		});
 		
-		it('returns empty when given a matchup with an empty character list', function() {
+		it('returns undefined when given a matchup with an empty character list', function() {
 			var matchupData = {
 				characters: []
 			};
-			expect(matchup(matchupData)).toEqual('');
+			expect(matchup(matchupData)).toBeUndefined();
 		});
 		
 		it('returns one character when given a single character matchup', function() {

@@ -20,8 +20,12 @@ describe('codex.filters module', function() {
 			matchupList = $filter('matchupList');
 		});
 		
-		it('returns empty when given null', function() {
-			expect(matchupList(null)).toEqual('');
+		it('returns undefined when given undefined', function() {
+			expect(matchupList(undefined)).toBeUndefined();
+		});
+		
+		it('returns undefined when given null', function() {
+			expect(matchupList(null)).toBeUndefined();
 		});
 		
 		it('returns empty when given an empty list', function() {
