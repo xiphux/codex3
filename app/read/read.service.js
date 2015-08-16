@@ -117,7 +117,7 @@ function readService(ficDataService, chapterDataService) {
 			next = null;
 			return;
 		}
-		prev = idx > 1 ? sorted[idx-1] : null;
+		prev = idx > 0 ? sorted[idx-1] : null;
 		next = idx < (sorted.length - 1) ? sorted[idx+1] : null;
 	}
 }
