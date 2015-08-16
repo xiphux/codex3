@@ -3,8 +3,10 @@
 
 angular.module('codex.browse')
 	.directive('codexFicListItem', ficListItemDirective);
+	
+ficListItemDirective.$inject = ['$timeout'];
 
-function ficListItemDirective() {
+function ficListItemDirective($timeout) {
 	return {
 		restrict: 'E',
 		templateUrl: 'browse/ficListItem.html',
@@ -14,6 +16,12 @@ function ficListItemDirective() {
 		scope: {
 			fic: '='
 		},
-		bindToController: true
+		bindToController: true,
+		link: function(scope, el, attr, ctrl) {
+			$timeout(function() {
+				// upgradeElement doesn't support passing multiple classes
+				componentHandler.upgradeElement(el[0].querySelector('.mdl-js-button'));
+			});
+		}
 	};
 }

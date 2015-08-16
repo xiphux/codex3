@@ -16,7 +16,11 @@ function readerFooterNavDirective($timeout) {
 		scope: {},
 		link: function(scope, el, attr, ctrl) {
 			$timeout(function() {
-				componentHandler.upgradeAllRegistered();
+				var buttons = el[0].querySelectorAll('.mdl-js-button');
+				for (var i = 0; i < buttons.length; i++) {
+					// upgradeElement doesn't support passing multiple classes
+					componentHandler.upgradeElement(buttons[i]);
+				}
 			});
 		}
 	};

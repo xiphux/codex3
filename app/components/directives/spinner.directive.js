@@ -16,7 +16,7 @@ function spinnerDirective($timeout) {
 		},
 		link: function(scope, el, attr, ctrl) {
 			$timeout(function() {
-				componentHandler.upgradeAllRegistered();
+				componentHandler.upgradeElement(el[0], 'MaterialSpinner');
 			});
 		}
 	};

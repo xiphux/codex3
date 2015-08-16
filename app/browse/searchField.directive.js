@@ -16,7 +16,8 @@ function searchFieldDirective($timeout) {
 		scope: {},
 		link: function(scope, el, attr, ctrl) {
 			$timeout(function() {
-				componentHandler.upgradeAllRegistered();
+				componentHandler.upgradeElement(el[0], 'MaterialTextfield');
+				componentHandler.upgradeElement(el[0].querySelector('.mdl-js-button'), 'MaterialButton');
 			});
 		}
 	};
