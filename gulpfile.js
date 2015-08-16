@@ -49,10 +49,10 @@ var jsBodyDev = [
 	'codex.js'
 ];
 var jsBodyPrd = [
-	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.min.js',
-	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular-route.min.js',
-	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular-resource.min.js',
-	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular-animate.min.js',
+	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular.min.js',
+	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-route.min.js',
+	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-resource.min.js',
+	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-animate.min.js',
 	'//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.min.js',
 	'//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js',
 	'codex.min.js'
