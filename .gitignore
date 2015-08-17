@@ -10,3 +10,4 @@ tmp
 dist/
 dev/
 public
+coverage/

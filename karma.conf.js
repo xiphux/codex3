@@ -22,18 +22,26 @@ module.exports = function(config){
 
     frameworks: ['jasmine'],
 
-    browsers : ['Chrome'],
+    browsers : ['Chrome', 'PhantomJS'],
 
     plugins : [
             'karma-chrome-launcher',
             'karma-firefox-launcher',
+            'karma-phantomjs-launcher',
             'karma-jasmine',
-            'karma-junit-reporter'
-            ],
+            'karma-junit-reporter',
+            'karma-coverage'
+    ],
 
     junitReporter : {
       outputFile: 'test_out/unit.xml',
       suite: 'unit'
+    },
+    
+    reporters: ['progress', 'coverage'],
+    
+    preprocessors: {
+      'app/**/!(.test).js': ['coverage']
     }
 
   });
