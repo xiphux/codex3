@@ -32,13 +32,13 @@ get '/api/fics' do
 			params['search'].each do |keyword|
 				if not keyword.empty?
 					# datamapper/dataobjects doesn't like using the ? param in this query
-					fics = fics.all(:conditions => [ 'UPPER(title) LIKE "%' + keyword.gsub("'","''") + '%"' ])
+					fics = fics.all(:conditions => [ "UPPER(title) LIKE '%" + keyword.upcase.gsub("'","''") + "%'" ])
 				end
 			end
 		else
 			if not params['search'].empty?
 				# datamapper/dataobjects doesn't like using the ? param in this query
-				fics = fics.all(:conditions => [ 'UPPER(title) LIKE "%' + params['search'].gsub("'","''") + '%"' ])
+				fics = fics.all(:conditions => [ "UPPER(title) LIKE '%" + params['search'].upcase.gsub("'","''") + "%'" ])
 			end
 		end
 	end
