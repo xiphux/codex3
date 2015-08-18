@@ -42,7 +42,7 @@ get '/api/fics' do
 			end
 		end
 	end
-	fics.to_json(methods: [ :authors, :fic_genres, :fic_series, :fic_matchups ])
+	fics.to_json(:methods => [ :authors, :fic_genres, :fic_series, :fic_matchups ])
 end
 
 get '/api/fics/:id' do
