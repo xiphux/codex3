@@ -41,7 +41,7 @@ module.exports = function(config){
     reporters: ['progress', 'coverage'],
     
     preprocessors: {
-      'app/**/!(.test).js': ['coverage']
+      'app/**/!(*.test).js': ['coverage']
     }
 
   });
