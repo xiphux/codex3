@@ -21,9 +21,6 @@ function ficDataService($resource) {
 		var params = filters ? _.pick(filters, ['series', 'genres', 'matchups', 'search']) : {};
 		
 		params = _.transform(params, function(result, n, key) {
-			if (!n || n.length < 1) {
-				return;
-			}
 			if (key == 'genres') {
 				key = 'genre';
 			} else if (key == 'matchups') {
