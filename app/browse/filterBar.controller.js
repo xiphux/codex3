@@ -76,7 +76,7 @@ function filterBarController($scope, ficBrowseService) {
 	}
 	
 	function updateFilterState() {
-		vm.hasFilters = ficBrowseService.hasAnyGenreFilter() || ficBrowseService.hasAnySeriesFilter() || ficBrowseService.hasAnyMatchupFilter();
+		vm.hasFilters = vm.genreFilters.length > 0 || vm.matchupFilters.length > 0 || vm.seriesFilters.length > 0;
 	}
 	
 }
