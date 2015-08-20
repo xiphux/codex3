@@ -2,7 +2,7 @@
 
 describe('codex.browse module', function() {
 	
-	beforeEach(module('codex.browse'));
+	beforeEach(angular.mock.module('codex.browse'));
 	
 	describe('search field controller', function() {
 		
@@ -46,7 +46,7 @@ describe('codex.browse module', function() {
 			
 			searchTerms = ['termtwo'];
 			
-			scope.$digest()
+			scope.$digest();
 			
 			expect(sfCtrl.search).toEqual('termtwo');
 			

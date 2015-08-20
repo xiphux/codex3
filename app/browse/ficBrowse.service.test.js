@@ -2,7 +2,7 @@
 
 describe('codex.browse module', function() {
 	
-	beforeEach(module('codex.browse'));
+	beforeEach(angular.mock.module('codex.browse'));
 	
 	describe('fic browse service', function() {
 		
@@ -14,7 +14,7 @@ describe('codex.browse module', function() {
 				getFics: function(params) {}
 			};
 			
-			module(function($provide) {
+			angular.mock.module(function($provide) {
 				$provide.value('ficDataService', mockFicDataService);
 			});
 			

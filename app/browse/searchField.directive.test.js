@@ -2,13 +2,13 @@
 
 describe('codex.browse module', function() {
 	
-	beforeEach(module('codex.browse'));
+	beforeEach(angular.mock.module('codex.browse'));
 	
 	describe('search field directive', function() {
 		
 		var element, scope, $timeout;
 		
-		beforeEach(module('browse/searchField.html'));
+		beforeEach(angular.mock.module('browse/searchField.html'));
 		
 		beforeEach(inject(function($rootScope, $compile, _$timeout_) {
 			

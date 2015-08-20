@@ -2,13 +2,13 @@
 
 describe('codex.browse module', function() {
 	
-	beforeEach(module('codex.browse'));
+	beforeEach(angular.mock.module('codex.browse'));
 	
 	describe('filter bar genre item directive', function() {
 		
 		var element, scope;
 		
-		beforeEach(module('browse/filterBarGenreItem.html'));
+		beforeEach(angular.mock.module('browse/filterBarGenreItem.html'));
 		
 		beforeEach(inject(function($rootScope, $compile) {
 			

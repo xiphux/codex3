@@ -2,13 +2,13 @@
 
 describe('codex.browse module', function() {
 	
-	beforeEach(module('codex.browse'));
+	beforeEach(angular.mock.module('codex.browse'));
 	
 	describe('fic list item directive', function() {
 		
 		var element, scope, $timeout;
 		
-		beforeEach(module('browse/ficListItem.html'));
+		beforeEach(angular.mock.module('browse/ficListItem.html'));
 		
 		beforeEach(inject(function($rootScope, $compile, _$timeout_) {
 			
