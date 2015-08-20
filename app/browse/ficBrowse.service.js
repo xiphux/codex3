@@ -61,10 +61,10 @@ function ficBrowseService(ficDataService) {
 	};
 	return service;
 	
-	function recount() {
-		genreCounts = fics ? _(fics).pluck('fic_genres').flatten().countBy('genre_id').value() : {};
-		matchupCounts = fics ? _(fics).pluck('fic_matchups').flatten().countBy('matchup_id').value() : {};
-		seriesCounts = fics ? _(fics).pluck('fic_series').flatten().countBy('series_id').value() : {};
+	function recount(ficData) {
+		genreCounts = ficData ? _(ficData).pluck('fic_genres').flatten().countBy('genre_id').value() : {};
+		matchupCounts = ficData ? _(ficData).pluck('fic_matchups').flatten().countBy('matchup_id').value() : {};
+		seriesCounts = ficData ? _(ficData).pluck('fic_series').flatten().countBy('series_id').value() : {};
 	};
 	
 	function getFics() {
@@ -106,12 +106,12 @@ function ficBrowseService(ficDataService) {
 			});
 			dirty = false;
 			fics.$promise.then(function(data) {
-				recount();
+				recount(data);
 			});
 		} else {
 			fics = null;
 			dirty = false;
-			recount();
+			recount(null);
 		}
 		
 		return fics;
@@ -215,7 +215,7 @@ function ficBrowseService(ficDataService) {
 	
 	function setSearchTerms(terms) {
 		var tempTerms = _.uniq(_.compact(terms));
-		if (_.isEqual(tempTerms, searchTerms)) {
+		if (_.isEqual(tempTerms.slice().sort(), searchTerms.slice().sort())) {
 			return;
 		}
 		searchTerms = tempTerms;
