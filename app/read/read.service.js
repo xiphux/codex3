@@ -90,7 +90,11 @@ function readService(ficDataService, chapterDataService) {
 		chapterNumInternal = +chapterNum;
 		chapter = chapterDataService.getChapter(ficIdInternal, chapterNumInternal);
 		
-		chapters.$promise.then(updatePrevNext);
+		if (chapters) {
+			chapters.$promise.then(updatePrevNext);
+		} else {
+			updatePrevNext();
+		}
 		
 		return true;
 	}
@@ -110,6 +114,11 @@ function readService(ficDataService, chapterDataService) {
 	}
 	
 	function updatePrevNext() {
+		if (!chapters || chapters.length == 1) {
+			prev = null;
+			next = null;
+			return;
+		}
 		var sorted = _.sortBy(chapters, 'number');
 		var idx = _.findIndex(sorted, 'number', chapterNumInternal);
 		if (idx == -1) {
