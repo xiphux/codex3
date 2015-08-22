@@ -23,14 +23,30 @@ function readController($scope, $routeParams, $locationEx, $timeout, $q, chapter
 	
 		readService.setFic($routeParams.ficId, $routeParams.chapterNum);
 		
-		readService.getFic().$promise.then(function(data) {
-			// defer setting for one time binding
-			vm.fic = data;
+		var unbindFic = $scope.$watch(function() {
+			return readService.getFic();
+		}, function(newValue) {
+			if (newValue) {
+				newValue.$promise.then(function(data) {
+					// defer setting for one time binding
+					vm.fic = data;	
+					updatePageTitleAsync();
+				});
+				unbindFic();
+			}
 		});
 		
-		readService.getChapters().$promise.then(function(data) {
-			// defer setting for one time binding
-			vm.chapters = data;
+		var unbindChapters = $scope.$watch(function() {
+			return readService.getChapters();
+		}, function(newValue) {
+			if (newValue) {
+				newValue.$promise.then(function(data) {
+					// defer setting for one time binding
+					vm.chapters = data;
+					updatePageTitleAsync();
+				});
+				unbindChapters();
+			}
 		});
 		
 		$scope.$watch(function() {
@@ -42,11 +58,11 @@ function readController($scope, $routeParams, $locationEx, $timeout, $q, chapter
 				vm.chapter.$promise.then(function(data) {
 					vm.loading = false;
 				});
+				if (newValue !== oldValue) {
+					$locationEx.skipReload().path('/read/' + $routeParams.ficId + '/chapters/' + readService.getChapterNumber());
+				}
 			}
 			updatePageTitleAsync();
-			if (newValue !== oldValue) {
-				$locationEx.skipReload().path('/read/' + $routeParams.ficId + '/chapters/' + readService.getChapterNumber());
-			}
 		});
 		
 		var unbindMultipleChapters = $scope.$watch(function() {
@@ -68,12 +84,19 @@ function readController($scope, $routeParams, $locationEx, $timeout, $q, chapter
 	}
 	
 	function updatePageTitleAsync() {
-		$q.all([readService.getFic().$promise, readService.getChapters().$promise, vm.chapter.$promise]).then(updatePageTitle);
+		if (!(vm.fic && vm.chapters)) {
+			return;
+		}
+		if (vm.chapter) {
+			vm.chapter.$promise.then(updatePageTitle);
+		} else {
+			updatePageTitle();
+		}
 	}
 	
 	function updatePageTitle() {
 		var subtitle = vm.fic.title;
-		if (readService.getChapters().length > 1) {
+		if (vm.chapter && ((vm.chapters && (vm.chapters.length > 1)) || vm.chapter.title)) {
 			subtitle += ' :: ' + chapterFilter(vm.chapter);
 		}
 		pageService.setSubtitle(subtitle);
