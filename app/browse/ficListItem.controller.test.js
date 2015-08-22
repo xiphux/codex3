@@ -2,7 +2,7 @@
 
 describe('codex.browse module', function() {
 	
-	beforeEach(module('codex.browse'));
+	beforeEach(angular.mock.module('codex.browse'));
 	
 	describe('ficListItem controller', function() {
 		
@@ -10,7 +10,7 @@ describe('codex.browse module', function() {
 		var fliCtrl;
 		var ficData;
 		
-		beforeEach(module(function($provide) {
+		beforeEach(angular.mock.module(function($provide) {
 			ficData = {
 				id: "3",
 				title: 'Title'

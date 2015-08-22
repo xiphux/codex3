@@ -3,7 +3,7 @@
 
 describe('codex.data module', function() {
 	
-	beforeEach(module('codex.data'));
+	beforeEach(angular.mock.module('codex.data'));
 	
 	describe('series data service', function() {
 		

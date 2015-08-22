@@ -3,7 +3,7 @@
 
 describe('codex.text module', function() {
 	
-	beforeEach(module('codex.text'));
+	beforeEach(angular.mock.module('codex.text'));
 	
 	describe('text formatter service', function() {
 		

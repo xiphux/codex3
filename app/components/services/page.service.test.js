@@ -2,7 +2,7 @@
 
 describe('codex.services module', function() {
 	
-	beforeEach(module('codex.services'));
+	beforeEach(angular.mock.module('codex.services'));
 	
 	describe('page service', function() {
 		
@@ -17,7 +17,7 @@ describe('codex.services module', function() {
 				}
 			};
 			
-			module(function($provide) {
+			angular.mock.module(function($provide) {
 				$provide.value('$window', mockWindow);
 			});
 			

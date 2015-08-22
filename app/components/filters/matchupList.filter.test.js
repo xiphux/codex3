@@ -4,7 +4,7 @@
 
 describe('codex.filters module', function() {
 	
-	beforeEach(module('codex.filters'));
+	beforeEach(angular.mock.module('codex.filters'));
 	
 	var $filter;
 
