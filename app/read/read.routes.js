@@ -15,6 +15,23 @@ function readRoutes($routeProvider) {
 	.when('/read/:ficId/chapters/:chapterNum', {
 		templateUrl: 'read/read.html',
 		controller: 'readController',
-		controllerAs: 'rCtrl'
+		controllerAs: 'rCtrl',
+		resolve: {
+			chapter: readRouteChapterResolve
+		}
+	});
+}
+
+readRouteChapterResolve.$inject = ['$route', 'readService', '$location'];
+
+function readRouteChapterResolve($route, readService, $location) {
+	if (!$route.skipResolve) {
+		if (!readService.setFic($route.current.params.ficId, $route.current.params.chapterNum)) {
+			$location.path('/');
+			return false;
+		}
+	}
+	return readService.getChapter().$promise.catch(function() {
+		$location.path('/');
 	});
 }

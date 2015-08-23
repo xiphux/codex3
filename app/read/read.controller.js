@@ -59,7 +59,7 @@ function readController($scope, $routeParams, $locationEx, $timeout, $q, chapter
 					vm.loading = false;
 				});
 				if (newValue !== oldValue) {
-					$locationEx.skipReload().path('/read/' + $routeParams.ficId + '/chapters/' + readService.getChapterNumber());
+					$locationEx.skipReload(true).path('/read/' + $routeParams.ficId + '/chapters/' + readService.getChapterNumber());
 				}
 			}
 			updatePageTitleAsync();
