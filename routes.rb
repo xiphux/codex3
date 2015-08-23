@@ -18,6 +18,34 @@ end
 
 get '/api/fics' do
 	fics = Fic.all
+	if params['search']
+		
+		authors = Author.all
+		authorfilters = false
+		
+		if params['search'].kind_of?(Array)
+			params['search'].each do |keyword|
+				if not keyword.empty?
+					# datamapper/dataobjects doesn't like using the ? param in this query
+					fics = fics.all(:conditions => [ "UPPER(title) LIKE '%" + keyword.upcase.gsub("'","''") + "%'" ])
+					authors = authors.all(:conditions => [ "UPPER(name) LIKE '%" + keyword.upcase.gsub("'","''") + "%'" ])
+					authorfilters = true
+				end
+			end
+		else
+			if not params['search'].empty?
+				# datamapper/dataobjects doesn't like using the ? param in this query
+				fics = fics.all(:conditions => [ "UPPER(title) LIKE '%" + params['search'].upcase.gsub("'","''") + "%'" ])
+				authors = authors.all(:conditions => [ "UPPER(name) LIKE '%" + params['search'].upcase.gsub("'","''") + "%'" ])
+				authorfilters = true
+			end
+		end
+		
+		if authorfilters
+			fics = fics | authors.fics
+		end
+		
+	end
 	if params['series']
 		fics = fics.all(:fic_series => FicSeries.all(:series_id => params['series']))
 	end
@@ -27,21 +55,7 @@ get '/api/fics' do
 	if params['genre']
 		fics = fics.all(:fic_genres => FicGenre.all(:genre_id => params['genre']))
 	end
-	if params['search']
-		if params['search'].kind_of?(Array)
-			params['search'].each do |keyword|
-				if not keyword.empty?
-					# datamapper/dataobjects doesn't like using the ? param in this query
-					fics = fics.all(:conditions => [ "UPPER(title) LIKE '%" + keyword.upcase.gsub("'","''") + "%'" ])
-				end
-			end
-		else
-			if not params['search'].empty?
-				# datamapper/dataobjects doesn't like using the ? param in this query
-				fics = fics.all(:conditions => [ "UPPER(title) LIKE '%" + params['search'].upcase.gsub("'","''") + "%'" ])
-			end
-		end
-	end
+
 	fics.to_json(:methods => [ :authors, :fic_genres, :fic_series, :fic_matchups ])
 end
 
