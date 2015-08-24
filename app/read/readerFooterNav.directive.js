@@ -19,7 +19,8 @@ function readerFooterNavDirective($timeout) {
 				var buttons = el[0].querySelectorAll('.mdl-js-button');
 				for (var i = 0; i < buttons.length; i++) {
 					// upgradeElement doesn't support passing multiple classes
-					componentHandler.upgradeElement(buttons[i]);
+					componentHandler.upgradeElement(buttons[i], 'MaterialButton');
+					componentHandler.upgradeElement(buttons[i], 'MaterialRipple');
 				}
 			});
 		}

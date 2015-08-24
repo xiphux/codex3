@@ -20,7 +20,9 @@ function ficListItemDirective($timeout) {
 		link: function(scope, el, attr, ctrl) {
 			$timeout(function() {
 				// upgradeElement doesn't support passing multiple classes
-				componentHandler.upgradeElement(el[0].querySelector('.mdl-js-button'));
+				var btn = el[0].querySelector('.mdl-js-button');
+				componentHandler.upgradeElement(btn,'MaterialButton');
+				componentHandler.upgradeElement(btn,'MaterialRipple');
 			});
 		}
 	};
