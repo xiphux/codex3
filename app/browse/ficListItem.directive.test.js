@@ -39,7 +39,9 @@ describe('codex.browse module', function() {
 		it('should upgrade the js button after a timeout', function() {
 			expect(componentHandler.upgradeElement).not.toHaveBeenCalled();
 			$timeout.flush();
-			expect(componentHandler.upgradeElement).toHaveBeenCalledWith(element[0].querySelector('.mdl-js-button'));
+			var el = element[0].querySelector('.mdl-js-button');
+			expect(componentHandler.upgradeElement).toHaveBeenCalledWith(el, 'MaterialButton');
+			expect(componentHandler.upgradeElement).toHaveBeenCalledWith(el, 'MaterialRipple');
 		});
 		
 		it('should display the title and author', function() {

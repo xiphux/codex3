@@ -27,7 +27,8 @@ describe('codex.read module', function() {
 			$timeout.flush();
 			var buttons = element[0].querySelectorAll('.mdl-js-button');
 			for (var i = 0; i < buttons.length; i++) {
-				expect(componentHandler.upgradeElement).toHaveBeenCalledWith(buttons[i]);	
+				expect(componentHandler.upgradeElement).toHaveBeenCalledWith(buttons[i], 'MaterialButton');
+				expect(componentHandler.upgradeElement).toHaveBeenCalledWith(buttons[i], 'MaterialRipple');	
 			}
 		});
 		
