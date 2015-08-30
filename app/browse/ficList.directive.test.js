@@ -12,6 +12,7 @@ describe('codex.browse module', function() {
 		beforeEach(angular.mock.module('browse/ficListSplash.html'));
 		beforeEach(angular.mock.module('browse/ficListItem.html'));
 		beforeEach(angular.mock.module('components/directives/spinner.html'));
+		beforeEach(angular.mock.module('components/directives/progressBar.html'));
 		
 		beforeEach(inject(function($rootScope, $compile) {
 			

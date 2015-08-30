@@ -11,6 +11,7 @@ describe('codex.browse module', function() {
 		var ficData;
 		var hasFic;
 		var scope;
+		var progress;
 		
 		beforeEach(angular.mock.module(function($provide) {
 			ficData = {
@@ -25,14 +26,19 @@ describe('codex.browse module', function() {
 			spyOn(mockFicDataService, 'getFic').and.callThrough();
 			
 			hasFic = false;
+			progress = null;
 			mockFicStorageService = {
 				hasFic: function(ficId) {
 					return hasFic;
+				},
+				getFicProgress: function(ficId) {
+					return progress;
 				},
 				removeFic: jasmine.createSpy('removeFic'),
 				addFic: jasmine.createSpy('addFic')
 			};
 			spyOn(mockFicStorageService, 'hasFic').and.callThrough();
+			spyOn(mockFicStorageService, 'getFicProgress').and.callThrough();
 			
 			$provide.value('ficDataService', mockFicDataService);
 			$provide.value('ficStorageService', mockFicStorageService);
@@ -106,6 +112,43 @@ describe('codex.browse module', function() {
 			
 			expect(fliCtrl.availableOffline).toBeTruthy();
 			
+		});
+		
+		it('should initialize offline progress from the storage service', function() {
+			
+			progress = 100;
+			
+			scope.$digest();
+			
+			expect(mockFicStorageService.getFicProgress).toHaveBeenCalledWith("2");
+			
+			expect(fliCtrl.offlineProgress).toEqual(100);
+			
+		});
+		
+		it('should update offline progress from the storage service', function() {
+			
+			scope.$digest();
+			
+			expect(fliCtrl.offlineProgress).toBeNull();
+			
+			progress = 10;
+			
+			scope.$digest();
+			
+			expect(fliCtrl.offlineProgress).toEqual(10);
+			
+			progress = 50;
+			
+			scope.$digest();
+			
+			expect(fliCtrl.offlineProgress).toEqual(50);
+			
+			progress = 100;
+			
+			scope.$digest();
+			
+			expect(fliCtrl.offlineProgress).toEqual(100);
 		});
 		
 		it('should add or remove the fic from the storage service when toggled', function() {

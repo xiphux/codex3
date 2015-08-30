@@ -9,6 +9,7 @@ describe('codex.browse module', function() {
 		var element, scope, $timeout;
 		
 		beforeEach(angular.mock.module('browse/ficListItem.html'));
+		beforeEach(angular.mock.module('components/directives/progressBar.html'));
 		
 		beforeEach(inject(function($rootScope, $compile, _$timeout_) {
 			
