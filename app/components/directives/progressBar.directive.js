@@ -17,9 +17,7 @@ function progressBarDirective($timeout) {
 		link: function(scope, el, attr, ctrl) {
 			$timeout(function() {
 				componentHandler.upgradeElement(el[0], 'MaterialProgress');
-				scope.$watch(function() {
-					return scope.progress();
-				}, function(newValue) {
+				scope.$watch(scope.progress, function(newValue) {
 					
 					if (newValue === null) {
 						if (el.hasClass('mdl-progress__indeterminate')) {
