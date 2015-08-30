@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('codex')
-	.config(codexConfig);
+	.config(codexConfigProduction);
 	
-codexConfig.$inject = ['$compileProvider'];
+codexConfigProduction.$inject = ['$compileProvider'];
 	
-function codexConfig($compileProvider) {
+function codexConfigProduction($compileProvider) {
 	$compileProvider.debugInfoEnabled(false);
 }
