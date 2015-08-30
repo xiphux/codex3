@@ -14,6 +14,7 @@ function ficListItemController($scope, ficDataService, ficStorageService) {
 	vm.availableOffline = false;
 	vm.toggleExpand = toggleExpand;
 	vm.toggleOffline = toggleOffline;
+	vm.offlineProgress = null;
 	
 	activate();
 	
@@ -22,6 +23,12 @@ function ficListItemController($scope, ficDataService, ficStorageService) {
 			return !!ficStorageService.hasFic(vm.fic.id);
 		}, function(newValue) {
 			vm.availableOffline = newValue;
+		});
+		
+		$scope.$watch(function() {
+			return ficStorageService.getFicProgress(vm.fic.id);
+		}, function(newValue) {
+			vm.offlineProgress = newValue;
 		});
 	}
 	

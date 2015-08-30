@@ -3,6 +3,7 @@
 		<div class="mdl-card__title" ng-click="fliCtrl.toggleExpand()">
 			<h3 class="mdl-card__title-text">{{::fliCtrl.fic.title}}</h3> <h5 class="mdl-card__subtitle-text">by {{::fliCtrl.fic.authors | authorList}}</h5>
 		</div>
+		<codex-progress-bar class="mdl-card__media" progress="fliCtrl.offlineProgress" ng-show="(fliCtrl.offlineProgress !== null) && (fliCtrl.offlineProgress < 100)"></codex-progress-bar>
 		<div class="mdl-card__supporting-text mdl-card--border codex-ficcard__details" ng-show="fliCtrl.expanded">
 			<div ng-show="::(fliCtrl.ficDetail.series && fliCtrl.ficDetail.series.length > 0)">
 				Series: {{::fliCtrl.ficDetail.series | seriesList}}

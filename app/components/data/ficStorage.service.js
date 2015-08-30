@@ -7,12 +7,15 @@ ficStorageService.$inject = ['$localStorage', '$q', 'ficResourceService', 'chapt
 
 function ficStorageService($localStorage, $q, ficResourceService, chapterResourceService) {
 	
+	activate();
+	
 	var service = {
 		getFics: getFics,
 		getFic: getFic,
 		hasFic: hasFic,
 		addFic: addFic,
 		removeFic: removeFic,
+		getFicProgress: getFicProgress,
 		getChapters: getChapters,
 		getChapter: getChapter,
 		getGenres: getGenres,
@@ -21,6 +24,18 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 	};
 	return service;
 	
+	function activate() {
+		if (!$localStorage.progress) {
+			return;
+		}
+		
+		_.forEach($localStorage.progress, function(percent, ficId) {
+			if (percent < 100) {
+				delete $localStorage.progress[ficId];
+				delete $localStorage.fics[ficId];
+			}
+		});
+	}
 	
 	function getFics(filters) {
 		
@@ -122,6 +137,10 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 			return true;
 		}
 		
+		if ($localStorage.progress && (ficId in $localStorage.progress)) {
+			return true;
+		}
+		
 		return downloadFic(ficId);
 	}
 	
@@ -131,6 +150,23 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 		}
 		
 		delete $localStorage.fics[ficId];
+		delete $localStorage.progress[ficId];
+	}
+	
+	function getFicProgress(ficId) {
+		if (!ficId) {
+			return null;
+		}
+		
+		if (!$localStorage.progress) {
+			return null;
+		}
+		
+		if (!(ficId in $localStorage.progress)) {
+			return null;
+		}
+		
+		return $localStorage.progress[ficId];
 	}
 	
 	function getChapters(ficId) {
@@ -180,6 +216,12 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 			return false;
 		}
 		
+		if (!$localStorage.progress) {
+			$localStorage.progress = {};
+		}
+		
+		$localStorage.progress[ficId] = -1;
+		
 		fic.$promise.then(function(ficData) {
 			
 			if (!$localStorage.fics) {
@@ -199,11 +241,19 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 				
 				var chapterPromises = [];
 				
+				var chapterCount = $localStorage.fics[ficId].chapters.length;
+				var chapterPercent = Math.ceil(100.0 / chapterCount);
+				$localStorage.progress[ficId] = 0; 
+				
 				_.forEach($localStorage.fics[ficId].chapters, function(chapter) {
 					
 					var chapterPromise = chapterResourceService.getChapter(ficId, chapter.number);
 					chapterPromise.$promise.then(function(chapterData) {
 						_.assign(chapter, _.pick(chapterData, ['id', 'number', 'title', 'data', 'wrapped', 'no_paragraph_spacing', 'double_line_breaks', 'fic_id']));
+						$localStorage.progress[ficId] += chapterPercent;
+						if ($localStorage.progress[ficId] > 100) {
+							$localStorage.progress[ficId] = 100;
+						}
 					});
 					chapterPromises.push(chapterPromise.$promise);
 					
@@ -211,6 +261,8 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 				
 			});
 			
+		}, function(reason) {
+			delete $localStorage.progress[ficId];
 		});
 		
 		return true;
