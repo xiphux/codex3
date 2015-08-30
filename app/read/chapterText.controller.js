@@ -19,6 +19,7 @@ function chapterTextController($scope, readService) {
 			return readService.getChapter();
 		}, function(newValue) {
 			vm.chapter = newValue;
+			$scope.$emit('chapter-changed');
 		});
 	}
 	
