@@ -59,6 +59,13 @@ var jsBodyPrd = [
 	'//storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js',
 	'codex.min.js'
 ];
+var fontPrd = [
+	'//fonts.gstatic.com/s/materialicons/v7/2fcrYFNaTjcS6g4U3t-Y5UEw0lE80llgEseQY3FEmqw.woff2',
+	'//fonts.gstatic.com/s/roboto/v15/oMMgfZMQthOryQo9n22dcuvvDin1pK8aKteLpeZ5c0A.woff2',
+	'//fonts.gstatic.com/s/roboto/v15/RxZJdnzeo3R5zSexge8UUZBw1xU1rKptJj_0jans920.woff2',
+	'//fonts.gstatic.com/s/roboto/v15/Hgo13k-tfSpn0qi1SFdUfZBw1xU1rKptJj_0jans920.woff2',
+	'//fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOJBw1xU1rKptJj_0jans920.woff2'
+];
 
 
 /*
@@ -152,7 +159,7 @@ gulp.task('build-cache', ['build-css', 'build-js'], function() {
 	return gulp.src('app/codex.appcache')
 		.pipe(htmlReplace({
 			css: {
-				src: cssPrd,
+				src: cssPrd.concat(fontPrd),
 				tpl: '%s'
 			},
 			jshead: {
