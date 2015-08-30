@@ -4,9 +4,9 @@
 angular.module('codex.browse')
 	.controller('ficListController', ficListController);
 
-ficListController.$inject = ['$scope', 'ficBrowseService'];
+ficListController.$inject = ['$scope', '$window', 'ficBrowseService'];
 
-function ficListController($scope, ficBrowseService) {
+function ficListController($scope, $window, ficBrowseService) {
 	
 	var vm = this;
 	
@@ -31,6 +31,18 @@ function ficListController($scope, ficBrowseService) {
 				});
 			} else {
 				vm.searchPending = false;
+			}
+		});
+		
+		$scope.$watch(function() {
+			return $window.navigator.onLine;
+		}, function(newValue, oldValue) {
+			if (newValue === oldValue) {
+				return;
+			}
+			
+			if (ficBrowseService.hasSearch()) {
+				ficBrowseService.clear();
 			}
 		});
 		

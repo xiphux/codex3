@@ -6,10 +6,16 @@ describe('codex.browse module', function() {
 	
 	describe('browse controller', function() {
 		
-		var mockPageService, bCtrl, $timeout, scope;
+		var mockPageService, bCtrl, $timeout, scope, $window;
 		
 		beforeEach(inject(function(_$controller_, _$timeout_, $rootScope) {
 			$timeout = _$timeout_;
+			
+			$window = {
+				navigator: {
+					onLine: true
+				}
+			};
 			
 			componentHandler = jasmine.createSpyObj('componentHandler', ['upgradeAllRegistered']);
 			
@@ -19,7 +25,8 @@ describe('codex.browse module', function() {
 			
 			bCtrl = _$controller_('browseController', {
 				pageService: mockPageService,
-				$scope: scope
+				$scope: scope,
+				$window: $window
 			});
 		}));
 		
@@ -38,6 +45,36 @@ describe('codex.browse module', function() {
 			$timeout.flush();
 			
 			expect(componentHandler.upgradeAllRegistered).toHaveBeenCalled();
+			
+		});
+		
+		it('should initialize with the online state', function() {
+			
+			$window.navigator.onLine = false;
+			
+			scope.$digest();
+			
+			expect(bCtrl.online).toBeFalsy();
+			
+		});
+		
+		it('should reflect changes to the online state', function() {
+			
+			scope.$digest();
+			
+			expect(bCtrl.online).toBeTruthy();
+			
+			$window.navigator.onLine = false;
+			
+			scope.$digest();
+			
+			expect(bCtrl.online).toBeFalsy();
+			
+			$window.navigator.onLine = true;
+			
+			scope.$digest();
+			
+			expect(bCtrl.online).toBeTruthy();
 			
 		});
 		

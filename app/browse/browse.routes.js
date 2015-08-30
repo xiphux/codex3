@@ -9,6 +9,7 @@ browseRoutes.$inject = ['$routeProvider'];
 function browseRoutes($routeProvider) {
 	$routeProvider.when('/', {
 		templateUrl: 'browse/browse.html',
-		controller: 'browseController'
+		controller: 'browseController',
+		controllerAs: 'bCtrl'
 	});
 }

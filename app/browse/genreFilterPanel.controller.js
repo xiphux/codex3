@@ -4,15 +4,30 @@
 angular.module('codex.browse')
 	.controller('genreFilterPanelController', genreFilterPanelController);
 
-genreFilterPanelController.$inject = ['genreDataService'];
+genreFilterPanelController.$inject = ['$scope', '$window', 'genreDataService'];
 
-function genreFilterPanelController(genreDataService) {
+function genreFilterPanelController($scope, $window, genreDataService) {
 	
 	var vm = this;
 	
 	vm.expanded = false;
 	vm.toggleGenreExpand = toggleGenreExpand;
 	vm.genres = undefined;
+	
+	activate();
+	
+	function activate() {
+		$scope.$watch(function() {
+			return $window.navigator.onLine;
+		}, function(newValue, oldValue) {
+			if (newValue === oldValue) {
+				return;
+			}
+			
+			vm.expanded = false;
+			vm.genres = undefined;
+		});
+	}
 	
 	function toggleGenreExpand() {
 		if (!vm.expanded && (vm.genres === undefined)) {

@@ -6,7 +6,8 @@ describe('codex.read module', function() {
 	
 	describe('read controller', function() {
 		
-		var rCtrl, mockPageService, mockReadService, mockLocationService, scope, routeParams, $q, $timeout, $rootScope, chapters, fic, chapter, chapterNum, hasMultipleChapters;
+		var rCtrl, mockPageService, mockReadService, mockLocationService, scope, routeParams, $q, $timeout, $rootScope, $window;
+		var chapters, fic, chapter, chapterNum, hasMultipleChapters;
 		
 		beforeEach(inject(function($controller, _$rootScope_, _$timeout_, _$q_) {
 			
@@ -18,6 +19,12 @@ describe('codex.read module', function() {
 			hasMultipleChapters = undefined;
 			fic = undefined;
 			chapter = undefined;
+			
+			$window = {
+				navigator: {
+					onLine: true
+				}
+			};
 			
 			componentHandler = jasmine.createSpyObj('componentHandler', ['upgradeAllRegistered']);
 			
@@ -67,7 +74,8 @@ describe('codex.read module', function() {
 				readService: mockReadService,
 				pageService: mockPageService,
 				$routeParams: routeParams,
-				$locationEx: mockLocationService
+				$locationEx: mockLocationService,
+				$window: $window
 			});
 			
 		}));
@@ -430,6 +438,36 @@ describe('codex.read module', function() {
 			$rootScope.$apply();
 			
 			expect(mockPageService.setSubtitle).toHaveBeenCalledWith('FicOne :: Chapter 1');
+			
+		});
+		
+		it('should initialize with the online state', function() {
+			
+			$window.navigator.onLine = false;
+			
+			scope.$digest();
+			
+			expect(rCtrl.online).toBeFalsy();
+			
+		});
+		
+		it('should reflect changes to the online state', function() {
+			
+			scope.$digest();
+			
+			expect(rCtrl.online).toBeTruthy();
+			
+			$window.navigator.onLine = false;
+			
+			scope.$digest();
+			
+			expect(rCtrl.online).toBeFalsy();
+			
+			$window.navigator.onLine = true;
+			
+			scope.$digest();
+			
+			expect(rCtrl.online).toBeTruthy();
 			
 		});
 		

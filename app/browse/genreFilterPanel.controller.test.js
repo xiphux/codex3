@@ -6,7 +6,7 @@ describe('codex.browse module', function() {
 	
 	describe('genre filter panel controller', function() {
 		
-		var mockGenreDataService, queryDeferred, gfpCtrl, $rootScope;
+		var mockGenreDataService, queryDeferred, gfpCtrl, $rootScope, scope, $window;
 		
 		beforeEach(inject(function($controller, $q, _$rootScope_) {
 			
@@ -23,8 +23,17 @@ describe('codex.browse module', function() {
 			
 			spyOn(mockGenreDataService, 'getGenres').and.callThrough();
 			
+			$window = {
+				navigator: {
+					onLine: true
+				}
+			};
+			
+			scope = $rootScope.$new();
 			gfpCtrl = $controller('genreFilterPanelController', {
-				genreDataService: mockGenreDataService
+				genreDataService: mockGenreDataService,
+				$scope: scope,
+				$window: $window
 			});
 		}));
 		
@@ -64,6 +73,30 @@ describe('codex.browse module', function() {
 			gfpCtrl.toggleGenreExpand();
 			
 			expect(mockGenreDataService.getGenres.calls.count()).toEqual(1);
+			
+		});
+		
+		it('should reset genres and expand state when online state changes', function() {
+			
+			scope.$digest();
+			
+			gfpCtrl.expanded = true;
+			gfpCtrl.genres = [
+				{ id: '1', name: 'GenreOne' },
+				{ id: '2', name: 'GenreTwo' }
+			];
+			
+			scope.$digest();
+			
+			expect(gfpCtrl.expanded).toBeTruthy();
+			expect(gfpCtrl.genres).not.toBeUndefined();
+			
+			$window.navigator.onLine = false;
+			
+			scope.$digest();
+			
+			expect(gfpCtrl.expanded).toBeFalsy();
+			expect(gfpCtrl.genres).toBeUndefined();
 			
 		});
 		

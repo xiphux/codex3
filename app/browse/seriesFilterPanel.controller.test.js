@@ -6,7 +6,7 @@ describe('codex.browse module', function() {
 	
 	describe('series filter panel controller', function() {
 		
-		var mockSeriesDataService, queryDeferred, sfpCtrl, $rootScope;
+		var mockSeriesDataService, queryDeferred, sfpCtrl, $rootScope, scope, $window;
 		
 		beforeEach(inject(function($controller, $q, _$rootScope_) {
 			
@@ -23,8 +23,18 @@ describe('codex.browse module', function() {
 			
 			spyOn(mockSeriesDataService, 'getSeries').and.callThrough();
 			
+			$window = {
+				navigator: {
+					onLine: true
+				}
+			};
+			
+			scope = $rootScope.$new();
+			
 			sfpCtrl = $controller('seriesFilterPanelController', {
-				seriesDataService: mockSeriesDataService
+				seriesDataService: mockSeriesDataService,
+				$scope: scope,
+				$window: $window
 			});
 		}));
 		
@@ -64,6 +74,30 @@ describe('codex.browse module', function() {
 			sfpCtrl.toggleSeriesExpand();
 			
 			expect(mockSeriesDataService.getSeries.calls.count()).toEqual(1);
+			
+		});
+		
+		it('should reset series and expand state when online state changes', function() {
+			
+			scope.$digest();
+			
+			sfpCtrl.expanded = true;
+			sfpCtrl.series = [
+				{ id: '1', title: 'SeriesOne' },
+				{ id: '2', title: 'SeriesTwo' }
+			];
+			
+			scope.$digest();
+			
+			expect(sfpCtrl.expanded).toBeTruthy();
+			expect(sfpCtrl.series).not.toBeUndefined();
+			
+			$window.navigator.onLine = false;
+			
+			scope.$digest();
+			
+			expect(sfpCtrl.expanded).toBeFalsy();
+			expect(sfpCtrl.series).toBeUndefined();
 			
 		});
 		

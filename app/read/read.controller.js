@@ -5,9 +5,9 @@
 angular.module('codex.read')
 	.controller('readController', readController);
 
-readController.$inject = ['$scope', '$routeParams', '$locationEx', '$timeout', '$q', 'chapterFilter', 'pageService', 'readService'];
+readController.$inject = ['$scope', '$routeParams', '$locationEx', '$timeout', '$q', '$window', 'chapterFilter', 'pageService', 'readService'];
 
-function readController($scope, $routeParams, $locationEx, $timeout, $q, chapterFilter, pageService, readService) {
+function readController($scope, $routeParams, $locationEx, $timeout, $q, $window, chapterFilter, pageService, readService) {
 	
 	var vm = this;
 	
@@ -16,6 +16,7 @@ function readController($scope, $routeParams, $locationEx, $timeout, $q, chapter
 	vm.fic = undefined;
 	vm.multipleChapters = undefined;
 	vm.loading = false;
+	vm.online = true;
 	
 	activate();
 	
@@ -73,6 +74,12 @@ function readController($scope, $routeParams, $locationEx, $timeout, $q, chapter
 			}
 			vm.multipleChapters = newValue;
 			unbindMultipleChapters();
+		});
+		
+		$scope.$watch(function() {
+			return !!$window.navigator.onLine;
+		}, function(newValue) {
+			vm.online = newValue;
 		});
 		
 		$scope.$on('$viewContentLoaded', function() {

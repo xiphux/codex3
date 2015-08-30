@@ -4,17 +4,18 @@
 angular.module('codex.browse')
 	.controller('ficListItemController', ficListItemController);
 
-ficListItemController.$inject = ['$scope', 'ficDataService', 'ficStorageService'];
+ficListItemController.$inject = ['$scope', '$window', 'ficDataService', 'ficStorageService'];
 
-function ficListItemController($scope, ficDataService, ficStorageService) {
+function ficListItemController($scope, $window, ficDataService, ficStorageService) {
 	
 	var vm = this;
 	
 	vm.expanded = false;
 	vm.availableOffline = false;
+	vm.offlineProgress = null;
+	vm.online = true;
 	vm.toggleExpand = toggleExpand;
 	vm.toggleOffline = toggleOffline;
-	vm.offlineProgress = null;
 	
 	activate();
 	
@@ -29,6 +30,12 @@ function ficListItemController($scope, ficDataService, ficStorageService) {
 			return ficStorageService.getFicProgress(vm.fic.id);
 		}, function(newValue) {
 			vm.offlineProgress = newValue;
+		});
+		
+		$scope.$watch(function() {
+			return !!$window.navigator.onLine;
+		}, function(newValue) {
+			vm.online = newValue;
 		});
 	}
 	

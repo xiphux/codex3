@@ -19,7 +19,7 @@
 			<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="#/read/{{::fliCtrl.fic.id}}">Read</a>
 		</div>
 		<div class="mdl-card__menu">
-			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" ng-class="{'mdl-button--colored': fliCtrl.availableOffline}" ng-click="fliCtrl.toggleOffline()">
+			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" ng-class="{'mdl-button--colored': fliCtrl.availableOffline}" ng-show="fliCtrl.online" ng-click="fliCtrl.toggleOffline()">
 				<i class="material-icons">offline_pin</i>
 			</button>
 		</div>

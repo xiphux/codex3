@@ -12,7 +12,18 @@ describe('codex.browse module', function() {
 		beforeEach(angular.mock.module('browse/ficListSplash.html'));
 		beforeEach(angular.mock.module('browse/ficListItem.html'));
 		beforeEach(angular.mock.module('components/directives/spinner.html'));
-		beforeEach(angular.mock.module('components/directives/progressBar.html'));
+				
+		beforeEach(angular.mock.module(function($compileProvider) {
+			$compileProvider.directive('codexProgressBar', function() {
+				var fake = {
+					priority: 100,
+					terminal: true,
+					restrict: 'E',
+					template: '<div class="fake"></div>',
+				};
+				return fake;
+			});
+		}));
 		
 		beforeEach(inject(function($rootScope, $compile) {
 			

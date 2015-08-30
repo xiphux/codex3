@@ -12,6 +12,7 @@ describe('codex.browse module', function() {
 		var hasFic;
 		var scope;
 		var progress;
+		var $window;
 		
 		beforeEach(angular.mock.module(function($provide) {
 			ficData = {
@@ -45,11 +46,17 @@ describe('codex.browse module', function() {
 		}));
 		
 		beforeEach(inject(function($controller, $rootScope) {
+			$window = {
+				navigator: {
+					onLine: true
+				}
+			};
 			scope = $rootScope.$new();
 			fliCtrl = $controller('ficListItemController', {
 				ficDataService: mockFicDataService,
 				ficStorageService: mockFicStorageService,
-				$scope: scope
+				$scope: scope,
+				$window: $window
 			});
 			fliCtrl.fic = {
 				id: "2"
@@ -176,6 +183,36 @@ describe('codex.browse module', function() {
 			
 			expect(mockFicStorageService.addFic).not.toHaveBeenCalled();
 			expect(mockFicStorageService.removeFic).toHaveBeenCalledWith("2");
+			
+		});
+		
+		it('should initialize with the online state', function() {
+			
+			$window.navigator.onLine = false;
+			
+			scope.$digest();
+			
+			expect(fliCtrl.online).toBeFalsy();
+			
+		});
+		
+		it('should reflect changes to the online state', function() {
+			
+			scope.$digest();
+			
+			expect(fliCtrl.online).toBeTruthy();
+			
+			$window.navigator.onLine = false;
+			
+			scope.$digest();
+			
+			expect(fliCtrl.online).toBeFalsy();
+			
+			$window.navigator.onLine = true;
+			
+			scope.$digest();
+			
+			expect(fliCtrl.online).toBeTruthy();
 			
 		});
 		

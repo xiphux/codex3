@@ -6,12 +6,18 @@ describe('codex.browse module', function() {
 	
 	describe('fic list controller', function() {
 		
-		var mockFicBrowseService, flCtrl, scope, $rootScope, $q, fics, hasSearch, queryDeferred;
+		var mockFicBrowseService, flCtrl, scope, $rootScope, $q, $window, fics, hasSearch, queryDeferred;
 		
 		beforeEach(inject(function(_$controller_, _$rootScope_, _$q_) {
 			
 			$rootScope = _$rootScope_;
 			$q = _$q_;
+			
+			$window = {
+				navigator: {
+					onLine: true
+				}
+			};
 			
 			fics = null;
 			hasSearch = false;
@@ -22,14 +28,16 @@ describe('codex.browse module', function() {
 				},
 				hasSearch: function() {
 					return hasSearch;
-				}
+				},
+				clear: jasmine.createSpy('clear')
 			};
 			
 			scope = $rootScope.$new();
 			
 			flCtrl = _$controller_('ficListController', {
 				ficBrowseService: mockFicBrowseService,
-				$scope: scope
+				$scope: scope,
+				$window: $window
 			});
 			
 		}));
@@ -110,6 +118,33 @@ describe('codex.browse module', function() {
 			$rootScope.$digest();
 			
 			expect(flCtrl.searchPending).toBeFalsy();
+			
+		});
+		
+		it('should clear the search if the online state changes', function() {
+			
+			$rootScope.$digest();
+			
+			expect(mockFicBrowseService.clear).not.toHaveBeenCalled();
+			
+			$window.navigator.onLine = true;
+			
+			$rootScope.$digest();
+			
+			expect(mockFicBrowseService.clear).not.toHaveBeenCalled();
+			
+			$window.navigator.onLine = false;
+			
+			$rootScope.$digest();
+			
+			expect(mockFicBrowseService.clear).not.toHaveBeenCalled();
+			
+			hasSearch = true;
+			$window.navigator.onLine = true;
+			
+			$rootScope.$digest();
+			
+			expect(mockFicBrowseService.clear).toHaveBeenCalled();
 			
 		});
 		

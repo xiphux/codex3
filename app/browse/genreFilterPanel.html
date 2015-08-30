@@ -3,6 +3,6 @@
 		<h6><i class="material-icons">{{ gfpCtrl.expanded ? 'expand_less' : 'expand_more' }}</i> Genre</h6>
 	</a>
 	<div ng-show="gfpCtrl.expanded">
-		<codex-genre-filter-panel-item genre="genre" ng-repeat="genre in ::gfpCtrl.genres | orderBy:'name'"></codex-genre-filter-panel-item>
+		<codex-genre-filter-panel-item genre="genre" ng-repeat="genre in gfpCtrl.genres | orderBy:'name'"></codex-genre-filter-panel-item>
 	</div>
 </nav>
