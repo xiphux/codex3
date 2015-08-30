@@ -3,11 +3,9 @@
 angular.module('codex.data')
 	.factory('matchupDataService', matchupDataService);
 
-matchupDataService.$inject = ['$resource'];
+matchupDataService.$inject = ['$window', 'matchupResourceService', 'ficStorageService'];
 
-function matchupDataService($resource) {
-	
-	var matchupsResource = $resource('api/matchups');
+function matchupDataService($window, matchupResourceService, ficStorageService) {
 	
 	var service = {
 		getMatchups: getMatchups
@@ -15,7 +13,11 @@ function matchupDataService($resource) {
 	return service;
 	
 	function getMatchups() {
-		return matchupsResource.query();
+		if ($window.navigator.onLine) {
+			return matchupResourceService.getMatchups();
+		} else {
+			return ficStorageService.getMatchups();
+		}
 	};
 	
 }

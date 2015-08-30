@@ -14,6 +14,10 @@ DataMapper.setup(:default, {
 	:host => settings.host
 })
 
+configure do
+	mime_type :appcache, 'text/cache-manifest'
+end
+
 require './models'
 require './routes'
 

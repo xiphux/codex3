@@ -3,12 +3,9 @@
 angular.module('codex.data')
 	.factory('chapterDataService', chapterDataService);
 
-chapterDataService.$inject = ['$resource'];
+chapterDataService.$inject = ['$window', 'chapterResourceService', 'ficStorageService'];
 
-function chapterDataService($resource) {
-	
-	var chaptersResource = $resource('api/fics/:ficId/chapters');
-	var chapterResource = $resource('api/fics/:ficId/chapters/:num');
+function chapterDataService($window, chapterResourceService, ficStorageService) {
 	
 	var service = {
 		getChapters: getChapters,
@@ -17,17 +14,19 @@ function chapterDataService($resource) {
 	return service;
 	
 	function getChapters(ficId) {
-		if (!ficId) {
-			return null;
+		if ($window.navigator.onLine) {
+			return chapterResourceService.getChapters(ficId);
+		} else {
+			return ficStorageService.getChapters(ficId);
 		}
-		return chaptersResource.query({ ficId: ficId });
 	};
 	
 	function getChapter(ficId, num) {
-		if (!(ficId && num)) {
-			return null;
+		if ($window.navigator.onLine) {
+			return chapterResourceService.getChapter(ficId, num);
+		} else {
+			return ficStorageService.getChapter(ficId, num);
 		}
-		return chapterResource.get({ ficId: ficId, num: num });
 	};
 	
 }

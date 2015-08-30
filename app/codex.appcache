@@ -1,0 +1,13 @@
+CACHE MANIFEST
+
+CACHE:
+index.html
+<!-- build:css -->
+<!-- endbuild -->
+<!-- build:jshead -->
+<!-- endbuild -->
+<!-- build:jsbody -->
+<!-- endbuild -->
+
+NETWORK:
+*

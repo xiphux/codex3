@@ -1,49 +1,80 @@
-/// <reference path="../../../typings/jasmine/jasmine.d.ts"/>
 'use strict';
 
 describe('codex.data module', function() {
 	
-	beforeEach(angular.mock.module('codex.data'));
+	beforeEach(angular.mock.module('codex.read'));
 	
 	describe('series data service', function() {
 		
-		var mockSeriesDataService, $httpBackend;
-	
-	    beforeEach(function () {
-	        angular.mock.inject(function ($injector) {
-	            $httpBackend = $injector.get('$httpBackend');
-	            mockSeriesDataService = $injector.get('seriesDataService');
-	        });
-	    });
+		var $window, mockSeriesResourceService, mockFicStorageService, seriesDataService;
+		var srSeries, fsSeries;
 		
-		describe('getSeries', function() {
+		beforeEach(function() {
 			
-			it('should request the api for all series', function() {
-				
-				var responseData = [
-					{
-						id: 1,
-						title: 'SeriesOne'
-					},
-					{
-						id: 2,
-						title: 'SeriesTwo'
-					}
-				];
-				
-				$httpBackend.expectGET('api/series').respond(responseData);
-				
-				var result = mockSeriesDataService.getSeries();
-				
-				$httpBackend.flush();
-				
-				expect(result.length).toEqual(responseData.length);
-				expect(result[0].id).toEqual(responseData[0].id);
-				expect(result[0].title).toEqual(responseData[0].title);
-				expect(result[1].id).toEqual(responseData[1].id);
-				expect(result[1].title).toEqual(responseData[1].title);
-				
+			$window = {
+				navigator: {
+					onLine: true
+				}
+			};
+			
+			srSeries = null;
+			fsSeries = null;
+			
+			mockSeriesResourceService = {
+				getSeries: function() {
+					return srSeries;
+				}
+			};
+			mockFicStorageService = {
+				getSeries: function() {
+					return fsSeries;
+				}
+			};
+			
+			angular.mock.module(function($provide) {
+				$provide.value('$window', $window);
+				$provide.value('seriesResourceService', mockSeriesResourceService);
+				$provide.value('ficStorageService', mockFicStorageService);
 			});
+			
+		});
+		
+		beforeEach(inject(function($injector) {
+			
+			spyOn(mockSeriesResourceService, 'getSeries').and.callThrough();
+			
+			spyOn(mockFicStorageService, 'getSeries').and.callThrough();
+			
+			seriesDataService = $injector.get('seriesDataService');
+		}));
+		
+		it('should get series from resource service when online', function() {
+			
+			$window.navigator.onLine = true;
+			
+			srSeries = [
+				{ id: 1, title: 'SeriesOne' },
+				{ id: 2, title: 'SeriesTwo' }
+			];
+			
+			expect(seriesDataService.getSeries()).toEqual(srSeries);
+			expect(mockSeriesResourceService.getSeries).toHaveBeenCalled();
+			expect(mockFicStorageService.getSeries).not.toHaveBeenCalled();
+			
+		});
+		
+		it('should get series from storage service when offline', function() {
+			
+			$window.navigator.onLine = false;
+			
+			fsSeries = [
+				{ id: 1, title: 'SeriesOne' },
+				{ id: 2, title: 'SeriesTwo' }
+			];
+			
+			expect(seriesDataService.getSeries()).toEqual(fsSeries);
+			expect(mockFicStorageService.getSeries).toHaveBeenCalled();
+			expect(mockSeriesResourceService.getSeries).not.toHaveBeenCalled();
 			
 		});
 		

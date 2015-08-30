@@ -29,7 +29,7 @@ var cssDev = [
 var cssPrd = [
 	'//fonts.googleapis.com/css?family=Roboto:300,400,500,700',
 	'//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css',
-	'//storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css',
+	'//storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css',
 	'//fonts.googleapis.com/icon?family=Material+Icons',
 	'codex.min.css'
 ];
@@ -44,6 +44,7 @@ var jsBodyDev = [
 	'bower_components/angular-route/angular-route.js',
 	'bower_components/angular-resource/angular-resource.js',
 	'bower_components/angular-animate/angular-animate.js',
+	'bower_components/ngstorage/ngStorage.js',
 	'bower_components/lodash/lodash.js',
 	'bower_components/material-design-lite/material.js',
 	'codex.js'
@@ -53,8 +54,9 @@ var jsBodyPrd = [
 	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-route.min.js',
 	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-resource.min.js',
 	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-animate.min.js',
+	'//cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.9/ngStorage.min.js',
 	'//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.min.js',
-	'//storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js',
+	'//storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js',
 	'codex.min.js'
 ];
 
@@ -146,7 +148,27 @@ gulp.task('build-js', ['build-browse-templates','build-read-templates','build-di
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('build', ['clean', 'build-css', 'build-js'], function() {
+gulp.task('build-cache', ['build-css', 'build-js'], function() {
+	return gulp.src('app/codex.appcache')
+		.pipe(htmlReplace({
+			css: {
+				src: cssPrd,
+				tpl: '%s'
+			},
+			jshead: {
+				src: jsHeadPrd,
+				tpl: '%s\n'
+			},
+			jsbody: {
+				src: jsBodyPrd,
+				tpl: '%s\n'
+			}
+		}))
+		.pipe(cacheBust.references())
+		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('build', ['clean', 'build-css', 'build-js', 'build-cache'], function() {
 	del([
 		'dist/browsetemplates.js',
 		'dist/readtemplates.js',
@@ -193,6 +215,14 @@ gulp.task('build-static-dev', function() {
 		.pipe(shell([
 			'cp -R app/fonts dev/'
 		]));
+		
+	gulp.src('app/codex.appcache')
+		.pipe(htmlReplace({
+				css: [],
+				jshead: [],
+				jsbody: []
+			}))
+		.pipe(gulp.dest('dev'));
 	
 	return gulp.src(['app/**/*.css', 'app/**/*.html','!app/fonts/*.css'])
 		.pipe(htmlReplace({

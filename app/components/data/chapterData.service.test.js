@@ -1,114 +1,114 @@
-/// <reference path="../../../typings/jasmine/jasmine.d.ts"/>
 'use strict';
 
 describe('codex.data module', function() {
 	
-	beforeEach(angular.mock.module('codex.data'));
+	beforeEach(angular.mock.module('codex.read'));
 	
 	describe('chapter data service', function() {
 		
-		var mockChapterDataService, $httpBackend;
-	
-	    beforeEach(function () {
-	        angular.mock.inject(function ($injector) {
-	            $httpBackend = $injector.get('$httpBackend');
-	            mockChapterDataService = $injector.get('chapterDataService');
-	        });
-	    });
+		var $window, mockChapterResourceService, mockFicStorageService, chapterDataService;
+		var crChapters, crChapter, fsChapters, fsChapter;
 		
-		describe('getChapters', function() {
+		beforeEach(function() {
 			
-			it('should return null if fic id is null', function() {
-				expect(mockChapterDataService.getChapters(null)).toBeNull();
-			});
+			$window = {
+				navigator: {
+					onLine: true
+				}
+			};
 			
-			it('should request the chapters api for a given fic', function() {
-				
-				var responseData = [
-					{
-						id: 1,
-						number: 1,
-						title: 'Part One',
-						fic_id: 12
-					},
-					{
-						id: 2,
-						number: 2,
-						title: 'Part Two',
-						fic_id: 12
-					},
-					{
-						id: 3,
-						number: 3,
-						title: 'Part Three',
-						fic_id: 12
-					}
-				];
-				
-				$httpBackend.expectGET('api/fics/12/chapters').respond(responseData);
-				
-				var result = mockChapterDataService.getChapters(12);
-				
-				$httpBackend.flush();
-				
-				expect(result.length).toEqual(responseData.length);
-				
-				expect(result[0].id).toEqual(responseData[0].id);
-				expect(result[0].number).toEqual(responseData[0].number);
-				expect(result[0].title).toEqual(responseData[0].title);
-				expect(result[0].fic_id).toEqual(responseData[0].fic_id);
-				expect(result[1].id).toEqual(responseData[1].id);
-				expect(result[1].number).toEqual(responseData[1].number);
-				expect(result[1].title).toEqual(responseData[1].title);
-				expect(result[1].fic_id).toEqual(responseData[1].fic_id);
-				expect(result[2].id).toEqual(responseData[2].id);
-				expect(result[2].number).toEqual(responseData[2].number);
-				expect(result[2].title).toEqual(responseData[2].title);
-				expect(result[2].fic_id).toEqual(responseData[2].fic_id);
-				
+			crChapters = null;
+			crChapter = null;
+			fsChapters = null;
+			fsChapter = null;
+			
+			mockChapterResourceService = {
+				getChapters: function(ficId) {
+					return crChapters;
+				},
+				getChapter: function(ficId, num) {
+					return crChapter;
+				}
+			};
+			mockFicStorageService = {
+				getChapters: function(ficId) {
+					return fsChapters;
+				},
+				getChapter: function(ficId, num) {
+					return fsChapter;
+				}
+			};
+			
+			angular.mock.module(function($provide) {
+				$provide.value('$window', $window);
+				$provide.value('chapterResourceService', mockChapterResourceService);
+				$provide.value('ficStorageService', mockFicStorageService);
 			});
 			
 		});
 		
-		describe('getChapter', function() {
+		beforeEach(inject(function($injector) {
 			
-			it('should return null if fic id is null', function() {
-				expect(mockChapterDataService.getChapter(null, 1)).toBeNull();
-			});
+			spyOn(mockChapterResourceService, 'getChapters').and.callThrough();
+			spyOn(mockChapterResourceService, 'getChapter').and.callThrough();
 			
-			it('should return null if chapter number is null', function() {
-				expect(mockChapterDataService.getChapter(1, null)).toBeNull();
-			});
+			spyOn(mockFicStorageService, 'getChapters').and.callThrough();
+			spyOn(mockFicStorageService, 'getChapter').and.callThrough();
 			
-			it('should request the api for the given fic and chapter', function() {
-				
-				var responseData = {
-					id: 1,
-					number: 3,
-					title: 'Chapter Three',
-					data: 'Chapter Three Text',
-					wrapped: true,
-					no_paragraph_spacing: false,
-					double_line_breaks: true,
-					fic_id: 2
-				};
-				
-				$httpBackend.expectGET('api/fics/12/chapters/3').respond(responseData);
-				
-				var result = mockChapterDataService.getChapter(12, 3);
-				
-				$httpBackend.flush();
-				
-				expect(result.id).toEqual(responseData.id);
-				expect(result.number).toEqual(responseData.number);
-				expect(result.title).toEqual(responseData.title);
-				expect(result.data).toEqual(responseData.data);
-				expect(result.wrapped).toEqual(responseData.wrapped);
-				expect(result.no_paragraph_spacing).toEqual(responseData.no_paragraph_spacing);
-				expect(result.double_line_breaks).toEqual(responseData.double_line_breaks);
-				expect(result.fic_id).toEqual(responseData.fic_id);
-				
-			});
+			chapterDataService = $injector.get('chapterDataService');
+		}));
+		
+		it('should get chapters from resource service when online', function() {
+			
+			$window.navigator.onLine = true;
+			
+			crChapters = [
+				{ id: "1", number: 1 },
+				{ id: "2", number: 2 }
+			];
+			
+			expect(chapterDataService.getChapters("2")).toEqual(crChapters);
+			expect(mockChapterResourceService.getChapters).toHaveBeenCalledWith("2");
+			expect(mockFicStorageService.getChapters).not.toHaveBeenCalled();
+			
+		});
+		
+		it('should get chapters from storage service when offline', function() {
+			
+			$window.navigator.onLine = false;
+			
+			fsChapters = [
+				{ id: "1", number: 1 },
+				{ id: "2", number: 2 }
+			];
+			
+			expect(chapterDataService.getChapters("2")).toEqual(fsChapters);
+			expect(mockFicStorageService.getChapters).toHaveBeenCalledWith("2");
+			expect(mockChapterResourceService.getChapters).not.toHaveBeenCalled();
+			
+		});
+		
+		it('should get a chapter from resource service when online', function() {
+			
+			$window.navigator.onLine = true;
+			
+			crChapter = { id: "2", number: 2 };
+			
+			expect(chapterDataService.getChapter("2", 2)).toEqual(crChapter);
+			expect(mockChapterResourceService.getChapter).toHaveBeenCalledWith("2", 2);
+			expect(mockFicStorageService.getChapter).not.toHaveBeenCalled();
+			
+		});
+		
+		it('should get a chapter from storage service when offline', function() {
+			
+			$window.navigator.onLine = false;
+			
+			fsChapter = { id: "3", number: 3 };
+			
+			expect(chapterDataService.getChapter("2", 2)).toEqual(fsChapter);
+			expect(mockFicStorageService.getChapter).toHaveBeenCalledWith("2", 2);
+			expect(mockChapterResourceService.getChapter).not.toHaveBeenCalled();
 			
 		});
 		

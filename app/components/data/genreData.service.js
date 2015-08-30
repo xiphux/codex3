@@ -3,11 +3,9 @@
 angular.module('codex.data')
 	.factory('genreDataService', genreDataService);
 
-genreDataService.$inject = ['$resource'];
+genreDataService.$inject = ['$window', 'genreResourceService', 'ficStorageService'];
 
-function genreDataService($resource) {
-	
-	var genresResource = $resource('api/genres');
+function genreDataService($window, genreResourceService, ficStorageService) {
 	
 	var service = {
 		getGenres: getGenres
@@ -15,7 +13,11 @@ function genreDataService($resource) {
 	return service;
 	
 	function getGenres() {
-		return genresResource.query();
+		if ($window.navigator.onLine) {
+			return genreResourceService.getGenres();
+		} else {
+			return ficStorageService.getGenres();
+		}
 	};
 	
 }

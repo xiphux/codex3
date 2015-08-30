@@ -3,11 +3,9 @@
 angular.module('codex.data')
 	.factory('seriesDataService', seriesDataService);
 
-seriesDataService.$inject = ['$resource'];
+seriesDataService.$inject = ['$window', 'seriesResourceService', 'ficStorageService'];
 
-function seriesDataService($resource) {
-	
-	var seriesResource = $resource('api/series');
+function seriesDataService($window, seriesResourceService, ficStorageService) {
 	
 	var service = {
 		getSeries: getSeries
@@ -15,7 +13,11 @@ function seriesDataService($resource) {
 	return service;
 	
 	function getSeries() {
-		return seriesResource.query();
+		if ($window.navigator.onLine) {
+			return seriesResourceService.getSeries();
+		} else {
+			return ficStorageService.getSeries();
+		}
 	};
 	
 }

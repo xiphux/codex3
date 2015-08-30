@@ -3,12 +3,9 @@
 angular.module('codex.data')
 	.factory('ficDataService', ficDataService);
 
-ficDataService.$inject = ['$resource'];
+ficDataService.$inject = ['$window', 'ficResourceService', 'ficStorageService'];
 
-function ficDataService($resource) {
-	
-	var ficsResource = $resource('api/fics');
-	var ficResource = $resource('api/fics/:ficId');
+function ficDataService($window, ficResourceService, ficStorageService) {
 	
 	var service = {
 		getFics: getFics,
@@ -17,30 +14,19 @@ function ficDataService($resource) {
 	return service;
 	
 	function getFics(filters) {
-		
-		var params = filters ? _.pick(filters, ['series', 'genres', 'matchups', 'search']) : {};
-		
-		params = _.transform(params, function(result, n, key) {
-			if (key == 'genres') {
-				key = 'genre';
-			} else if (key == 'matchups') {
-				key = 'matchup';
-			}
-			if (n.length > 1) {
-				result[key + '[]'] = n;
-			} else {
-				result[key] = n[0];
-			}
-		});
-		
-		return ficsResource.query(params);
+		if ($window.navigator.onLine) {
+			return ficResourceService.getFics(filters);
+		} else {
+			return ficStorageService.getFics(filters);
+		}
 	};
 	
 	function getFic(ficId) {
-		if (!ficId) {
-			return null;
+		if ($window.navigator.onLine) {
+			return ficResourceService.getFic(ficId);
+		} else {
+			return ficStorageService.getFic(ficId);
 		}
-		return ficResource.get({ ficId: ficId });
 	};
 
 }

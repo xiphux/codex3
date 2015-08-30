@@ -1,6 +1,6 @@
 <div class="mdl-cell mdl-cell--4-col codex-ficcard">
-	<div class="mdl-card mdl-shadow--2dp codex-ficcard__card" ng-click="fliCtrl.toggle()">
-		<div class="mdl-card__title">
+	<div class="mdl-card mdl-shadow--2dp codex-ficcard__card">
+		<div class="mdl-card__title" ng-click="fliCtrl.toggleExpand()">
 			<h3 class="mdl-card__title-text">{{::fliCtrl.fic.title}}</h3> <h5 class="mdl-card__subtitle-text">by {{::fliCtrl.fic.authors | authorList}}</h5>
 		</div>
 		<div class="mdl-card__supporting-text mdl-card--border codex-ficcard__details" ng-show="fliCtrl.expanded">
@@ -16,6 +16,11 @@
 		</div>
 		<div class="mdl-card__actions mdl-card--border">
 			<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="#/read/{{::fliCtrl.fic.id}}">Read</a>
+		</div>
+		<div class="mdl-card__menu">
+			<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" ng-class="{'mdl-button--colored': fliCtrl.availableOffline}" ng-click="fliCtrl.toggleOffline()">
+				<i class="material-icons">offline_pin</i>
+			</button>
 		</div>
 	</div>
 </div>

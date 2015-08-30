@@ -1,83 +1,104 @@
-/// <reference path="../../../typings/jasmine/jasmine.d.ts"/>
 'use strict';
 
 describe('codex.data module', function() {
 	
-	beforeEach(angular.mock.module('codex.data'));
+	beforeEach(angular.mock.module('codex.read'));
 	
 	describe('matchup data service', function() {
 		
-		var mockMatchupDataService, $httpBackend;
-	
-	    beforeEach(function () {
-	        angular.mock.inject(function ($injector) {
-	            $httpBackend = $injector.get('$httpBackend');
-	            mockMatchupDataService = $injector.get('matchupDataService');
-	        });
-	    });
+		var $window, mockMatchupResourceService, mockFicStorageService, matchupDataService;
+		var mrMatchups, fsMatchups;
 		
-		describe('getMatchups', function() {
+		beforeEach(function() {
 			
-			it('should request the api for all matchups', function() {
-				
-				var responseData = [
-						{
-							id: 1,
-							characters: [
-								{
-									id: 1,
-									name: 'CharacterOne',
-									series: {
-										id: 1,
-										title: 'SeriesOne'
-									}
-								},
-								{
-									id: 2,
-									name: 'CharacterTwo',
-									series: {
-										id: 1,
-										title: 'SeriesOne'
-									}
-								}
-							]
-						},
-						{
-							id: 2,
-							characters: [
-								{
-									id: 3,
-									name: 'CharacterThree',
-									series: {
-										id: 1,
-										title: 'SeriesOne'
-									}
-								},
-								{
-									id: 4,
-									name: 'CharacterFour',
-									series: {
-										id: 2,
-										title: 'SeriesTwo'
-									}
-								}
-							]
-						}
-				];
-				
-				$httpBackend.expectGET('api/matchups').respond(responseData);
-				
-				var result = mockMatchupDataService.getMatchups();
-				
-				$httpBackend.flush();
-				
-				expect(result.length).toEqual(responseData.length);
-				expect(result[0].id).toEqual(responseData[0].id);
-				expect(result[0].characters).toEqual(responseData[0].characters);
-				expect(result[1].id).toEqual(responseData[1].id);
-				expect(result[1].characters).toEqual(responseData[1].characters);
-				
+			$window = {
+				navigator: {
+					onLine: true
+				}
+			};
+			
+			mrMatchups = null;
+			fsMatchups = null;
+			
+			mockMatchupResourceService = {
+				getMatchups: function() {
+					return mrMatchups;
+				}
+			};
+			mockFicStorageService = {
+				getMatchups: function() {
+					return fsMatchups;
+				}
+			};
+			
+			angular.mock.module(function($provide) {
+				$provide.value('$window', $window);
+				$provide.value('matchupResourceService', mockMatchupResourceService);
+				$provide.value('ficStorageService', mockFicStorageService);
 			});
+			
+		});
+		
+		beforeEach(inject(function($injector) {
+			
+			spyOn(mockMatchupResourceService, 'getMatchups').and.callThrough();
+			
+			spyOn(mockFicStorageService, 'getMatchups').and.callThrough();
+			
+			matchupDataService = $injector.get('matchupDataService');
+		}));
+		
+		it('should get matchups from resource service when online', function() {
+			
+			$window.navigator.onLine = true;
+			
+			mrMatchups = [
+				{
+					id: 1,
+					characters: [
+						{ id: 1, name: 'CharacterOne' },
+						{ id: 2, name: 'CharacterTwo' }
+					]
+				},
+				{ 
+					id: 2,
+					characters: [
+						{ id: 3, name: 'CharacterThree' },
+						{ id: 4, name: 'CharacterFour' }
+					]
+				}
+			];
+			
+			expect(matchupDataService.getMatchups()).toEqual(mrMatchups);
+			expect(mockMatchupResourceService.getMatchups).toHaveBeenCalled();
+			expect(mockFicStorageService.getMatchups).not.toHaveBeenCalled();
+			
+		});
+		
+		it('should get matchups from storage service when offline', function() {
+			
+			$window.navigator.onLine = false;
+			
+			fsMatchups = [
+				{
+					id: 1,
+					characters: [
+						{ id: 1, name: 'CharacterOne' },
+						{ id: 2, name: 'CharacterTwo' }
+					]
+				},
+				{ 
+					id: 2,
+					characters: [
+						{ id: 3, name: 'CharacterThree' },
+						{ id: 4, name: 'CharacterFour' }
+					]
+				}
+			];
+			
+			expect(matchupDataService.getMatchups()).toEqual(fsMatchups);
+			expect(mockFicStorageService.getMatchups).toHaveBeenCalled();
+			expect(mockMatchupResourceService.getMatchups).not.toHaveBeenCalled();
 			
 		});
 		

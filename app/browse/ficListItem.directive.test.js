@@ -36,12 +36,14 @@ describe('codex.browse module', function() {
 			
 		}));
 		
-		it('should upgrade the js button after a timeout', function() {
+		it('should upgrade each js button after a timeout', function() {
 			expect(componentHandler.upgradeElement).not.toHaveBeenCalled();
 			$timeout.flush();
-			var el = element[0].querySelector('.mdl-js-button');
-			expect(componentHandler.upgradeElement).toHaveBeenCalledWith(el, 'MaterialButton');
-			expect(componentHandler.upgradeElement).toHaveBeenCalledWith(el, 'MaterialRipple');
+			var buttons = element[0].querySelectorAll('.mdl-js-button');
+			for (var i = 0; i < buttons.length; i++) {
+				expect(componentHandler.upgradeElement).toHaveBeenCalledWith(buttons[i], 'MaterialButton');
+				expect(componentHandler.upgradeElement).toHaveBeenCalledWith(buttons[i], 'MaterialRipple');
+			}
 		});
 		
 		it('should display the title and author', function() {
@@ -52,6 +54,11 @@ describe('codex.browse module', function() {
 		it('should provide a read link', function() {
 			var a = element.find('a');
 			expect(a.attr('href')).toContain('read/2');
+		});
+		
+		it('should provide an offline button', function() {
+			var button = element.find('button');
+			expect(button.text()).toContain('offline_pin');
 		});
 		
 	});

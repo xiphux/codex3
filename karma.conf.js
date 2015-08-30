@@ -8,6 +8,7 @@ module.exports = function(config){
       'dev/bower_components/angular-route/angular-route.js',
       'dev/bower_components/angular-mocks/angular-mocks.js',
       'dev/bower_components/angular-resource/angular-resource.js',
+      'dev/bower_components/ngstorage/ngStorage.js',
       'dev/bower_components/lodash/lodash.js',
       'dev/bower_components/material-design-lite/material.js',
       'app/components/**/*.module.js',
