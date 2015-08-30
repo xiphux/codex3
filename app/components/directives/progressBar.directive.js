@@ -17,24 +17,24 @@ function progressBarDirective($timeout) {
 		link: function(scope, el, attr, ctrl) {
 			$timeout(function() {
 				componentHandler.upgradeElement(el[0], 'MaterialProgress');
-				scope.$watch(scope.progress, function(newValue) {
+				scope.$watch(scope.progress, function(newValue, oldValue) {
 					
 					if (newValue === null) {
-						if (el.hasClass('mdl-progress__indeterminate')) {
-							el.removeClass('mdl-progress__indeterminate');
-						}
-						return;
+						// treat null as 0 percent (no progress to show)
+						newValue = 0;
 					}
 					
-					if (newValue >= 0) {
-						if (el.hasClass('mdl-progress__indeterminate')) {
+					if (newValue < 0) {
+						// indeterminate
+						if ((oldValue === null) || (oldValue >= 0)) {	
+							el.addClass('mdl-progress__indeterminate');
+						}
+					} else {
+						// determinate
+						if ((oldValue !== null) && (oldValue < 0)) {
 							el.removeClass('mdl-progress__indeterminate');
 						}
 						el[0].MaterialProgress.setProgress(newValue > 100 ? 100 : newValue);
-					} else {
-						if (!el.hasClass('mdl-progress__indeterminate')) {
-							el.addClass('mdl-progress__indeterminate');
-						}
 					}
 					
 				});
