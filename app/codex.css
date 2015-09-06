@@ -30,9 +30,25 @@
 	margin: 0 auto;
 }
 
-.codex-chapter {
-	padding: 80px 56px;
-	margin-bottom: 80px;
+@media (max-width: 479px) {	
+	.codex-chapter {
+		padding: 40px 28px;
+		margin-bottom: 40px;
+	}
+}
+
+@media (min-width: 480px) and (max-width: 839px) {
+	.codex-chapter {
+		padding: 40px 28px;
+		margin-bottom: 40px;
+	}
+}
+
+@media (min-width: 840px) {
+	.codex-chapter {
+		padding: 80px 56px;
+		margin-bottom: 80px;
+	}
 }
 
 .codex-chapter__text {
