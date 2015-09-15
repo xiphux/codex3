@@ -7,7 +7,7 @@ ficStorageService.$inject = ['$localStorage', '$q', 'ficResourceService', 'chapt
 
 function ficStorageService($localStorage, $q, ficResourceService, chapterResourceService) {
 	
-	activate();
+	var downloadProgress = {};
 	
 	var service = {
 		getFics: getFics,
@@ -24,24 +24,11 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 	};
 	return service;
 	
-	function activate() {
-		if (!$localStorage.progress) {
-			return;
-		}
-		
-		_.forEach($localStorage.progress, function(percent, ficId) {
-			if (percent < 100) {
-				delete $localStorage.progress[ficId];
-				delete $localStorage.fics[ficId];
-			}
-		});
-	}
-	
 	function getFics(filters) {
 		
 		filters = filters || {};
 		
-		var chain = _($localStorage.fics);
+		var chain = _(storageGetFicCollection());
 		
 		// filter genres
 		if (filters.genres && (filters.genres.length > 0)) {
@@ -113,7 +100,7 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 			return null;
 		}
 		
-		return promiseWrapper(_.omit($localStorage.fics[ficId], 'chapters'));
+		return promiseWrapper(_.omit(storageGetFicData(ficId), 'chapters'));
 	}
 	
 	function hasFic(ficId) {
@@ -121,11 +108,7 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 			return false;
 		}
 		
-		if (!$localStorage.fics) {
-			return false;
-		}
-		
-		return ficId in $localStorage.fics;
+		return storageHasFic(ficId);
 	}
 	
 	function addFic(ficId) {
@@ -137,7 +120,7 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 			return true;
 		}
 		
-		if ($localStorage.progress && (ficId in $localStorage.progress)) {
+		if (ficId in downloadProgress) {
 			return true;
 		}
 		
@@ -149,8 +132,8 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 			return false;
 		}
 		
-		delete $localStorage.fics[ficId];
-		delete $localStorage.progress[ficId];
+		storageDeleteFic(ficId);
+		delete downloadProgress[ficId];
 	}
 	
 	function getFicProgress(ficId) {
@@ -158,15 +141,11 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 			return null;
 		}
 		
-		if (!$localStorage.progress) {
-			return null;
+		if (hasFic(ficId)) {
+			return 100;
 		}
 		
-		if (!(ficId in $localStorage.progress)) {
-			return null;
-		}
-		
-		return $localStorage.progress[ficId];
+		return downloadProgress[ficId] || null;
 	}
 	
 	function getChapters(ficId) {
@@ -174,7 +153,7 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 			return null;
 		}
 		
-		var chapters = _.map($localStorage.fics[ficId].chapters, function(chapter) {
+		var chapters = _.map(storageGetFicData(ficId).chapters, function(chapter) {
 			return {
 				id: chapter.id,
 				number: chapter.number,
@@ -195,19 +174,19 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 			return null;
 		}
 		
-		return promiseWrapper(_.find($localStorage.fics[ficId].chapters, 'number', num));
+		return promiseWrapper(_.find(storageGetFicData(ficId).chapters, 'number', num));
 	}
 	
 	function getGenres() {
-		return promiseWrapper(_($localStorage.fics).pluck('genres').flatten().uniq('id').value());
+		return promiseWrapper(_(storageGetFicCollection()).pluck('genres').flatten().uniq('id').value());
 	}
 	
 	function getMatchups() {
-		return promiseWrapper(_($localStorage.fics).pluck('matchups').flatten().uniq('id').value());
+		return promiseWrapper(_(storageGetFicCollection()).pluck('matchups').flatten().uniq('id').value());
 	}
 	
 	function getSeries() {
-		return promiseWrapper(_($localStorage.fics).pluck('series').flatten().uniq('id').value());
+		return promiseWrapper(_(storageGetFicCollection()).pluck('series').flatten().uniq('id').value());
 	}
 	
 	function downloadFic(ficId) {
@@ -216,53 +195,50 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 			return false;
 		}
 		
-		if (!$localStorage.progress) {
-			$localStorage.progress = {};
-		}
-		
-		$localStorage.progress[ficId] = -1;
+		downloadProgress[ficId] = -1;
 		
 		fic.$promise.then(function(ficData) {
 			
-			if (!$localStorage.fics) {
-				$localStorage.fics = {};
-			}
-			
-			$localStorage.fics[ficId] = _.pick(ficData, ['id', 'title', 'authors', 'matchups', 'series', 'genres']);
+			var ficStorageData = _.pick(ficData, ['id', 'title', 'authors', 'matchups', 'series', 'genres']);
 			
 			chapterResourceService.getChapters(ficId).$promise.then(function(chaptersData) {
 				
 				delete chaptersData['$promise'];
 				delete chaptersData['$resolved'];
 				
-				$localStorage.fics[ficId].chapters = _.map(chaptersData, function(chapter) {
+				ficStorageData.chapters = _.map(chaptersData, function(chapter) {
 					return _.pick(chapter, ['id', 'number', 'title', 'fic_id']);
 				});
 				
 				var chapterPromises = [];
 				
-				var chapterCount = $localStorage.fics[ficId].chapters.length;
+				var chapterCount = ficStorageData.chapters.length;
 				var chapterPercent = Math.ceil(100.0 / chapterCount);
-				$localStorage.progress[ficId] = 0; 
+				downloadProgress[ficId] = 0; 
 				
-				_.forEach($localStorage.fics[ficId].chapters, function(chapter) {
+				_.forEach(ficStorageData.chapters, function(chapter) {
 					
 					var chapterPromise = chapterResourceService.getChapter(ficId, chapter.number);
 					chapterPromise.$promise.then(function(chapterData) {
 						_.assign(chapter, _.pick(chapterData, ['id', 'number', 'title', 'data', 'wrapped', 'no_paragraph_spacing', 'double_line_breaks', 'fic_id']));
-						$localStorage.progress[ficId] += chapterPercent;
-						if ($localStorage.progress[ficId] > 100) {
-							$localStorage.progress[ficId] = 100;
+						downloadProgress[ficId] += chapterPercent;
+						if (downloadProgress[ficId] > 100) {
+							downloadProgress[ficId] = 100;
 						}
 					});
 					chapterPromises.push(chapterPromise.$promise);
 					
 				});
 				
+				$q.all(chapterPromises).then(function(values) {
+					storageSetFicData(ficId, ficStorageData);
+					delete downloadProgress[ficId];
+				});
+				
 			});
 			
 		}, function(reason) {
-			delete $localStorage.progress[ficId];
+			delete downloadProgress[ficId];
 		});
 		
 		return true;
@@ -304,6 +280,30 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 		}
 		
 		return false;
+	}
+	
+	function storageGetFicCollection() {
+		return $localStorage.fics;
+	}
+	
+	function storageGetFicData(ficId) {
+		return $localStorage.fics[ficId];
+	}
+	
+	function storageSetFicData(ficId, ficData) {
+		$localStorage.fics[ficId] = ficData;
+	}
+	
+	function storageHasFic(ficId) {
+		if (!$localStorage.fics) {
+			return false;
+		}
+		
+		return ficId in $localStorage.fics;
+	}
+	
+	function storageDeleteFic(ficId) {
+		delete $localStorage.fics[ficId];
 	}
 	
 }
