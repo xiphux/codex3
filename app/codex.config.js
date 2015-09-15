@@ -3,8 +3,8 @@
 angular.module('codex')
 	.config(codexConfig);
 	
-codexConfig.$inject = ['$localStorageProvider'];
+codexConfig.$inject = ['localStorageServiceProvider'];
 	
-function codexConfig($localStorageProvider) {
-	$localStorageProvider.setKeyPrefix('codex-');
+function codexConfig(localStorageServiceProvider) {
+	localStorageServiceProvider.setPrefix('codex');
 }

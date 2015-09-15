@@ -44,7 +44,7 @@ var jsBodyDev = [
 	'bower_components/angular-route/angular-route.js',
 	'bower_components/angular-resource/angular-resource.js',
 	'bower_components/angular-animate/angular-animate.js',
-	'bower_components/ngstorage/ngStorage.js',
+	'bower_components/angular-local-storage/dist/angular-local-storage.js',
 	'bower_components/lodash/lodash.js',
 	'bower_components/material-design-lite/material.js',
 	'codex.js'
@@ -54,7 +54,7 @@ var jsBodyPrd = [
 	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-route.min.js',
 	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-resource.min.js',
 	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-animate.min.js',
-	'//cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.9/ngStorage.min.js',
+	'//cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.2.2/angular-local-storage.min.js',
 	'//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.min.js',
 	'//storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js',
 	'codex.min.js'

@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('codex.data', ['ngResource', 'ngStorage']);
+angular.module('codex.data', ['ngResource', 'LocalStorageModule']);

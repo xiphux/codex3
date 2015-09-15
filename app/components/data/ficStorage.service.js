@@ -3,9 +3,9 @@
 angular.module('codex.data')
 	.factory('ficStorageService', ficStorageService);
 	
-ficStorageService.$inject = ['$localStorage', '$q', 'ficResourceService', 'chapterResourceService'];
+ficStorageService.$inject = ['localStorageService', '$q', 'ficResourceService', 'chapterResourceService'];
 
-function ficStorageService($localStorage, $q, ficResourceService, chapterResourceService) {
+function ficStorageService(localStorageService, $q, ficResourceService, chapterResourceService) {
 	
 	var downloadProgress = {};
 	
@@ -283,27 +283,33 @@ function ficStorageService($localStorage, $q, ficResourceService, chapterResourc
 	}
 	
 	function storageGetFicCollection() {
-		return $localStorage.fics;
+		var fics = [];
+		
+		var keys = localStorageService.keys();
+		for (var i = 0; i < keys.length; i++) {
+			var key = keys[i];
+			if (key.substr(0, 4) == 'fic.') {
+				fics.push(localStorageService.get(key));
+			}
+		}
+		
+		return fics;
 	}
 	
 	function storageGetFicData(ficId) {
-		return $localStorage.fics[ficId];
+		return localStorageService.get('fic.' + ficId);
 	}
 	
 	function storageSetFicData(ficId, ficData) {
-		$localStorage.fics[ficId] = ficData;
+		localStorageService.set('fic.' + ficId, ficData);
 	}
 	
 	function storageHasFic(ficId) {
-		if (!$localStorage.fics) {
-			return false;
-		}
-		
-		return ficId in $localStorage.fics;
+		return !!localStorageService.get('fic.' + ficId);
 	}
 	
 	function storageDeleteFic(ficId) {
-		delete $localStorage.fics[ficId];
+		localStorageService.remove('fic.' + ficId);
 	}
 	
 }

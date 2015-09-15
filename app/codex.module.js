@@ -4,7 +4,7 @@
 angular.module('codex', [
   'ngRoute',
   'ngAnimate',
-  'ngStorage',
+  'LocalStorageModule',
   'codex.browse',
   'codex.read'
 ]);
