@@ -45,6 +45,7 @@ var jsBodyDev = [
 	'bower_components/angular-resource/angular-resource.js',
 	'bower_components/angular-animate/angular-animate.js',
 	'bower_components/angular-local-storage/dist/angular-local-storage.js',
+    'bower_components/lz-string/libs/lz-string.js',
 	'bower_components/lodash/lodash.js',
 	'bower_components/material-design-lite/material.js',
 	'codex.js'
@@ -55,6 +56,7 @@ var jsBodyPrd = [
 	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-resource.min.js',
 	'//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-animate.min.js',
 	'//cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.2.2/angular-local-storage.min.js',
+    '//cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js',
 	'//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.min.js',
 	'//storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js',
 	'codex.min.js'

@@ -16,6 +16,7 @@
     "material-design-lite": "~1.0.0",
     "material-design-icons": "~1.0.0",
     "angular-animate": "~1.4.0",
-    "angular-local-storage": "~0.2.0"
+    "angular-local-storage": "~0.2.0",
+    "lz-string": "~1.4.0"
   }
 }

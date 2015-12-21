@@ -1,3 +1,4 @@
+/* global LZString */
 'use strict';
 
 angular.module('codex.data')
@@ -173,8 +174,12 @@ function ficStorageService(localStorageService, $q, ficResourceService, chapterR
 		if (!hasFic(ficId)) {
 			return null;
 		}
+        
+        var chapter = _.find(storageGetFicData(ficId).chapters, 'number', num);
+        
+        chapter.data = LZString.decompressFromUTF16(chapter.data);
 		
-		return promiseWrapper(_.find(storageGetFicData(ficId).chapters, 'number', num));
+		return promiseWrapper(chapter);
 	}
 	
 	function getGenres() {
@@ -220,7 +225,9 @@ function ficStorageService(localStorageService, $q, ficResourceService, chapterR
 					
 					var chapterPromise = chapterResourceService.getChapter(ficId, chapter.number);
 					chapterPromise.$promise.then(function(chapterData) {
-						_.assign(chapter, _.pick(chapterData, ['id', 'number', 'title', 'data', 'wrapped', 'no_paragraph_spacing', 'double_line_breaks', 'fic_id']));
+                        chapterData = _.pick(chapterData, ['id', 'number', 'title', 'data', 'wrapped', 'no_paragraph_spacing', 'double_line_breaks', 'fic_id']);
+                        chapterData.data = LZString.compressToUTF16(chapterData.data);
+						_.assign(chapter, chapterData);
 						downloadProgress[ficId] += chapterPercent;
 						if (downloadProgress[ficId] > 100) {
 							downloadProgress[ficId] = 100;
