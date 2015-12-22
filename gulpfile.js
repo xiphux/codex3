@@ -27,10 +27,10 @@ var cssDev = [
 	'codex.css'
 ];
 var cssPrd = [
-	'//fonts.googleapis.com/css?family=Roboto:300,400,500,700',
 	'//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css',
 	'//storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css',
-	'//fonts.googleapis.com/icon?family=Material+Icons',
+	'fonts/RobotoFont.css',
+	'fonts/MaterialIcons.css',
 	'codex.min.css'
 ];
 var jsHeadDev = [
@@ -62,15 +62,14 @@ var jsBodyPrd = [
 	'codex.min.js'
 ];
 var fontPrd = [
-	'//fonts.gstatic.com/s/materialicons/v7/2fcrYFNaTjcS6g4U3t-Y5UEw0lE80llgEseQY3FEmqw.woff2',
-	'//fonts.gstatic.com/s/materialicons/v7/2fcrYFNaTjcS6g4U3t-Y5RV6cRhDpPC5P4GCEJpqGoc.woff',
-	'//fonts.gstatic.com/s/roboto/v15/oMMgfZMQthOryQo9n22dcuvvDin1pK8aKteLpeZ5c0A.woff2',
-	'//fonts.gstatic.com/s/roboto/v15/RxZJdnzeo3R5zSexge8UUZBw1xU1rKptJj_0jans920.woff2',
-	'//fonts.gstatic.com/s/roboto/v15/Hgo13k-tfSpn0qi1SFdUfZBw1xU1rKptJj_0jans920.woff2',
-	'//fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOJBw1xU1rKptJj_0jans920.woff2',
-	'//fonts.gstatic.com/s/roboto/v15/CrYjSnGjrRCn0pd9VQsnFOvvDin1pK8aKteLpeZ5c0A.woff',
-	'//fonts.gstatic.com/s/roboto/v15/RxZJdnzeo3R5zSexge8UUbO3LdcAZYWl9Si6vvxL-qU.woff',
-	'//fonts.gstatic.com/s/roboto/v15/Hgo13k-tfSpn0qi1SFdUfbO3LdcAZYWl9Si6vvxL-qU.woff'
+    'fonts/Roboto-Bold.ttf',
+    'fonts/Roboto-Light.ttf',
+    'fonts/Roboto-Medium.ttf',
+    'fonts/Roboto-Regular.ttf',
+    'fonts/MaterialIcons-Regular.woff2',
+    'fonts/MaterialIcons-Regular.woff',
+    'fonts/MaterialIcons-Regular.ttf',
+    'fonts/MaterialIcons-Regular.eot'
 ];
 
 
@@ -162,6 +161,14 @@ gulp.task('build-js', ['build-browse-templates','build-read-templates','build-di
 		.pipe(gulp.dest('dist'));
 });
 
+gulp.task('build-fonts', ['build-css', 'build-js'], function() {
+   	// piping fonts through gulp corrupts the font data
+	return gulp.src('')
+		.pipe(shell([
+			'cp -R app/fonts dist/'
+		])); 
+});
+
 gulp.task('build-cache', ['build-css', 'build-js'], function() {
 	return gulp.src('app/codex.appcache')
 		.pipe(htmlReplace({
@@ -182,7 +189,7 @@ gulp.task('build-cache', ['build-css', 'build-js'], function() {
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('build', ['clean', 'build-css', 'build-js', 'build-cache'], function() {
+gulp.task('build', ['clean', 'build-css', 'build-js', 'build-fonts', 'build-cache'], function() {
 	del([
 		'dist/browsetemplates.js',
 		'dist/readtemplates.js',
