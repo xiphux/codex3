@@ -189,7 +189,12 @@ gulp.task('build-cache', ['build-css', 'build-js'], function() {
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('build', ['clean', 'build-css', 'build-js', 'build-fonts', 'build-cache'], function() {
+gulp.task('build-static', function() {
+   return gulp.src('app/robots.txt')
+    .pipe(gulp.dest('dist')); 
+});
+
+gulp.task('build', ['clean', 'build-css', 'build-js', 'build-static', 'build-fonts', 'build-cache'], function() {
 	del([
 		'dist/browsetemplates.js',
 		'dist/readtemplates.js',
