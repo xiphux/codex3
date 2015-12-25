@@ -17,6 +17,7 @@ function readController($scope, $routeParams, $locationEx, $timeout, $q, $window
 	vm.multipleChapters = undefined;
 	vm.loading = false;
 	vm.online = true;
+    vm.textSize = "1";
 	
 	activate();
 	

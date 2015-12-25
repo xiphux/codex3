@@ -1,1 +1,1 @@
-<div class="codex-chapter__text mdl-typography--body-1" ng-bind-html="ctCtrl.chapter | formatChapterContent"></div>
+<div class="codex-chapter__text" ng-class="{'mdl-typography--body-1': ctCtrl.textSize==1, 'mdl-typography--headline': ctCtrl.textSize==2, 'mdl-typography--display-1': ctCtrl.textSize==3}" ng-bind-html="ctCtrl.chapter | formatChapterContent"></div>

@@ -11,6 +11,9 @@ function chapterTextDirective() {
 		replace: true,
 		controller: 'chapterTextController',
 		controllerAs: 'ctCtrl',
-		scope: {}
+		scope: {
+            textSize: '='
+        },
+        bindToController: true
 	};
 }
