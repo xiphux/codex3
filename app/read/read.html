@@ -1,20 +1,25 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-color--grey-100">
-	<header class="mdl-layout__header" ng-class="{'mdl-color--grey': !rCtrl.online}">
+	<header class="mdl-layout__header mdl-layout__header--waterfall" ng-class="{'mdl-color--grey': !rCtrl.online}">
 		<div class="mdl-layout__header-row">
 			<span class="mdl-layout-title">
 				<a href="#/">Codex</a>
-				<i class="material-icons">chevron_right</i>
-				{{::rCtrl.fic.title}}
-				<span ng-show="rCtrl.multipleChapters || rCtrl.chapter.name">
-					<i class="material-icons">chevron_right</i>
-					{{ rCtrl.chapter | chapter }}
-				</span>
 			</span>
             <div class="mdl-layout-spacer"></div>
             <button class="mdl-button mdl-js-button mdl-button--icon" id="read-more-options">
                 <i class="material-icons">more_vert</i>
             </button>
-            <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="read-more-options">
+		</div>
+        <div class="mdl-layout__header-row codex-header__title-row">
+            <span class="mdl-layout-title">
+                {{::rCtrl.fic.title}}
+                <span ng-show="rCtrl.multipleChapters || rCtrl.chapter.name">
+                    <i class="material-icons">chevron_right</i>
+                    {{ rCtrl.chapter | chapter }}
+                </span>
+            </span>
+        </div>
+	</header>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="read-more-options">
                 <li class="mdl-menu__item">
                     <label for="read-more-options-text-size-small" class="mdl-radio mdl-js-radio">
                         <input type="radio" id="read-more-options-text-size-small" name="read-more-options-text-size" class="mdl-radio__button" ng-model="rCtrl.textSize" value="1">
@@ -34,8 +39,6 @@
                     </label>
                 </li>
             </ul>
-		</div>
-	</header>
 	<div class="mdl-layout__drawer">
 		<span class="mdl-layout-title">{{::rCtrl.fic.title}}</span>
 		<span class="mdl-layout-title">by {{::rCtrl.fic.authors | authorList}}</span>
