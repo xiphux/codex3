@@ -128,6 +128,8 @@ function textFormatterService() {
 	function stylize(content) {
 		return content
 			.replace(/\s*\n([\s\n])*(([\*\-=\~_\^`#\$@\+]) ?){3,}([\s\n])*\n/g, "<hr>")    // stylize breaking lines
+			.replace(/^([\s\n])*(([\*\-=\~_\^`#\$@\+]) ?){3,}([\s\n])+/g, "")    // remove leading breaking lines
+			.replace(/([\s\n])+(([\*\-=\~_\^`#\$@\+]) ?){3,}([\s\n])*$/g, "")    // remove trailing breaking lines
  			.replace(/(\W)_(\S+?)_(\W)/g, "$1<strong>$2</strong>$3")			// stylize underscore emphasis
  			.replace(/([^\*])(\*{1,2})([^\*>\n]*)(\*{1,2})([^\*])/g, "$1$2<strong>$3</strong>$4$5")	// stylize asterisk emphasis
  			.replace(/\^?\(TM\)/ig, "<sup>TM</sup>");			// stylize trademark
